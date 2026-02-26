@@ -16,6 +16,7 @@ import { setupBadge } from 'app/system/badge';
 import Tray from 'app/system/tray/tray';
 import WebContentsManager from 'app/views/webContentsManager';
 import {
+<<<<<<< HEAD
 	QUIT,
 	NOTIFY_MENTION,
 	GET_AVAILABLE_SPELL_CHECKER_LANGUAGES,
@@ -44,6 +45,28 @@ import {
 	WINDOW_CLOSE,
 	IS_WINDOW_MAXIMIZED,
 	WINDOW_DRAG,
+=======
+    QUIT,
+    NOTIFY_MENTION,
+    GET_AVAILABLE_SPELL_CHECKER_LANGUAGES,
+    USER_ACTIVITY_UPDATE,
+    PING_DOMAIN,
+    OPEN_APP_MENU,
+    GET_CONFIGURATION,
+    GET_LOCAL_CONFIGURATION,
+    UPDATE_CONFIGURATION,
+    UPDATE_PATHS,
+    GET_DARK_MODE,
+    DOUBLE_CLICK_ON_WINDOW,
+    TOGGLE_SECURE_INPUT,
+    GET_APP_INFO,
+    SHOW_SETTINGS_WINDOW,
+    DEVELOPER_MODE_UPDATED,
+    SERVER_ADDED,
+    GET_FULL_SCREEN_STATUS,
+    SERVER_PRE_AUTH_SECRET_CHANGED,
+    SERVER_URL_CHANGED,
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 } from 'common/communication';
 import Config from 'common/config';
 import { Logger } from 'common/log';
@@ -51,8 +74,12 @@ import ServerManager from 'common/servers/serverManager';
 import { parseURL } from 'common/utils/url';
 import AppVersionManager from 'main/AppVersionManager';
 import AutoLauncher from 'main/AutoLauncher';
+<<<<<<< HEAD
 import updateManager from 'main/autoUpdater';
 import { configPath, updatePaths } from 'main/constants';
+=======
+import {configPath, updatePaths} from 'main/constants';
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 import CriticalErrorHandler from 'main/CriticalErrorHandler';
 import DeveloperMode from 'main/developerMode';
 import downloadsManager from 'main/downloadsManager';
@@ -66,6 +93,7 @@ import AllowProtocolDialog from 'main/security/allowProtocolDialog';
 import PermissionsManager from 'main/security/permissionsManager';
 import PreAuthManager from 'main/security/preAuthManager';
 import sentryHandler from 'main/sentryHandler';
+import updateNotifier from 'main/updateNotifier';
 import UserActivityMonitor from 'main/UserActivityMonitor';
 
 import {
@@ -128,11 +156,18 @@ export async function initialize() {
 	initializeAppEventListeners();
 	initializeBeforeAppReady();
 
+<<<<<<< HEAD
 	// wait for registry config data to load and app ready event
 	await Promise.all([
 		app.whenReady(),
 		Config.initRegistry(),
 	]);
+=======
+    // wait for registry config data to load and app ready event
+    await Promise.all([
+        app.whenReady(),
+    ]);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	// no need to continue initializing if app is quitting
 	if (global.willAppQuit) {
@@ -179,11 +214,19 @@ async function initializeConfig() {
 
 			sentryHandler.init();
 
+<<<<<<< HEAD
 			resolve();
 		});
 		Config.init(configPath, app.name, app.getAppPath());
 		ipcMain.on(UPDATE_PATHS, () => {
 			log.debug('Config.UPDATE_PATHS');
+=======
+            resolve();
+        });
+        Config.init(configPath, app.name);
+        ipcMain.on(UPDATE_PATHS, () => {
+            log.debug('Config.UPDATE_PATHS');
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			Config.setConfigPath(configPath);
 			if (Config.data) {
@@ -261,6 +304,7 @@ function initializeInterCommunicationEventListeners() {
 
 	ipcMain.on(QUIT, handleQuit);
 
+<<<<<<< HEAD
 	ipcMain.handle(GET_AVAILABLE_SPELL_CHECKER_LANGUAGES, () => session.defaultSession.availableSpellCheckerLanguages);
 	ipcMain.on(START_UPDATE_DOWNLOAD, handleStartDownload);
 	ipcMain.on(START_UPGRADE, handleStartUpgrade);
@@ -268,6 +312,13 @@ function initializeInterCommunicationEventListeners() {
 	ipcMain.handle(GET_CONFIGURATION, handleGetConfiguration);
 	ipcMain.handle(GET_LOCAL_CONFIGURATION, handleGetLocalConfiguration);
 	ipcMain.on(UPDATE_CONFIGURATION, updateConfiguration);
+=======
+    ipcMain.handle(GET_AVAILABLE_SPELL_CHECKER_LANGUAGES, () => session.defaultSession.availableSpellCheckerLanguages);
+    ipcMain.handle(PING_DOMAIN, handlePingDomain);
+    ipcMain.handle(GET_CONFIGURATION, handleGetConfiguration);
+    ipcMain.handle(GET_LOCAL_CONFIGURATION, handleGetLocalConfiguration);
+    ipcMain.on(UPDATE_CONFIGURATION, updateConfiguration);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	ipcMain.handle(GET_DARK_MODE, handleGetDarkMode);
 	ipcMain.on(DOUBLE_CLICK_ON_WINDOW, handleDoubleClick);
@@ -437,6 +488,7 @@ async function initializeAfterAppReady() {
 		updateSpellCheckerLocales();
 	}
 
+<<<<<<< HEAD
 	if (typeof Config.canUpgrade === 'undefined') {
 		// windows might not be ready, so we have to wait until it is
 		Config.once('update', () => {
@@ -456,6 +508,27 @@ async function initializeAfterAppReady() {
 	} else {
 		log.info(`Autoupgrade disabled: ${Config.canUpgrade}`);
 	}
+=======
+    if (typeof Config.canUpgrade === 'undefined') {
+        // windows might not be ready, so we have to wait until it is
+        Config.once('update', () => {
+            log.debug('checkForUpdates');
+            if (Config.canUpgrade && Config.autoCheckForUpdates) {
+                setTimeout(() => {
+                    updateNotifier.checkForUpdates(false);
+                }, 5000);
+            } else {
+                log.info(`Autoupgrade disabled: ${Config.canUpgrade}`);
+            }
+        });
+    } else if (Config.canUpgrade && Config.autoCheckForUpdates) {
+        setTimeout(() => {
+            updateNotifier.checkForUpdates(false);
+        }, 5000);
+    } else {
+        log.info(`Autoupgrade disabled: ${Config.canUpgrade}`);
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	if (!global.isDev) {
 		AutoLauncher.upgradeAutoLaunch();
@@ -546,6 +619,7 @@ function onUserActivityStatus(status: {
 	log.debug('UserActivityMonitor.on(status)', { status });
 	WebContentsManager.sendToAllViews(USER_ACTIVITY_UPDATE, status.userIsActive, status.idleTime, status.isSystemEvent);
 }
+<<<<<<< HEAD
 
 function handleStartDownload() {
 	if (updateManager) {
@@ -558,3 +632,5 @@ function handleStartUpgrade() {
 		updateManager.handleUpdate();
 	}
 }
+=======
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14

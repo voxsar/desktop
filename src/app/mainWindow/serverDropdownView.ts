@@ -37,19 +37,33 @@ import MainWindow from './mainWindow';
 const log = new Logger('ServerDropdownView');
 
 export class ServerDropdownView {
+<<<<<<< HEAD
 	private view?: WebContentsView;
 	private servers: UniqueServer[];
 	private hasGPOServers: boolean;
 	private isOpen: boolean;
 	private bounds: Electron.Rectangle;
+=======
+    private view?: WebContentsView;
+    private servers: UniqueServer[];
+    private isOpen: boolean;
+    private bounds: Electron.Rectangle;
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private windowBounds?: Electron.Rectangle;
 
+<<<<<<< HEAD
 	constructor() {
 		this.servers = [];
 		this.hasGPOServers = false;
 		this.isOpen = false;
 		this.bounds = this.getBounds(0, 0);
+=======
+    constructor() {
+        this.servers = [];
+        this.isOpen = false;
+        this.bounds = this.getBounds(0, 0);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		MainWindow.on(MAIN_WINDOW_CREATED, this.init);
 		MainWindow.on(MAIN_WINDOW_RESIZED, this.updateWindowBounds);
@@ -96,6 +110,7 @@ export class ServerDropdownView {
 	private updateDropdown = () => {
 		log.silly('updateDropdown');
 
+<<<<<<< HEAD
 		this.view?.webContents.send(
 			UPDATE_SERVERS_DROPDOWN,
 			this.servers,
@@ -108,6 +123,19 @@ export class ServerDropdownView {
 			AppState.getUnreadsPerServer(),
 		);
 	};
+=======
+        this.view?.webContents.send(
+            UPDATE_SERVERS_DROPDOWN,
+            this.servers,
+            this.windowBounds,
+            ServerManager.hasServers() ? ServerManager.getCurrentServerId() : undefined,
+            Config.enableServerManagement,
+            AppState.getExpired(),
+            AppState.getMentionsPerServer(),
+            AppState.getUnreadsPerServer(),
+        );
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private updateServers = () => {
 		this.setOrderedServers();
@@ -164,10 +192,16 @@ export class ServerDropdownView {
 		};
 	};
 
+<<<<<<< HEAD
 	private setOrderedServers = () => {
 		this.servers = ServerManager.getOrderedServers().map((server) => server.toUniqueServer());
 		this.hasGPOServers = this.servers.some((srv) => srv.isPredefined);
 	};
+=======
+    private setOrderedServers = () => {
+        this.servers = ServerManager.getOrderedServers().map((server) => server.toUniqueServer());
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 const serverDropdownView = new ServerDropdownView();

@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
@@ -35,7 +35,6 @@ jobs:
         run: |
           mkdir -p ./build/linux
           npm run package:linux-tar
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/linux
       - name: ci/upload-test-results
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -54,16 +53,16 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
           cache-dependency-path: package-lock.json
       - name: ci/cache-node-modules
         id: cache-node-modules
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: node_modules
           key: ${{ runner.os }}-build-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -87,16 +86,16 @@ jobs:
       - windows-install-deps
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
           cache-dependency-path: package-lock.json
       - name: ci/cache-node-modules
         id: cache-node-modules
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: node_modules
           key: ${{ runner.os }}-build-node-modules-${{ hashFiles('package-lock.json') }}
@@ -123,8 +122,8 @@ jobs:
       - name: ci/build
         run: |
           mkdir -p ./build/win
+          jq '.win.azureSignOptions=null' electron-builder.json > /tmp/electron-builder.json && cp /tmp/electron-builder.json .
           npm run package:windows
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/win
       - name: ci/upload-test-results
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -145,9 +144,9 @@ jobs:
       MACOS_NOTIFICATION_STATE_NO_SDK_CHECK: true
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
@@ -171,7 +170,6 @@ jobs:
         run: |
           mkdir -p ./build/macos
           npm run package:mac
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/macos/
         env:
           SDKROOT: ${{ env.SDKROOT }}
@@ -215,7 +213,7 @@ jobs:
           name: linux-test-results
           path: linux-test-results
       - name: ci/publish-results
-        uses: EnricoMi/publish-unit-test-result-action@27d65e188ec43221b20d26de30f4892fad91df2f # v2.22.0
+        uses: EnricoMi/publish-unit-test-result-action@c950f6fb443cb5af20a377fd0dfaa78838901040 # v2.23.0
         with:
           comment_mode: failures
           compare_to_earlier_commit: false

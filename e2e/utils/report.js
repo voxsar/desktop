@@ -245,6 +245,7 @@ function generateTitle() {
 
 	let title;
 
+<<<<<<< HEAD
 	switch (TYPE) {
 		case 'PR':
 			title = `E2E for Pull Request Build: [${BRANCH}](${PULL_REQUEST})`;
@@ -267,6 +268,30 @@ function generateTitle() {
 		default:
 			title = 'E2E for Build$';
 	}
+=======
+    switch (TYPE) {
+    case 'PR':
+        title = `E2E for Pull Request Build: [${BRANCH}](${PULL_REQUEST})`;
+        break;
+    case 'RELEASE':
+        title = `E2E for Release Build ${releaseVersion}`;
+        break;
+    case 'NIGHTLY':
+        title = 'E2E for Master Nightly Build';
+        break;
+    case 'MASTER':
+        title = 'E2E for Post Merge to Master';
+        break;
+    case 'MANUAL':
+        title = `E2E for Manually triggered for branch ${BRANCH}`;
+        break;
+    case 'CMT':
+        title = `Compatibility Matrix Testing Report for Server v${SERVER_VERSION} and Desktop version v${DESKTOP_VERSION}`;
+        break;
+    default:
+        title = 'E2E for Build$';
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	return title;
 }

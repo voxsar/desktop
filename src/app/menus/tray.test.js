@@ -90,11 +90,17 @@ describe('main/menus/tray', () => {
 
 		serverMenuItem.click();
 
+<<<<<<< HEAD
 		expect(MainWindow.get).toHaveBeenCalled();
 		expect(mockWindow.isVisible).toHaveBeenCalled();
 		expect(MainWindow.show).toHaveBeenCalled();
 		expect(ServerManager.updateCurrentServer).toHaveBeenCalledWith('server-1');
 	});
+=======
+        expect(MainWindow.show).toHaveBeenCalled();
+        expect(ServerManager.updateCurrentServer).toHaveBeenCalledWith('server-1');
+    });
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	it('should open main window if it is not visible when clicking settings', () => {
 		ServerManager.getOrderedServers.mockReturnValue([]);
@@ -116,9 +122,15 @@ describe('main/menus/tray', () => {
 
 		settingsMenuItem.click();
 
+<<<<<<< HEAD
 		expect(MainWindow.get).toHaveBeenCalled();
 		expect(mockWindow.isVisible).toHaveBeenCalled();
 		expect(mockWindow.show).toHaveBeenCalled();
 		expect(ModalManager.addModal).toHaveBeenCalled();
 	});
+=======
+        expect(mockWindow.show).toHaveBeenCalled();
+        expect(ModalManager.addModal).toHaveBeenCalled();
+    });
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 });

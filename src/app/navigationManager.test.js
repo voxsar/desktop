@@ -72,6 +72,7 @@ jest.mock('app/mainWindow/mainWindow', () => ({
 }));
 
 jest.mock('common/utils/url', () => ({
+<<<<<<< HEAD
 	parseURL: (url) => {
 		try {
 			return new URL(url);
@@ -80,6 +81,17 @@ jest.mock('common/utils/url', () => ({
 		}
 	},
 	getFormattedPathName: (pathname) => (pathname.length ? pathname : '/'),
+=======
+    parseURL: (url) => {
+        try {
+            return new URL(url);
+        } catch (e) {
+            return null;
+        }
+    },
+    getFormattedPathName: (pathname) => (pathname.length ? pathname : '/'),
+    isMagicLinkUrl: jest.fn(() => false),
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }));
 
 jest.mock('common/utils/util', () => ({

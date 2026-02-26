@@ -1,7 +1,6 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import os from 'os';
 import path from 'path';
 
 import type { BrowserWindowConstructorOptions, Input, WebContents } from 'electron';
@@ -16,10 +15,16 @@ import {
 	TOGGLE_SECURE_INPUT,
 } from 'common/communication';
 import Config from 'common/config';
+<<<<<<< HEAD
 import { Logger } from 'common/log';
 import { DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT, MINIMUM_WINDOW_WIDTH, SECOND, TAB_BAR_HEIGHT } from 'common/utils/constants';
 import Utils from 'common/utils/util';
 import { localizeMessage } from 'main/i18nManager';
+=======
+import {Logger} from 'common/log';
+import {DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT, MINIMUM_WINDOW_WIDTH, SECOND, TAB_BAR_HEIGHT} from 'common/utils/constants';
+import {localizeMessage} from 'main/i18nManager';
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 import ContextMenu from '../../main/contextMenu';
 import { getLocalPreload } from '../../main/utils';
@@ -39,6 +44,7 @@ export default class BaseWindow {
 		this.ready = false;
 		this.altPressStatus = false;
 
+<<<<<<< HEAD
 		const windowOptions: BrowserWindowConstructorOptions = Object.assign({}, {
 			fullscreenable: process.platform !== 'linux',
 			show: false, // don't start the window until it is ready and only if it isn't hidden
@@ -59,6 +65,29 @@ export default class BaseWindow {
 			},
 		}, options);
 		log.debug('main window options', { windowOptions });
+=======
+        const useNativeTitleBar = process.platform === 'linux' && Config.useNativeTitleBar;
+        const windowOptions: BrowserWindowConstructorOptions = Object.assign({}, {
+            fullscreenable: process.platform !== 'linux',
+            show: false, // don't start the window until it is ready and only if it isn't hidden
+            paintWhenInitiallyHidden: true, // we want it to start painting to get info from the webapp
+            minWidth: MINIMUM_WINDOW_WIDTH,
+            minHeight: MINIMUM_WINDOW_HEIGHT,
+            height: DEFAULT_WINDOW_HEIGHT,
+            width: DEFAULT_WINDOW_WIDTH,
+            frame: useNativeTitleBar,
+            titleBarStyle: useNativeTitleBar ? 'default' as const : 'hidden' as const,
+            titleBarOverlay: useNativeTitleBar ? undefined : this.getTitleBarOverlay(),
+            trafficLightPosition: {x: 12, y: 12},
+            backgroundColor: '#000', // prevents blurry text: https://electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
+            webPreferences: {
+                disableBlinkFeatures: 'Auxclick',
+                preload: getLocalPreload('internalAPI.js'),
+                spellcheck: typeof Config.useSpellChecker === 'undefined' ? true : Config.useSpellChecker,
+            },
+        }, options);
+        log.debug('main window options', {windowOptions});
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		if (process.platform === 'linux') {
 			windowOptions.icon = path.join(path.resolve(app.getAppPath(), 'assets'), 'linux', 'app_icon.png');
@@ -108,6 +137,7 @@ export default class BaseWindow {
 		return this.win;
 	}
 
+<<<<<<< HEAD
 	getBounds = (): Electron.Rectangle => {
 		// Workaround for linux maximizing/minimizing, which doesn't work properly because of these bugs:
 		// https://github.com/electron/electron/issues/28699
@@ -122,6 +152,10 @@ export default class BaseWindow {
 
 	handleAltKeyPressed = (_: Event, input: Input) => {
 		log.silly('handleInputEvents', { input });
+=======
+    handleAltKeyPressed = (_: Event, input: Input) => {
+        log.silly('handleInputEvents', {input});
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		if (input.type === 'keyDown') {
 			this.altPressStatus = input.key === 'Alt' &&
@@ -184,6 +218,7 @@ export default class BaseWindow {
 		this.win.webContents.send(channel, ...args);
 	};
 
+<<<<<<< HEAD
 	private isFramelessWindow = () => {
 		return os.platform() === 'darwin' || (os.platform() === 'win32' && Utils.isVersionGreaterThanOrEqualTo(os.release(), '6.2'));
 	};
@@ -195,6 +230,15 @@ export default class BaseWindow {
 			height: TAB_BAR_HEIGHT,
 		};
 	};
+=======
+    private getTitleBarOverlay = () => {
+        return {
+            color: Config.darkMode ? 'rgba(25, 27, 31, 0)' : 'rgba(255, 255, 255, 0)',
+            symbolColor: Config.darkMode ? 'rgba(227, 228, 232, 0.64)' : 'rgba(63, 67, 80, 0.64)',
+            height: TAB_BAR_HEIGHT,
+        };
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private onBlur = () => {
 		ipcMain.emit(TOGGLE_SECURE_INPUT, null, false);
@@ -238,10 +282,22 @@ export default class BaseWindow {
 		this.win?.webContents.send('leave-full-screen');
 	};
 
+<<<<<<< HEAD
 	private onEmitConfiguration = () => {
 		this.win.webContents.send(RELOAD_CONFIGURATION);
 		if (process.platform !== 'darwin') {
 			// this.win.setTitleBarOverlay(this.getTitleBarOverlay()); // Disabled - using injected controls
 		}
 	};
+=======
+    private onEmitConfiguration = () => {
+        this.win.webContents.send(RELOAD_CONFIGURATION);
+        if (process.platform !== 'darwin') {
+            const useNativeTitleBar = process.platform === 'linux' && Config.useNativeTitleBar;
+            if (!useNativeTitleBar) {
+                this.win.setTitleBarOverlay(this.getTitleBarOverlay());
+            }
+        }
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }

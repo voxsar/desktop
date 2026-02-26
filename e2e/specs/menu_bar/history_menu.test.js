@@ -8,7 +8,11 @@ const env = require('../../modules/environment');
 const { asyncSleep } = require('../../modules/utils');
 
 describe('history_menu', function desc() {
+<<<<<<< HEAD
 	this.timeout(30000);
+=======
+    this.timeout(90000);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const config = env.demoMattermostConfig;
 

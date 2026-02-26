@@ -157,9 +157,15 @@ export class MainWindow extends EventEmitter {
 		this.win?.sendToRenderer(channel, ...args);
 	};
 
+<<<<<<< HEAD
 	getBounds = () => {
 		return this.win?.getBounds();
 	};
+=======
+    getBounds = () => {
+        return this.win?.browserWindow.getContentBounds();
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private shouldStartFullScreen = () => {
 		if (process.platform === 'linux') {
@@ -250,17 +256,28 @@ export class MainWindow extends EventEmitter {
 			}
 		}
 
+<<<<<<< HEAD
 		this.emit(MAIN_WINDOW_RESIZED, this.win?.getBounds());
 		this.emit(MAIN_WINDOW_FOCUSED);
 	};
+=======
+        this.emit(MAIN_WINDOW_RESIZED, this.win?.browserWindow.getContentBounds());
+        this.emit(MAIN_WINDOW_FOCUSED);
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private onBlur = () => {
 		if (!this.win) {
 			return;
 		}
 
+<<<<<<< HEAD
 		this.emit(MAIN_WINDOW_RESIZED, this.win?.getBounds());
 		ipcMain.emit(TOGGLE_SECURE_INPUT, null, false);
+=======
+        this.emit(MAIN_WINDOW_RESIZED, this.win?.browserWindow.getContentBounds());
+        ipcMain.emit(TOGGLE_SECURE_INPUT, null, false);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		// App should save bounds when a window is closed.
 		// However, 'close' is not fired in some situations(shutdown, ctrl+c)

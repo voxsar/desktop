@@ -45,6 +45,7 @@ export const DOWNLOADS_DROPDOWN_MAX_ITEMS = 50;
 export const DOWNLOADS_DROPDOWN_AUTOCLOSE_TIMEOUT = 4000; // 4 sec
 
 export const URLValidationStatus = {
+<<<<<<< HEAD
 	OK: 'OK',
 	Missing: 'MISSING',
 	Invalid: 'INVALID',
@@ -56,6 +57,20 @@ export const URLValidationStatus = {
 	PreAuthRequired: 'PREAUTH_REQUIRED',
 	BasicAuthRequired: 'BASICAUTH_REQUIRED',
 	ClientCertRequired: 'CLIENTCERT_REQUIRED',
+=======
+    OK: 'OK',
+    Missing: 'MISSING',
+    Invalid: 'INVALID',
+    Insecure: 'INSECURE',
+    URLExists: 'URL_EXISTS',
+    NotMattermost: 'NOT_MATTERMOST',
+    URLNotMatched: 'URL_NOT_MATCHED',
+    URLUpdated: 'URL_UPDATED',
+    PreAuthRequired: 'PREAUTH_REQUIRED',
+    BasicAuthRequired: 'BASICAUTH_REQUIRED',
+    ClientCertRequired: 'CLIENTCERT_REQUIRED',
+    MagicLink: 'MAGIC_LINK',
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };
 
 export const nonTeamUrlPaths = [

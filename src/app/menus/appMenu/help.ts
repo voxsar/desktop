@@ -8,14 +8,22 @@ import Config from 'common/config';
 import { DEFAULT_EE_REPORT_PROBLEM_LINK, DEFAULT_TE_REPORT_PROBLEM_LINK } from 'common/constants';
 import { Logger } from 'common/log';
 import ServerManager from 'common/servers/serverManager';
+<<<<<<< HEAD
 import { isHttpLink } from 'common/utils/url';
 import UpdateManager from 'main/autoUpdater';
 import Diagnostics from 'main/diagnostics';
 import { localizeMessage } from 'main/i18nManager';
+=======
+import {isHttpLink} from 'common/utils/url';
+import Diagnostics from 'main/diagnostics';
+import {localizeMessage} from 'main/i18nManager';
+import UpdateManager from 'main/updateNotifier';
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 const log = new Logger('Help');
 
 export default function createHelpMenu(): MenuItemConstructorOptions {
+<<<<<<< HEAD
 	const submenu: MenuItemConstructorOptions[] = [];
 	if (Config.canUpgrade) {
 		if (UpdateManager.versionDownloaded) {
@@ -42,6 +50,18 @@ export default function createHelpMenu(): MenuItemConstructorOptions {
 		}
 		submenu.push({ type: 'separator' });
 	}
+=======
+    const submenu: MenuItemConstructorOptions[] = [];
+    if (Config.canUpgrade) {
+        submenu.push({
+            label: localizeMessage('main.menus.app.help.checkForUpdates', 'Check for Updates'),
+            click() {
+                UpdateManager.checkForUpdates(true);
+            },
+        });
+        submenu.push({type: 'separator'});
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const serverId = ServerManager.getCurrentServerId();
 	const currentServer = serverId ? ServerManager.getServer(serverId) : undefined;

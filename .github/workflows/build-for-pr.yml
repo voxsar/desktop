@@ -18,11 +18,11 @@ jobs:
     if: ${{ github.event.label.name == 'Build Apps for PR' }}
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
@@ -39,7 +39,6 @@ jobs:
         run: |
           mkdir -p ./build/linux
           npm run package:linux-tar
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/linux
       - name: ci/upload-build
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -53,18 +52,18 @@ jobs:
     if: ${{ github.event.label.name == 'Build Apps for PR' }}
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
           cache-dependency-path: package-lock.json
       - name: ci/cache-node-modules
         id: cache-node-modules
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: node_modules
           key: ${{ runner.os }}-build-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -85,18 +84,18 @@ jobs:
       - windows-install-deps
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
           cache-dependency-path: package-lock.json
       - name: ci/cache-node-modules
         id: cache-node-modules
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: node_modules
           key: ${{ runner.os }}-build-node-modules-${{ hashFiles('package-lock.json') }}
@@ -122,14 +121,12 @@ jobs:
       - name: ci/build
         env:
           MM_WIN_INSTALLERS: 1
-          PFX_KEY: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_PFX_KEY }}
-          CSC_KEY_PASSWORD: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_CSC_KEY_PASSWORD }}
-          PFX: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_PFX }}
-          CSC_LINK: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_CSC_LINK }}
+          AZURE_CLIENT_ID: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.MM_DESKTOP_MSI_INSTALLER_AZURE_TENANT_ID }}
         run: |
           mkdir -p ./build/win
           npm run package:windows
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/win
       - name: ci/upload-build
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -145,11 +142,11 @@ jobs:
     if: ${{ github.event.label.name == 'Build Apps for PR' }}
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: ci/setup-node
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: "package.json"
           cache: "npm"
@@ -177,7 +174,6 @@ jobs:
           zsh -c 'echo -n $APPLE_API_KEY_RAW > ./key.p8'
           mkdir -p ./build/macos
           npm run package:mac
-          bash -x ./scripts/patch_updater_yml.sh
           bash -x ./scripts/cp_artifacts.sh release ./build/macos/
       - name: ci/upload-build
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

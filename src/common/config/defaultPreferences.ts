@@ -30,6 +30,7 @@ export const getDefaultDownloadLocation = (): string | undefined => {
 };
 
 const defaultPreferences: ConfigV4 = {
+<<<<<<< HEAD
 	version: 4,
 	servers: [],
 	showTrayIcon: true,
@@ -55,6 +56,34 @@ const defaultPreferences: ConfigV4 = {
 	enableSentry: true,
 	viewLimit: 15,
 	themeSyncing: true,
+=======
+    version: 4,
+    servers: [],
+    showTrayIcon: true,
+    trayIconTheme: 'use_system',
+    minimizeToTray: process.platform !== 'linux',
+    notifications: {
+        flashWindow: process.platform === 'linux' ? 0 : 2,
+        bounceIcon: true,
+        bounceIconType: 'informational',
+    },
+    showUnreadBadge: true,
+    useSpellChecker: true,
+    enableHardwareAcceleration: true,
+    autostart: true,
+    hideOnStart: false,
+    spellCheckerLocales: [],
+    darkMode: false,
+    lastActiveServer: 0,
+    downloadLocation: getDefaultDownloadLocation(),
+    startInFullscreen: false,
+    logLevel: 'info',
+    enableMetrics: true,
+    enableSentry: true,
+    viewLimit: 15,
+    themeSyncing: true,
+    useNativeTitleBar: false,
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };
 
 export default defaultPreferences;

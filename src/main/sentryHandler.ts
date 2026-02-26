@@ -41,6 +41,7 @@ export class SentryHandler {
 		log.info('Sentry initialized for error tracking', { isPrerelease });
 	};
 
+<<<<<<< HEAD
 	captureException = (error: Error) => {
 		if (!this.shouldSendToSentry() || !this.sentryInitialized) {
 			return;
@@ -53,6 +54,11 @@ export class SentryHandler {
 
 		Sentry.captureException(error);
 	};
+=======
+    flush = () => {
+        return Sentry.flush(3000);
+    };
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private addSentryContext = () => {
 		if (!this.shouldSendToSentry()) {

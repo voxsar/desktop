@@ -11,8 +11,8 @@
  *
  * Environment variables:
  *   BRANCH=[branch]            : Branch identifier from CI
- *   BUILD_ID=[build_id]        : Build identifier from CI
- *   BUILD_TAG=[build_tag]      : Docker image used to run the test
+ *   BUILD_TAG=[build_tag]      : Commit SHA from CI
+ *   RUNNER_OS=[os]             : Operating system (linux, darwin, win32)
  *
  *   For saving artifacts to AWS S3
  *      - AWS_S3_BUCKET, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
@@ -47,6 +47,7 @@ const { createTestCycle, createTestExecutions } = require('./utils/test_cases');
 require('dotenv').config();
 
 const saveReport = async () => {
+<<<<<<< HEAD
 	const {
 		BRANCH,
 		BUILD_ID,
@@ -56,12 +57,24 @@ const saveReport = async () => {
 		TYPE,
 		WEBHOOK_URL,
 	} = process.env;
+=======
+    const {
+        BRANCH,
+        BUILD_TAG,
+        RUNNER_OS,
+        ZEPHYR_ENABLE,
+        ZEPHYR_CYCLE_KEY,
+        TYPE,
+        WEBHOOK_URL,
+    } = process.env;
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	removeOldGeneratedReports();
 
 	// Import
 	const jsonReport = readJsonFromFile(path.join(MOCHAWESOME_REPORT_DIR, 'mochawesome.json'));
 
+<<<<<<< HEAD
 	// Generate the html report file
 	await generator.create(
 		jsonReport,
@@ -70,6 +83,16 @@ const saveReport = async () => {
 			reportTitle: `Desktop E2E - Build: ${BUILD_ID} Branch: ${BRANCH} Tag: ${BUILD_TAG}`,
 		},
 	);
+=======
+    // Generate the html report file
+    await generator.create(
+        jsonReport,
+        {
+            reportDir: MOCHAWESOME_REPORT_DIR,
+            reportTitle: `Desktop E2E [${RUNNER_OS || 'unknown'}] - ${BRANCH} (${BUILD_TAG.substring(0, 8)})`,
+        },
+    );
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	// Generate short summary, write to file and then send report via webhook
 	const { stats, statsFieldValue } = generateShortSummary(jsonReport);

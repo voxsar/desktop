@@ -14,6 +14,7 @@ type OwnProps = {
 	appName: string;
 }
 
+<<<<<<< HEAD
 const DownloadsDropdownItem = ({ item, activeItem, appName }: OwnProps) => {
 	if (item.type === 'update' && item.state !== 'progressing') {
 		return (
@@ -23,6 +24,18 @@ const DownloadsDropdownItem = ({ item, activeItem, appName }: OwnProps) => {
 			/>
 		);
 	}
+=======
+const DownloadsDropdownItem = ({item, activeItem, appName}: OwnProps) => {
+    if (item.type === 'update' && item.state !== 'progressing') {
+        return (
+            <UpdateWrapper
+                item={item}
+                appName={appName}
+                activeItem={activeItem}
+            />
+        );
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	return (
 		<DownloadsDropdownItemFile

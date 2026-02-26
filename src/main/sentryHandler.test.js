@@ -123,6 +123,7 @@ describe('main/sentryHandler', () => {
 		});
 	});
 
+<<<<<<< HEAD
 	describe('captureException', () => {
 		beforeEach(() => {
 			process.env = { NODE_ENV: 'production' };
@@ -168,6 +169,12 @@ describe('main/sentryHandler', () => {
 		beforeEach(() => {
 			process.env = { NODE_ENV: 'production' };
 		});
+=======
+    describe('isPrereleaseBuild', () => {
+        beforeEach(() => {
+            process.env = {NODE_ENV: 'production'};
+        });
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('should detect prerelease build from prerelease version', () => {
 			app.getVersion.mockReturnValue('6.0.0-develop.1');

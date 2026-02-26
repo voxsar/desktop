@@ -7,6 +7,7 @@ const glob = require('glob');
 const webpack = require('webpack');
 
 module.exports = {
+<<<<<<< HEAD
 	mode: 'development',
 	entry: {
 		e2e: glob.sync('./specs/**/*.js'),
@@ -54,4 +55,58 @@ module.exports = {
 		},
 		extensions: ['.ts', '.js'],
 	},
+=======
+    mode: 'development',
+    entry: {
+        e2e: glob.sync('./specs/**/*.js'),
+    },
+    output: {
+        path: path.resolve(__dirname, 'dist/'),
+        filename: '[name]_bundle.js',
+    },
+    plugins: [
+        new webpack.DefinePlugin({__IS_MAC_APP_STORE__: false}),
+    ],
+    externals: {
+        electron: 'require("electron")',
+        fs: 'require("fs")',
+        ws: 'require("ws")',
+        child_process: 'require("child_process")',
+        dns: 'require("dns")',
+        http2: 'require("http2")',
+        net: 'require("net")',
+        repl: 'require("repl")',
+        tls: 'require("tls")',
+        playwright: 'require("playwright")',
+        robotjs: 'require("robotjs")',
+        'registry-js': 'require("registry-js")',
+        'cf-prefs': 'require("cf-prefs")',
+        'macos-notification-state': 'require("macos-notification-state")',
+        'electron-is-dev': 'require("electron-is-dev")',
+    },
+    module: {
+        rules: [{
+            test: /\.(js|ts)?$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+        }],
+    },
+    node: {
+        __filename: false,
+        __dirname: false,
+    },
+    target: 'node',
+    resolve: {
+        modules: [
+            'node_modules',
+            '../src',
+            path.resolve(__dirname),
+            path.resolve(__dirname, 'specs'),
+        ],
+        alias: {
+            src: path.resolve(__dirname, '../src'),
+        },
+        extensions: ['.ts', '.js'],
+    },
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };

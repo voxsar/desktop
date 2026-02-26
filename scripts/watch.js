@@ -4,6 +4,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
+const electron = require('electron');
 const webpack = require('webpack');
 
 const mainConfig = require('../webpack.config.main.js');
@@ -13,6 +14,7 @@ const rendererConfig = require('../webpack.config.renderer.js');
 let electronProcess = null;
 
 function startElectron() {
+<<<<<<< HEAD
 	if (electronProcess) {
 		electronProcess.removeAllListeners();
 	}
@@ -31,6 +33,16 @@ function startElectron() {
 		[path.resolve('dist')],
 		{ stdio: 'inherit' }
 	);
+=======
+    if (electronProcess) {
+        electronProcess.removeAllListeners();
+    }
+    electronProcess = spawn(
+        electron,
+        [path.resolve('dist/')],
+        {stdio: 'inherit'},
+    );
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 

@@ -9,13 +9,24 @@ const { asyncSleep } = require('../../modules/utils');
 describe('Welcome Screen Modal', function desc() {
 	this.timeout(30000);
 
+<<<<<<< HEAD
 	beforeEach(async () => {
 		env.createTestUserDataDir();
 		env.cleanTestConfig();
 		await asyncSleep(1000);
+=======
+    let welcomeScreenModal;
+
+    beforeEach(async () => {
+        env.createTestUserDataDir();
+        await asyncSleep(1000);
+        env.cleanTestConfig();
+        await asyncSleep(1000);
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		this.app = await env.getApp();
 
+<<<<<<< HEAD
 		welcomeScreenModal = this.app.windows().find((window) => window.url().includes('welcomeScreen'));
 	});
 
@@ -34,6 +45,36 @@ describe('Welcome Screen Modal', function desc() {
 		const welcomeSlideTitle = await welcomeScreenModal.innerText('#welcome .WelcomeScreenSlide__title');
 		welcomeSlideTitle.should.equal('Welcome');
 		await welcomeScreenModal.click('#nextCarouselButton');
+=======
+        // Wait for welcome screen modal to appear if not immediately available
+        welcomeScreenModal = this.app.windows().find((window) => window.url().includes('welcomeScreen'));
+        if (!welcomeScreenModal) {
+            welcomeScreenModal = await this.app.waitForEvent('window', {
+                predicate: (window) => window.url().includes('welcomeScreen'),
+                timeout: 10000,
+            });
+        }
+
+        // Wait for the welcome screen modal to be fully loaded
+        await welcomeScreenModal.waitForLoadState('domcontentloaded');
+        await asyncSleep(500);
+    });
+
+    afterEach(async () => {
+        if (this.app) {
+            await this.app.close();
+        }
+        await env.clearElectronInstances();
+        await asyncSleep(1000);
+    });
+
+    it('MM-T4976 should show the slides in the expected order', async () => {
+        const welcomeSlideClass = await welcomeScreenModal.getAttribute('#welcome', 'class');
+        welcomeSlideClass.should.contain('Carousel__slide-current');
+        const welcomeSlideTitle = await welcomeScreenModal.innerText('#welcome .WelcomeScreenSlide__title');
+        welcomeSlideTitle.should.equal('Welcome');
+        await welcomeScreenModal.click('#nextCarouselButton');
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		const channelSlideClass = await welcomeScreenModal.getAttribute('div.Carousel__slide.inFromRight', 'class');
 		channelSlideClass.should.contain('Carousel__slide-current');

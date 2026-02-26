@@ -152,6 +152,7 @@ const configDataSchemaV3 = Joi.object<ConfigV3>({
 });
 
 const configDataSchemaV4 = Joi.object<ConfigV4>({
+<<<<<<< HEAD
 	version: Joi.number().min(4).default(4),
 	servers: Joi.array().items(Joi.object({
 		name: Joi.string().required(),
@@ -186,6 +187,45 @@ const configDataSchemaV4 = Joi.object<ConfigV4>({
 	enableSentry: Joi.boolean(),
 	viewLimit: Joi.number().integer().min(1),
 	themeSyncing: Joi.boolean().default(true),
+=======
+    version: Joi.number().min(4).default(4),
+    servers: Joi.array().items(Joi.object({
+        name: Joi.string().required(),
+        url: Joi.string().required(),
+        order: Joi.number().integer().min(0),
+        isPredefined: Joi.boolean(),
+    })).default([]),
+    showTrayIcon: Joi.boolean().default(false),
+    trayIconTheme: Joi.any().allow('').valid('light', 'dark', 'use_system').default('use_system'),
+    minimizeToTray: Joi.boolean().default(false),
+    notifications: Joi.object({
+        flashWindow: Joi.any().valid(0, 2).default(0),
+        bounceIcon: Joi.boolean().default(false),
+        bounceIconType: Joi.any().allow('').valid('informational', 'critical').default('informational'),
+    }),
+    showUnreadBadge: Joi.boolean().default(true),
+    useSpellChecker: Joi.boolean().default(true),
+    enableHardwareAcceleration: Joi.boolean().default(true),
+    startInFullscreen: Joi.boolean().default(false),
+    autostart: Joi.boolean().default(true),
+    hideOnStart: Joi.boolean().default(false),
+    spellCheckerLocales: Joi.array().items(Joi.string()).default([]),
+    spellCheckerURL: Joi.string().allow(null),
+    darkMode: Joi.boolean().default(false),
+    downloadLocation: Joi.string(),
+    lastActiveServer: Joi.number().integer().min(0).default(0),
+    autoCheckForUpdates: Joi.boolean().default(true),
+    alwaysMinimize: Joi.boolean(),
+    alwaysClose: Joi.boolean(),
+    logLevel: Joi.string().default('info'),
+    appLanguage: Joi.string().allow(''),
+    enableMetrics: Joi.boolean().default(true),
+    enableSentry: Joi.boolean().default(true),
+    viewLimit: Joi.number().integer().min(1),
+    themeSyncing: Joi.boolean().default(true),
+    skippedVersions: Joi.array().items(Joi.string()).default([]),
+    useNativeTitleBar: Joi.boolean().default(false),
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 });
 
 // eg. data['community.mattermost.com'] = { data: 'certificate data', issuerName: 'COMODO RSA Domain Validation Secure Server CA'};

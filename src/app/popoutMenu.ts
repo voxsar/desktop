@@ -1,8 +1,13 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+<<<<<<< HEAD
 import type { MenuItem, MenuItemConstructorOptions } from 'electron';
 import { clipboard, Menu } from 'electron';
+=======
+import type {BrowserWindow, Input, MenuItem, MenuItemConstructorOptions} from 'electron';
+import {clipboard, Menu} from 'electron';
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 import WebContentsManager from 'app/views/webContentsManager';
 import PopoutManager from 'app/windows/popoutManager';
@@ -83,6 +88,17 @@ function createTemplate(viewId: string) {
 function createMenu(viewId: string) {
 	// Electron is enforcing certain variables that it doesn't need
 	return Menu.buildFromTemplate(createTemplate(viewId));
+}
+
+export function createSetNativeTitleBar(window: BrowserWindow, viewId: string) {
+    return (event: Event, input: Input) => {
+        if (input.key === 'Alt') {
+            window.setMenu(Menu.buildFromTemplate([{
+                label: localizeMessage('main.menus.popoutMenu.title', 'Popout Menu'),
+                submenu: createTemplate(viewId) as MenuItemConstructorOptions[],
+            }]));
+        }
+    };
 }
 
 export default function PopoutMenu(viewId: string) {

@@ -9,10 +9,16 @@ import Tray from 'app/system/tray/tray';
 import WebContentsManager from 'app/views/webContentsManager';
 import { Logger } from 'common/log';
 import ServerManager from 'common/servers/serverManager';
+<<<<<<< HEAD
 import { parseURL } from 'common/utils/url';
 import updateManager from 'main/autoUpdater';
 import { localizeMessage } from 'main/i18nManager';
+=======
+import {parseURL} from 'common/utils/url';
+import {localizeMessage} from 'main/i18nManager';
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 import CertificateStore from 'main/security/certificateStore';
+import sentryHandler from 'main/sentryHandler';
 
 import { getDeeplinkingURL, openDeepLink, resizeScreen } from './utils';
 
@@ -78,10 +84,17 @@ export function handleAppWillFinishLaunching() {
 export function handleAppBeforeQuit() {
 	log.debug('handleAppBeforeQuit');
 
+<<<<<<< HEAD
 	// Make sure tray icon gets removed if the user exits via CTRL-Q
 	Tray.destroy();
 	global.willAppQuit = true;
 	updateManager.handleOnQuit();
+=======
+    // Make sure tray icon gets removed if the user exits via CTRL-Q
+    sentryHandler.flush();
+    Tray.destroy();
+    global.willAppQuit = true;
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 export async function handleAppCertificateError(event: Event, webContents: WebContents, url: string, error: string, certificate: Certificate, callback: (isTrusted: boolean) => void) {

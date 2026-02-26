@@ -30,6 +30,7 @@ describe('application', function desc() {
 		await env.clearElectronInstances();
 	});
 
+<<<<<<< HEAD
 	if (process.platform === 'win32') {
 		it('MM-T1304/MM-T1306 should open the app on the requested deep link', async () => {
 			this.app = await env.getApp(['mattermost://github.com/test/url']);
@@ -51,4 +52,41 @@ describe('application', function desc() {
 			await this.app.close();
 		});
 	}
+=======
+    if (process.platform === 'win32') {
+        it('MM-T1304/MM-T1306 should open the app on the requested deep link', async () => {
+            this.app = await env.getApp(['mattermost://github.com/test/url']);
+            this.serverMap = await env.getServerMap(this.app);
+            if (!this.app.windows().some((window) => window.url().includes('github.com'))) {
+                await this.app.waitForEvent('window', {
+                    predicate: (window) => window.url().includes('github.com'),
+                });
+            }
+            const mainWindow = this.app.windows().find((window) => window.url().includes('index'));
+            const browserWindow = await this.app.browserWindow(mainWindow);
+
+            // Wait for server map to have the github server populated
+            const serverName = config.servers[1].name;
+            if (!this.serverMap[serverName] || this.serverMap[serverName].length === 0) {
+                // Retry getting server map if github server is not ready
+                await asyncSleep(2000);
+                this.serverMap = await env.getServerMap(this.app);
+            }
+
+            // Ensure we have the server data before accessing webContentsId
+            this.serverMap.should.have.property(serverName);
+            this.serverMap[serverName].should.have.lengthOf.at.least(1);
+
+            const webContentsId = this.serverMap[serverName][0].webContentsId;
+            const isActive = await browserWindow.evaluate((window, id) => {
+                const view = window.contentView.children.find((view) => view.webContents && view.webContents.id === id);
+                return view ? view.webContents.getURL() : null;
+            }, webContentsId);
+            isActive.should.equal('https://github.com/test/url/');
+            const dropdownButtonText = await mainWindow.innerText('.ServerDropdownButton');
+            dropdownButtonText.should.equal('github');
+            await this.app.close();
+        });
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 });

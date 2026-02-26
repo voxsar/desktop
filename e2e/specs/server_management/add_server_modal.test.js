@@ -19,6 +19,7 @@ describe('Add Server Modal', function desc() {
 		await asyncSleep(1000);
 		this.app = await env.getApp();
 
+<<<<<<< HEAD
 		const mainView = this.app.windows().find((window) => window.url().includes('index'));
 		const dropdownView = this.app.windows().find((window) => window.url().includes('dropdown'));
 		await mainView.click('.ServerDropdownButton');
@@ -26,6 +27,22 @@ describe('Add Server Modal', function desc() {
 		newServerView = await this.app.waitForEvent('window', {
 			predicate: (window) => window.url().includes('newServer'),
 		});
+=======
+        const mainView = this.app.windows().find((window) => window.url().includes('index'));
+        let dropdownView = this.app.windows().find((window) => window.url().includes('dropdown'));
+
+        // Wait for dropdown window if not immediately available
+        if (dropdownView === false) {
+            await asyncSleep(500);
+            dropdownView = this.app.windows().find((window) => window.url().includes('dropdown'));
+        }
+
+        await mainView.click('.ServerDropdownButton');
+        await dropdownView.click('.ServerDropdown .ServerDropdown__button.addServer');
+        newServerView = await this.app.waitForEvent('window', {
+            predicate: (window) => window.url().includes('newServer'),
+        });
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		// wait for autofocus to finish
 		await asyncSleep(2000);

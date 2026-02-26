@@ -6,10 +6,12 @@
 const fs = require('fs');
 
 const env = require('../../modules/environment');
+const {asyncSleep} = require('../../modules/utils');
 
 describe('window', function desc() {
 	this.timeout(30000);
 
+<<<<<<< HEAD
 	beforeEach(async () => {
 		env.createTestUserDataDir();
 		env.cleanTestConfig();
@@ -38,6 +40,50 @@ describe('window', function desc() {
 			await this.app.close();
 		});
 	}
+=======
+    beforeEach(async () => {
+        env.createTestUserDataDir();
+        await asyncSleep(1000);
+        env.cleanTestConfig();
+        await asyncSleep(1000);
+    });
+
+    afterEach(async () => {
+        if (this.app) {
+            try {
+                await this.app.close();
+            // eslint-disable-next-line no-empty
+            } catch (err) {}
+        }
+        await env.clearElectronInstances();
+        await asyncSleep(1000);
+    });
+
+    // TODO: this fails on Linux right now due to the window frame for some reason
+    if (process.platform !== 'linux') {
+        it('MM-T4403_1 should restore window bounds', async () => {
+            const expectedBounds = {x: 100, y: 200, width: 800, height: 400};
+            fs.writeFileSync(env.boundsInfoPath, JSON.stringify(expectedBounds));
+            this.app = await env.getApp();
+            const mainWindow = await this.app.windows().find((window) => window.url().includes('index'));
+            const browserWindow = await this.app.browserWindow(mainWindow);
+            const bounds = await browserWindow.evaluate((window) => window.getContentBounds());
+
+            // Windows may adjust height due to window decorations/DPI scaling
+            if (process.platform === 'win32') {
+                bounds.x.should.equal(expectedBounds.x);
+                bounds.y.should.equal(expectedBounds.y);
+                bounds.width.should.equal(expectedBounds.width);
+
+                // Allow some tolerance for height on Windows (±150px for title bar and DPI adjustments)
+                Math.abs(bounds.height - expectedBounds.height).should.be.lessThan(150);
+            } else {
+                bounds.should.deep.equal(expectedBounds);
+            }
+            await this.app.close();
+        });
+    }
+>>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	it('MM-T4403_2 should NOT restore window bounds if x is located on outside of viewarea', async () => {
 		fs.writeFileSync(env.boundsInfoPath, JSON.stringify({ x: -100000, y: 200, width: 800, height: 400 }));

@@ -32,7 +32,7 @@ $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-win-arm64.zip")
 #### Mac
 $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-mac-universal.dmg")
 $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-mac-x64.dmg")
-$(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-mac-m1.dmg")
+$(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-mac-arm64.dmg")
 
 #### Linux
 $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-arm64.tar.gz")
@@ -49,4 +49,8 @@ $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-x86_64.rpm")
 #### Linux (Unofficial) - AppImage files
 $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-arm64.AppImage")
 $(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-x86_64.AppImage")
+
+#### Linux (Unofficial) - flatpak files (beta)
+$(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-aarch64.flatpak")
+$(print_link "${BASE_URL}/mattermost-desktop-${VERSION}-linux-x86_64.flatpak")
 MD
