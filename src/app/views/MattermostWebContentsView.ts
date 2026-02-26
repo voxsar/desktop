@@ -834,6 +834,7 @@ export class MattermostWebContentsView extends EventEmitter {
 					const fixedContainer = document.createElement('div');
 					fixedContainer.style.position = 'fixed';
 					fixedContainer.style.top = '8px';
+					fixedContainer.style.backgroundColor = 'rgba(0, 0, 0)';
 					fixedContainer.style.right = '8px';
 					fixedContainer.style.zIndex = '999999';
 					fixedContainer.style.pointerEvents = 'auto';

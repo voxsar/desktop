@@ -5,7 +5,7 @@
 			"url": "https://releases.mattermost.com/desktop"
 		}
 	],
-	"appId": "Mattermost.Desktop",
+	"appId": "Aura.Desktop",
 	"artifactName": "${version}/${name}-${version}-${os}-${arch}.${ext}",
 	"directories": {
 		"buildResources": "src/assets",
@@ -49,7 +49,7 @@
 	"afterAllArtifactBuild": "scripts/afterbuild.js",
 	"deb": {
 		"artifactName": "${version}/${name}_${version}-1_${arch}.${ext}",
-		"synopsis": "Mattermost Desktop App",
+		"synopsis": "Aura Desktop App",
 		"depends": [
 			"libnotify4",
 			"libxtst6",
@@ -114,7 +114,7 @@
 		"extendInfo": {
 			"NSMicrophoneUsageDescription": "Microphone access is used to capture audio for voice communication and recordings.",
 			"NSCameraUsageDescription": "Camera access is used to capture video for video conferencing and recordings.",
-			"NSFocusStatusUsageDescription": "Focus status is used by Mattermost to determine whether to send notifications or not.",
+			"NSFocusStatusUsageDescription": "Focus status is used by Aura to determine whether to send notifications or not.",
 			"LSFileQuarantineEnabled": true
 		}
 	},
@@ -178,7 +178,7 @@
 			}
 		],
 		"signDlls": true,
-		"publisherName": "CN=\"Mattermost, Inc.\", O=\"Mattermost, Inc.\", L=Palo Alto, S=California, C=US"
+		"publisherName": "CN=\"Aura.\", O=\"Artslab Creatives, PVT.\", L=Palo Alto, S=California, C=US"
 	},
 	"nsis": {
 		"artifactName": "${version}/${name}-setup-${version}-win.${ext}",
