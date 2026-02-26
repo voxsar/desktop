@@ -1,4 +1,4 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 export const GET_APP_INFO = 'get-app-info';
@@ -7,6 +7,9 @@ export const SWITCH_SERVER = 'switch-server';
 export const SWITCH_TAB = 'switch-tab';
 export const SET_ACTIVE_VIEW = 'set-active-view';
 export const HISTORY = 'history';
+export const SWITCH_APP = 'switch-app';
+export const GET_ACTIVE_APP_NAME = 'get-active-app-name';
+export const APP_SWITCHED = 'app-switched';
 
 export const QUIT = 'quit';
 
@@ -33,6 +36,13 @@ export const RELOAD_VIEW = 'reload_view';
 export const MAXIMIZE_CHANGE = 'maximized_change';
 
 export const DOUBLE_CLICK_ON_WINDOW = 'double_click';
+
+export const WINDOW_MINIMIZE = 'window-minimize';
+export const WINDOW_MAXIMIZE = 'window-maximize';
+export const WINDOW_UNMAXIMIZE = 'window-unmaximize';
+export const WINDOW_CLOSE = 'window-close';
+export const IS_WINDOW_MAXIMIZED = 'is-window-maximized';
+export const WINDOW_DRAG = 'window-drag';
 
 export const SHOW_NEW_SERVER_MODAL = 'show_new_server_modal';
 export const SHOW_EDIT_SERVER_MODAL = 'show-edit-server-modal';

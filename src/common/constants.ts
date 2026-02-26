@@ -1,7 +1,7 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {DownloadedItem, DownloadItemTypeEnum} from 'types/downloads';
+import type { DownloadedItem, DownloadItemTypeEnum } from 'types/downloads';
 
 /**
  * This string includes special characters so that it's not confused with
@@ -9,13 +9,13 @@ import type {DownloadedItem, DownloadItemTypeEnum} from 'types/downloads';
  */
 export const APP_UPDATE_KEY = '#:(APP_UPDATE):#';
 export const UPDATE_DOWNLOAD_ITEM: Omit<DownloadedItem, 'filename' | 'state'> = {
-    type: 'update' as DownloadItemTypeEnum,
-    progress: 0,
-    location: '',
-    mimeType: null,
-    addedAt: 0,
-    receivedBytes: 0,
-    totalBytes: 0,
+	type: 'update' as DownloadItemTypeEnum,
+	progress: 0,
+	location: '',
+	mimeType: null,
+	addedAt: 0,
+	receivedBytes: 0,
+	totalBytes: 0,
 };
 
 // Regular expressions
@@ -53,13 +53,13 @@ export const DEFAULT_UPGRADE_LINK = 'https://forum.mattermost.com/t/mattermost-d
 export const DEFAULT_CHANGELOG_LINK = 'https://docs.mattermost.com/help/apps/desktop-changelog.html';
 
 export const ModalConstants = {
-    SETTINGS_MODAL: 'settingsModal',
-    NEW_SERVER_MODAL: 'newServer',
-    EDIT_SERVER_MODAL: 'editServer',
-    REMOVE_SERVER_MODAL: 'removeServer',
-    WELCOME_SCREEN_MODAL: 'welcomeScreen',
-    CERTIFICATE_MODAL: 'certificateModal',
-    LOGIN_MODAL: 'loginModal',
-    PROXY_LOGIN_MODAL: 'proxyLoginModal',
-    PRE_AUTH_MODAL: 'preAuthModal',
+	SETTINGS_MODAL: 'settingsModal',
+	NEW_SERVER_MODAL: 'newServer',
+	EDIT_SERVER_MODAL: 'editServer',
+	REMOVE_SERVER_MODAL: 'removeServer',
+	WELCOME_SCREEN_MODAL: 'welcomeScreen',
+	CERTIFICATE_MODAL: 'certificateModal',
+	LOGIN_MODAL: 'loginModal',
+	PROXY_LOGIN_MODAL: 'proxyLoginModal',
+	PRE_AUTH_MODAL: 'preAuthModal',
 };

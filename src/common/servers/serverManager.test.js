@@ -1,317 +1,317 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 import Config from 'common/config';
-import {parseURL, isInternalURL} from 'common/utils/url';
+import { parseURL, isInternalURL } from 'common/utils/url';
 import Utils from 'common/utils/util';
 
-import {ServerManager} from './serverManager';
+import { ServerManager } from './serverManager';
 
 jest.mock('common/config', () => {
-    const mock = {
-        set: jest.fn(),
-        predefinedServers: [],
-        localServers: [],
-        lastActiveServer: undefined,
-        enableServerManagement: true,
-        setServers: jest.fn(),
-    };
-    return {
-        __esModule: true,
-        default: mock,
-    };
+	const mock = {
+		set: jest.fn(),
+		predefinedServers: [],
+		localServers: [],
+		lastActiveServer: undefined,
+		enableServerManagement: true,
+		setServers: jest.fn(),
+	};
+	return {
+		__esModule: true,
+		default: mock,
+	};
 });
 jest.mock('common/utils/url', () => ({
-    parseURL: jest.fn(),
-    isInternalURL: jest.fn(),
-    getFormattedPathName: (pathname) => (pathname.endsWith('/') ? pathname : `${pathname}/`),
+	parseURL: jest.fn(),
+	isInternalURL: jest.fn(),
+	getFormattedPathName: (pathname) => (pathname.endsWith('/') ? pathname : `${pathname}/`),
 }));
 jest.mock('common/utils/util', () => ({
-    isVersionGreaterThanOrEqualTo: jest.fn(),
+	isVersionGreaterThanOrEqualTo: jest.fn(),
 }));
 jest.mock('main/server/serverInfo', () => ({
-    ServerInfo: jest.fn(),
+	ServerInfo: jest.fn(),
 }));
 
 describe('common/servers/serverManager', () => {
-    describe('updateRemoteInfos', () => {
-        const serverManager = new ServerManager();
+	describe('updateRemoteInfos', () => {
+		const serverManager = new ServerManager();
 
-        beforeEach(() => {
-            const server = {id: 'server-1', url: new URL('http://server-1.com'), name: 'server-1'};
-            server.updateURL = (url) => {
-                server.url = new URL(url);
-            };
-            serverManager.servers = new Map([['server-1', server]]);
-            serverManager.persistServers = jest.fn();
-            Utils.isVersionGreaterThanOrEqualTo.mockImplementation((version) => version === '6.0.0');
-        });
+		beforeEach(() => {
+			const server = { id: 'server-1', url: new URL('http://server-1.com'), name: 'server-1' };
+			server.updateURL = (url) => {
+				server.url = new URL(url);
+			};
+			serverManager.servers = new Map([['server-1', server]]);
+			serverManager.persistServers = jest.fn();
+			Utils.isVersionGreaterThanOrEqualTo.mockImplementation((version) => version === '6.0.0');
+		});
 
-        it('should not save when there is nothing to update', () => {
-            serverManager.updateRemoteInfo('server-1', {
-                siteURL: 'http://server-1.com',
-                serverVersion: '6.0.0',
-                hasPlaybooks: false,
-                hasFocalboard: false,
-            });
+		it('should not save when there is nothing to update', () => {
+			serverManager.updateRemoteInfo('server-1', {
+				siteURL: 'http://server-1.com',
+				serverVersion: '6.0.0',
+				hasPlaybooks: false,
+				hasFocalboard: false,
+			});
 
-            expect(serverManager.persistServers).not.toHaveBeenCalled();
-        });
+			expect(serverManager.persistServers).not.toHaveBeenCalled();
+		});
 
-        it('should update server URL using site URL when validated', async () => {
-            serverManager.updateRemoteInfo('server-1', {
-                siteURL: 'http://server-2.com',
-                serverVersion: '6.0.0',
-                hasPlaybooks: true,
-                hasFocalboard: true,
-            }, true);
+		it('should update server URL using site URL when validated', async () => {
+			serverManager.updateRemoteInfo('server-1', {
+				siteURL: 'http://server-2.com',
+				serverVersion: '6.0.0',
+				hasPlaybooks: true,
+				hasFocalboard: true,
+			}, true);
 
-            expect(serverManager.servers.get('server-1').url.toString()).toBe('http://server-2.com/');
-        });
+			expect(serverManager.servers.get('server-1').url.toString()).toBe('http://server-2.com/');
+		});
 
-        it('should not update server URL when site URL is not validated', async () => {
-            serverManager.updateRemoteInfo('server-1', {
-                siteURL: 'http://server-2.com',
-                serverVersion: '6.0.0',
-                hasPlaybooks: true,
-                hasFocalboard: true,
-            }, false);
+		it('should not update server URL when site URL is not validated', async () => {
+			serverManager.updateRemoteInfo('server-1', {
+				siteURL: 'http://server-2.com',
+				serverVersion: '6.0.0',
+				hasPlaybooks: true,
+				hasFocalboard: true,
+			}, false);
 
-            expect(serverManager.servers.get('server-1').url.toString()).toBe('http://server-1.com/');
-            expect(serverManager.persistServers).not.toHaveBeenCalled();
-        });
-    });
+			expect(serverManager.servers.get('server-1').url.toString()).toBe('http://server-1.com/');
+			expect(serverManager.persistServers).not.toHaveBeenCalled();
+		});
+	});
 
-    describe('lookupServerByURL', () => {
-        const serverManager = new ServerManager();
-        serverManager.getAllServers = () => [
-            {id: 'server-1', url: new URL('http://server-1.com')},
-            {id: 'server-2', url: new URL('http://server-2.com/subpath')},
-        ];
+	describe('lookupServerByURL', () => {
+		const serverManager = new ServerManager();
+		serverManager.getAllServers = () => [
+			{ id: 'server-1', url: new URL('http://server-1.com') },
+			{ id: 'server-2', url: new URL('http://server-2.com/subpath') },
+		];
 
-        beforeEach(() => {
-            parseURL.mockImplementation((url) => new URL(url));
-            isInternalURL.mockImplementation((url1, url2) => `${url1}`.startsWith(`${url2}`));
-        });
+		beforeEach(() => {
+			parseURL.mockImplementation((url) => new URL(url));
+			isInternalURL.mockImplementation((url1, url2) => `${url1}`.startsWith(`${url2}`));
+		});
 
-        afterEach(() => {
-            jest.resetAllMocks();
-        });
+		afterEach(() => {
+			jest.resetAllMocks();
+		});
 
-        it('should match the correct server - base URL', () => {
-            const inputURL = new URL('http://server-1.com');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
-        });
+		it('should match the correct server - base URL', () => {
+			const inputURL = new URL('http://server-1.com');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com') });
+		});
 
-        it('should match the correct server - base view', () => {
-            const inputURL = new URL('http://server-1.com/server');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
-        });
+		it('should match the correct server - base view', () => {
+			const inputURL = new URL('http://server-1.com/server');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com') });
+		});
 
-        it('should match the correct server - different view', () => {
-            const inputURL = new URL('http://server-1.com/type1/app');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com/type1')});
-        });
+		it('should match the correct server - different view', () => {
+			const inputURL = new URL('http://server-1.com/type1/app');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com/type1') });
+		});
 
-        it('should return undefined for server with subpath and URL without', () => {
-            const inputURL = new URL('http://server-2.com');
-            expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
-        });
+		it('should return undefined for server with subpath and URL without', () => {
+			const inputURL = new URL('http://server-2.com');
+			expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
+		});
 
-        it('should return undefined for server with subpath and URL with wrong subpath', () => {
-            const inputURL = new URL('http://server-2.com/different/subpath');
-            expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
-        });
+		it('should return undefined for server with subpath and URL with wrong subpath', () => {
+			const inputURL = new URL('http://server-2.com/different/subpath');
+			expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
+		});
 
-        it('should match the correct server with a subpath - base URL', () => {
-            const inputURL = new URL('http://server-2.com/subpath');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
-        });
+		it('should match the correct server with a subpath - base URL', () => {
+			const inputURL = new URL('http://server-2.com/subpath');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath') });
+		});
 
-        it('should not match a server where the subpaths are substrings of each other ', () => {
-            const inputURL = new URL('http://server-2.com/subpath2');
-            expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
-        });
+		it('should not match a server where the subpaths are substrings of each other ', () => {
+			const inputURL = new URL('http://server-2.com/subpath2');
+			expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
+		});
 
-        it('should match the correct server with a subpath - base view', () => {
-            const inputURL = new URL('http://server-2.com/subpath/server');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
-        });
+		it('should match the correct server with a subpath - base view', () => {
+			const inputURL = new URL('http://server-2.com/subpath/server');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath') });
+		});
 
-        it('should match the correct server with a subpath - different view', () => {
-            const inputURL = new URL('http://server-2.com/subpath/type2/server');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath/type2')});
-        });
+		it('should match the correct server with a subpath - different view', () => {
+			const inputURL = new URL('http://server-2.com/subpath/type2/server');
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath/type2') });
+		});
 
-        it('should return undefined for wrong server', () => {
-            const inputURL = new URL('http://server-3.com');
-            expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
-        });
-    });
+		it('should return undefined for wrong server', () => {
+			const inputURL = new URL('http://server-3.com');
+			expect(serverManager.lookupServerByURL(inputURL)).toBe(undefined);
+		});
+	});
 
-    describe('persistServers with predefined servers', () => {
-        let serverManager;
+	describe('persistServers with predefined servers', () => {
+		let serverManager;
 
-        beforeEach(() => {
-            Config.predefinedServers = [
-                {name: 'Predefined Server 1', url: 'http://predefined-1.com'},
-                {name: 'Predefined Server 2', url: 'http://predefined-2.com'},
-            ];
-            Config.localServers = [];
-            Config.enableServerManagement = true;
-            Config.lastActiveServer = undefined;
-            Config.setServers.mockClear();
+		beforeEach(() => {
+			Config.predefinedServers = [
+				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+				{ name: 'Predefined Server 2', url: 'http://predefined-2.com' },
+			];
+			Config.localServers = [];
+			Config.enableServerManagement = true;
+			Config.lastActiveServer = undefined;
+			Config.setServers.mockClear();
 
-            parseURL.mockImplementation((url) => new URL(url));
+			parseURL.mockImplementation((url) => new URL(url));
 
-            serverManager = new ServerManager();
-            serverManager.init();
-        });
+			serverManager = new ServerManager();
+			serverManager.init();
+		});
 
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
 
-        it('should always set lastActiveServer to at least 0 when there are predefined servers', () => {
-            const localServer = {name: 'Local Server', url: 'http://local.com'};
-            serverManager.addServer(localServer);
-            serverManager.updateCurrentServer(serverManager.getOrderedServers()[0].id);
-            expect(Config.setServers).toHaveBeenCalledWith(expect.any(Array), 0);
-        });
-    });
+		it('should always set lastActiveServer to at least 0 when there are predefined servers', () => {
+			const localServer = { name: 'Local Server', url: 'http://local.com' };
+			serverManager.addServer(localServer);
+			serverManager.updateCurrentServer(serverManager.getOrderedServers()[0].id);
+			expect(Config.setServers).toHaveBeenCalledWith(expect.any(Array), 0);
+		});
+	});
 
-    describe('init with invalid lastActiveServer', () => {
-        let serverManager;
+	describe('init with invalid lastActiveServer', () => {
+		let serverManager;
 
-        beforeEach(() => {
-            parseURL.mockImplementation((url) => new URL(url));
-        });
+		beforeEach(() => {
+			parseURL.mockImplementation((url) => new URL(url));
+		});
 
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
 
-        it('should set a current server even when lastActiveServer index is out of bounds', () => {
-            Config.predefinedServers = [
-                {name: 'Predefined Server 1', url: 'http://predefined-1.com'},
-            ];
-            Config.localServers = [
-                {name: 'Local Server 1', url: 'http://local-1.com', order: 0},
-            ];
-            Config.enableServerManagement = true;
-            Config.lastActiveServer = 10;
+		it('should set a current server even when lastActiveServer index is out of bounds', () => {
+			Config.predefinedServers = [
+				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+			];
+			Config.localServers = [
+				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+			];
+			Config.enableServerManagement = true;
+			Config.lastActiveServer = 10;
 
-            serverManager = new ServerManager();
-            serverManager.init();
+			serverManager = new ServerManager();
+			serverManager.init();
 
-            expect(serverManager.getCurrentServerId()).toBeDefined();
-            const orderedServers = serverManager.getOrderedServers();
-            expect(orderedServers.length).toBeGreaterThan(0);
-            expect(orderedServers.some((s) => s.id === serverManager.getCurrentServerId())).toBe(true);
-        });
-    });
+			expect(serverManager.getCurrentServerId()).toBeDefined();
+			const orderedServers = serverManager.getOrderedServers();
+			expect(orderedServers.length).toBeGreaterThan(0);
+			expect(orderedServers.some((s) => s.id === serverManager.getCurrentServerId())).toBe(true);
+		});
+	});
 
-    describe('reloadServer', () => {
-        let serverManager;
+	describe('reloadServer', () => {
+		let serverManager;
 
-        beforeEach(() => {
-            Config.predefinedServers = [];
-            Config.localServers = [
-                {name: 'Local Server 1', url: 'http://local-1.com', order: 0},
-                {name: 'Local Server 2', url: 'http://local-2.com', order: 1},
-                {name: 'Local Server 3', url: 'http://local-3.com', order: 2},
-            ];
-            Config.enableServerManagement = true;
-            Config.lastActiveServer = 0;
+		beforeEach(() => {
+			Config.predefinedServers = [];
+			Config.localServers = [
+				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+				{ name: 'Local Server 2', url: 'http://local-2.com', order: 1 },
+				{ name: 'Local Server 3', url: 'http://local-3.com', order: 2 },
+			];
+			Config.enableServerManagement = true;
+			Config.lastActiveServer = 0;
 
-            parseURL.mockImplementation((url) => new URL(url));
+			parseURL.mockImplementation((url) => new URL(url));
 
-            serverManager = new ServerManager();
-            serverManager.init();
-        });
+			serverManager = new ServerManager();
+			serverManager.init();
+		});
 
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
 
-        it('should maintain the same order when reloading a user-configured server', () => {
-            const orderedServers = serverManager.getOrderedServers();
-            const serverToReload = orderedServers[1];
-            const originalOrder = orderedServers.map((s) => s.id);
+		it('should maintain the same order when reloading a user-configured server', () => {
+			const orderedServers = serverManager.getOrderedServers();
+			const serverToReload = orderedServers[1];
+			const originalOrder = orderedServers.map((s) => s.id);
 
-            serverManager.reloadServer(serverToReload.id);
+			serverManager.reloadServer(serverToReload.id);
 
-            const newOrderedServers = serverManager.getOrderedServers();
-            const newOrder = newOrderedServers.map((s) => s.id);
+			const newOrderedServers = serverManager.getOrderedServers();
+			const newOrder = newOrderedServers.map((s) => s.id);
 
-            expect(newOrder.length).toBe(originalOrder.length);
-            const reloadedServer = newOrderedServers.find((s) => s.name === serverToReload.name);
-            expect(reloadedServer).toBeDefined();
-            const reloadedIndex = newOrder.indexOf(reloadedServer.id);
-            expect(reloadedIndex).toBe(1);
-        });
-    });
+			expect(newOrder.length).toBe(originalOrder.length);
+			const reloadedServer = newOrderedServers.find((s) => s.name === serverToReload.name);
+			expect(reloadedServer).toBeDefined();
+			const reloadedIndex = newOrder.indexOf(reloadedServer.id);
+			expect(reloadedIndex).toBe(1);
+		});
+	});
 
-    describe('removeServer', () => {
-        let serverManager;
+	describe('removeServer', () => {
+		let serverManager;
 
-        beforeEach(() => {
-            parseURL.mockImplementation((url) => new URL(url));
-        });
+		beforeEach(() => {
+			parseURL.mockImplementation((url) => new URL(url));
+		});
 
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
 
-        it('should switch to previous server when removing a server, even with predefined servers', () => {
-            Config.predefinedServers = [
-                {name: 'Predefined Server 1', url: 'http://predefined-1.com'},
-            ];
-            Config.localServers = [
-                {name: 'Local Server 1', url: 'http://local-1.com', order: 0},
-                {name: 'Local Server 2', url: 'http://local-2.com', order: 1},
-            ];
-            Config.enableServerManagement = true;
-            Config.lastActiveServer = 0;
+		it('should switch to previous server when removing a server, even with predefined servers', () => {
+			Config.predefinedServers = [
+				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+			];
+			Config.localServers = [
+				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+				{ name: 'Local Server 2', url: 'http://local-2.com', order: 1 },
+			];
+			Config.enableServerManagement = true;
+			Config.lastActiveServer = 0;
 
-            serverManager = new ServerManager();
-            serverManager.init();
+			serverManager = new ServerManager();
+			serverManager.init();
 
-            const orderedServers = serverManager.getOrderedServers();
-            const serverToRemove = orderedServers[2];
-            const previousServer = orderedServers[1];
+			const orderedServers = serverManager.getOrderedServers();
+			const serverToRemove = orderedServers[2];
+			const previousServer = orderedServers[1];
 
-            serverManager.updateCurrentServer(serverToRemove.id);
-            expect(serverManager.getCurrentServerId()).toBe(serverToRemove.id);
+			serverManager.updateCurrentServer(serverToRemove.id);
+			expect(serverManager.getCurrentServerId()).toBe(serverToRemove.id);
 
-            serverManager.removeServer(serverToRemove.id);
+			serverManager.removeServer(serverToRemove.id);
 
-            expect(serverManager.getCurrentServerId()).toBe(previousServer.id);
-        });
+			expect(serverManager.getCurrentServerId()).toBe(previousServer.id);
+		});
 
-        it('should switch to next server when removing first server and no previous exists', () => {
-            Config.predefinedServers = [
-                {name: 'Predefined Server 1', url: 'http://predefined-1.com'},
-            ];
-            Config.localServers = [
-                {name: 'Local Server 1', url: 'http://local-1.com', order: 0},
-            ];
-            Config.enableServerManagement = true;
-            Config.lastActiveServer = 0;
+		it('should switch to next server when removing first server and no previous exists', () => {
+			Config.predefinedServers = [
+				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+			];
+			Config.localServers = [
+				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+			];
+			Config.enableServerManagement = true;
+			Config.lastActiveServer = 0;
 
-            serverManager = new ServerManager();
-            serverManager.init();
+			serverManager = new ServerManager();
+			serverManager.init();
 
-            const orderedServers = serverManager.getOrderedServers();
-            const firstServer = orderedServers[0];
-            const nextServer = orderedServers[1];
+			const orderedServers = serverManager.getOrderedServers();
+			const firstServer = orderedServers[0];
+			const nextServer = orderedServers[1];
 
-            serverManager.updateCurrentServer(firstServer.id);
-            expect(serverManager.getCurrentServerId()).toBe(firstServer.id);
+			serverManager.updateCurrentServer(firstServer.id);
+			expect(serverManager.getCurrentServerId()).toBe(firstServer.id);
 
-            serverManager.removeServer(firstServer.id);
+			serverManager.removeServer(firstServer.id);
 
-            expect(serverManager.getCurrentServerId()).toBe(nextServer.id);
-        });
-    });
+			expect(serverManager.getCurrentServerId()).toBe(nextServer.id);
+		});
+	});
 });

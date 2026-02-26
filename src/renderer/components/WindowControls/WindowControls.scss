@@ -1,0 +1,76 @@
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+.WindowControls {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	margin-left: 8px;
+	-webkit-app-region: no-drag;
+
+	&__button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 46px;
+		height: 32px;
+		border: none;
+		background: transparent;
+		color: rgba(255, 255, 255, 0.8);
+		cursor: pointer;
+		transition: background-color 0.2s;
+		padding: 0;
+		margin: 0;
+
+		i {
+			font-size: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		&:active {
+			background: rgba(255, 255, 255, 0.15);
+		}
+
+		&--minimize {
+			i::before {
+				content: '−';
+				font-weight: 300;
+				font-size: 20px;
+				font-family: system-ui, -apple-system, sans-serif;
+			}
+		}
+
+		&--maximize {
+			i::before {
+				content: '□';
+				font-weight: 300;
+				font-size: 16px;
+				font-family: system-ui, -apple-system, sans-serif;
+			}
+		}
+
+		&--close {
+			&:hover {
+				background: #e81123;
+				color: white;
+			}
+
+			&:active {
+				background: #f1707a;
+			}
+
+			i::before {
+				content: '×';
+				font-weight: 300;
+				font-size: 24px;
+				font-family: system-ui, -apple-system, sans-serif;
+			}
+		}
+	}
+}

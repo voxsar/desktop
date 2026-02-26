@@ -1,4 +1,4 @@
-@use 'base/css_variables';
+﻿@use 'base/css_variables';
 @use 'base/typography';
 
 @import '~@mattermost/compass-icons/css/compass-icons.css';
@@ -47,7 +47,7 @@ body {
 .topBar {
   height: 40px;
   z-index: 9;
-  -webkit-app-region: drag;
+  -webkit-app-region: no-drag;
 
   > .topBar-bg {
     display: flex;
@@ -94,7 +94,7 @@ body {
 
   &.macOS .three-dot-menu {
     flex-basis: 80px;
-    -webkit-app-region: drag;
+    -webkit-app-region: no-drag;
 
     i.icon-dots-vertical.isFocused {
       background: none !important;
@@ -131,7 +131,7 @@ body {
     flex: 0 0 40px;
     z-index: 9;
     /* background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #e5e5e5 100%); */
-    -webkit-app-region: drag;
+    -webkit-app-region: no-drag;
     margin-top: 4px;
   }
 

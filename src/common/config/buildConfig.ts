@@ -1,10 +1,10 @@
 // Copyright (c) 2015-2016 Yuya Ochiai
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {BuildConfig} from 'types/config';
+import type { BuildConfig } from 'types/config';
 
-import {DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK} from '../../common/constants';
+import { DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK } from '../../common/constants';
 
 // For detailed guides, please refer to https://docs.mattermost.com/deployment/desktop-app-deployment.html
 
@@ -23,24 +23,28 @@ import {DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK} from '../
  * @prop {[]} allowedProtocols - Defines which protocols should be automatically allowed
  */
 const buildConfig: BuildConfig = {
-    defaultServers: [/*
-    {
-      name: 'example',
-      url: 'https://example.com'
-    }
-  */],
-    helpLink: DEFAULT_HELP_LINK,
-    academyLink: DEFAULT_ACADEMY_LINK,
-    upgradeLink: DEFAULT_UPGRADE_LINK,
-    enableServerManagement: true,
-    enableAutoUpdater: true,
-    managedResources: ['trusted'],
-    allowedProtocols: [
-        'mattermost',
-        'ftp',
-        'mailto',
-        'tel',
-    ],
+	defaultServers: [
+		{
+			name: 'Aura Chat',
+			url: 'https://aura.artslabcreatives.com',
+		},
+		{
+			name: 'Collab',
+			url: 'https://collab.artslabcreatives.com',
+		},
+	],
+	helpLink: '',
+	academyLink: DEFAULT_ACADEMY_LINK,
+	upgradeLink: DEFAULT_UPGRADE_LINK,
+	enableServerManagement: false,
+	enableAutoUpdater: true,
+	managedResources: ['trusted'],
+	allowedProtocols: [
+		'mattermost',
+		'ftp',
+		'mailto',
+		'tel',
+	],
 };
 
 export default buildConfig;

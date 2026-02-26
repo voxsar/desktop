@@ -1,4 +1,4 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 import React from 'react';
@@ -11,21 +11,21 @@ import setupDarkMode from '../darkMode';
 setupDarkMode();
 
 const onClose = () => {
-    window.desktop.modals.finishModal();
+	window.desktop.modals.finishModal();
 };
 
 const start = async () => {
-    ReactDOM.render(
-        (
-            <IntlProvider>
-                <SettingsModal
-                    onClose={onClose}
-                />
-            </IntlProvider>
-        )
-        ,
-        document.getElementById('app'),
-    );
+	ReactDOM.render(
+		(
+			<IntlProvider>
+				<SettingsModal
+					onClose={onClose}
+				/>
+			</IntlProvider>
+		)
+		,
+		document.getElementById('app'),
+	);
 };
 
 // Deny drag&drop navigation in mainWindow.

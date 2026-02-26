@@ -1,4 +1,4 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
@@ -12,8 +12,8 @@ import useTransitionEnd from '../../hooks/useTransitionEnd';
 import './LoadingScreen.scss';
 
 type Props = {
-    loading?: boolean;
-    onFadeOutComplete?: () => void;
+	loading?: boolean;
+	onFadeOutComplete?: () => void;
 };
 
 /**
@@ -22,57 +22,57 @@ type Props = {
  * @param {boolean} darkMode - Prop that indicates if dark mode is enabled
  * @param {() => void} onFadeOutComplete - Function to call when the loading animation is completely finished
  */
-function LoadingScreen({loading = false, onFadeOutComplete = () => null}: Props) {
-    const loadingScreenRef = React.useRef(null);
+function LoadingScreen({ loading = false, onFadeOutComplete = () => null }: Props) {
+	const loadingScreenRef = React.useRef(null);
 
-    const [loadingIsComplete, setLoadingIsComplete] = React.useState(true);
-    const [loadAnimationIsComplete, setLoadAnimationIsComplete] = React.useState(true);
-    const [fadeOutIsComplete, setFadeOutIsComplete] = React.useState(true);
+	const [loadingIsComplete, setLoadingIsComplete] = React.useState(true);
+	const [loadAnimationIsComplete, setLoadAnimationIsComplete] = React.useState(true);
+	const [fadeOutIsComplete, setFadeOutIsComplete] = React.useState(true);
 
-    React.useEffect(() => {
-    // reset internal state if loading restarts
-        if (loading) {
-            resetState();
-        } else {
-            setLoadingIsComplete(true);
-        }
-    }, [loading]);
+	React.useEffect(() => {
+		// reset internal state if loading restarts
+		if (loading) {
+			resetState();
+		} else {
+			setLoadingIsComplete(true);
+		}
+	}, [loading]);
 
-    function handleLoadAnimationComplete() {
-        setLoadAnimationIsComplete(true);
-    }
+	function handleLoadAnimationComplete() {
+		setLoadAnimationIsComplete(true);
+	}
 
-    useTransitionEnd<HTMLDivElement>(loadingScreenRef, React.useCallback(() => {
-        setFadeOutIsComplete(true);
-        onFadeOutComplete();
-    }, []), ['opacity']);
+	useTransitionEnd<HTMLDivElement>(loadingScreenRef, React.useCallback(() => {
+		setFadeOutIsComplete(true);
+		onFadeOutComplete();
+	}, []), ['opacity']);
 
-    function loadingInProgress() {
-        return !(loadingIsComplete && loadAnimationIsComplete && fadeOutIsComplete);
-    }
+	function loadingInProgress() {
+		return !(loadingIsComplete && loadAnimationIsComplete && fadeOutIsComplete);
+	}
 
-    function resetState() {
-        setLoadingIsComplete(false);
-        setLoadAnimationIsComplete(false);
-        setFadeOutIsComplete(false);
-    }
+	function resetState() {
+		setLoadingIsComplete(false);
+		setLoadAnimationIsComplete(false);
+		setFadeOutIsComplete(false);
+	}
 
-    const loadingScreen = (
-        <div
-            ref={loadingScreenRef}
-            className={classNames('LoadingScreen', {
-                'LoadingScreen--loaded': loadingIsComplete && loadAnimationIsComplete,
-            })}
-        >
-            <BackgroundImage/>
-            <LoadingAnimation
-                loading={loading}
-                onLoadAnimationComplete={handleLoadAnimationComplete}
-            />
-        </div>
-    );
+	const loadingScreen = (
+		<div
+			ref={loadingScreenRef}
+			className={classNames('LoadingScreen', {
+				'LoadingScreen--loaded': loadingIsComplete && loadAnimationIsComplete,
+			})}
+		>
+			<BackgroundImage />
+			<LoadingAnimation
+				loading={loading}
+				onLoadAnimationComplete={handleLoadAnimationComplete}
+			/>
+		</div>
+	);
 
-    return loadingInProgress() ? loadingScreen : null;
+	return loadingInProgress() ? loadingScreen : null;
 }
 
 export default LoadingScreen;
