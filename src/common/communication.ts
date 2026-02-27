@@ -88,8 +88,13 @@ export const REQUEST_SERVERS_DROPDOWN_INFO = 'request-servers-dropdown-info';
 export const RECEIVE_DROPDOWN_MENU_SIZE = 'receive-dropdown-menu-size';
 
 export const UPDATE_AVAILABLE = 'update-available';
+export const UPDATE_DOWNLOADED = 'update-downloaded';
+export const UPDATE_PROGRESS = 'update-progress';
 export const CHECK_FOR_UPDATES = 'check-for-updates';
 export const NO_UPDATE_AVAILABLE = 'no-update-available';
+export const CANCEL_UPDATE_DOWNLOAD = 'cancel-update-download';
+export const CANCEL_UPGRADE = 'cancel-upgrade';
+export const UPDATE_REMIND_LATER = 'update-remind-later';
 export const OPEN_WINDOWS_STORE = 'open-windows-store';
 export const DOWNLOAD_UPDATE_MANUALLY = 'download-update-manually';
 export const OPEN_UPDATE_GUIDE = 'open-update-guide';
