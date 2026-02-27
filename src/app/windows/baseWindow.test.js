@@ -244,8 +244,6 @@ describe('BaseWindow', () => {
             }));
         });
 
-
-
         // Note: Testing BrowserWindow creation failure is complex with current mock setup
         // The actual implementation throws an error if BrowserWindow returns null
 
