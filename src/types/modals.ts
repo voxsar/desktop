@@ -2,17 +2,17 @@
 // See LICENSE.txt for license information.
 
 import type {
-	AuthInfo,
-	AuthenticationResponseDetails,
-	Certificate,
+    AuthInfo,
+    AuthenticationResponseDetails,
+    Certificate,
 } from 'electron/common';
 
 export type CertificateModalInfo = {
-	url: string;
-	list: Certificate[];
+    url: string;
+    list: Certificate[];
 }
 
 export type LoginModalInfo = {
-	request: AuthenticationResponseDetails;
-	authInfo: AuthInfo;
+    request: AuthenticationResponseDetails;
+    authInfo: AuthInfo;
 }

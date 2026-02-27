@@ -1,30 +1,30 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type { Placement } from '@floating-ui/react';
+import type {Placement} from '@floating-ui/react';
 import {
-	useFloating,
-	autoUpdate,
-	offset,
-	useHover,
-	useFocus,
-	useDismiss,
-	useRole,
-	useInteractions,
-	arrow,
-	FloatingPortal,
-	useTransitionStyles,
-	FloatingArrow,
-	flip,
-	useMergeRefs,
+    useFloating,
+    autoUpdate,
+    offset,
+    useHover,
+    useFocus,
+    useDismiss,
+    useRole,
+    useInteractions,
+    arrow,
+    FloatingPortal,
+    useTransitionStyles,
+    FloatingArrow,
+    flip,
+    useMergeRefs,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import React, { useRef, useState, useMemo, cloneElement, isValidElement } from 'react';
-import type { ReactElement, ReactNode } from 'react';
-import type { MessageDescriptor } from 'react-intl';
-import { defineMessage } from 'react-intl';
+import React, {useRef, useState, useMemo, cloneElement, isValidElement} from 'react';
+import type {ReactElement, ReactNode} from 'react';
+import type {MessageDescriptor} from 'react-intl';
+import {defineMessage} from 'react-intl';
 
-import { Constants } from 'renderer/constants';
+import {Constants} from 'renderer/constants';
 
 import TooltipContent from './tooltip_content';
 
@@ -35,170 +35,170 @@ import './with_tooltip.scss';
  * when shortcut definition is provided
  */
 export const ShortcutKeys = {
-	alt: defineMessage({
-		id: 'shortcuts.generic.alt',
-		defaultMessage: 'Alt',
-	}),
-	cmd: '⌘',
-	ctrl: defineMessage({
-		id: 'shortcuts.generic.ctrl',
-		defaultMessage: 'Ctrl',
-	}),
-	option: '⌥',
-	shift: defineMessage({
-		id: 'shortcuts.generic.shift',
-		defaultMessage: 'Shift',
-	}),
+    alt: defineMessage({
+        id: 'shortcuts.generic.alt',
+        defaultMessage: 'Alt',
+    }),
+    cmd: '⌘',
+    ctrl: defineMessage({
+        id: 'shortcuts.generic.ctrl',
+        defaultMessage: 'Ctrl',
+    }),
+    option: '⌥',
+    shift: defineMessage({
+        id: 'shortcuts.generic.shift',
+        defaultMessage: 'Shift',
+    }),
 };
 
 interface Props {
-	title: string | ReactNode | MessageDescriptor;
-	emoji?: string;
-	isEmojiLarge?: boolean;
-	hint?: string | ReactNode | MessageDescriptor;
+    title: string | ReactNode | MessageDescriptor;
+    emoji?: string;
+    isEmojiLarge?: boolean;
+    hint?: string | ReactNode | MessageDescriptor;
 
-	/**
+    /**
 	 * Whether the tooltip should be vertical or horizontal, by default it is vertical
 	 * This doesn't always guarantee the tooltip will be vertical, it just determines the initial placement and fallback placements
 	*/
-	isVertical?: boolean;
+    isVertical?: boolean;
 
-	/**
+    /**
 	 * If closing of the tooltip should be delayed,
 	 * Useful if tooltips contains links that need to be clicked
 	 */
-	delayClose?: boolean;
+    delayClose?: boolean;
 
-	/**
+    /**
 	 * Additional class name to be added to the tooltip container
 	 */
-	className?: string;
-	disabled?: boolean;
+    className?: string;
+    disabled?: boolean;
 
-	/**
+    /**
 	* @deprecated Do not use this except for special cases
 	* Callback when the tooltip appears
    */
-	onOpen?: () => void;
-	children: ReactElement;
+    onOpen?: () => void;
+    children: ReactElement;
 }
 
 export default function WithTooltip({
-	children,
-	title,
-	isEmojiLarge = false,
-	hint,
-	isVertical = true,
-	delayClose = false,
-	className,
-	onOpen,
-	disabled,
+    children,
+    title,
+    isEmojiLarge = false,
+    hint,
+    isVertical = true,
+    delayClose = false,
+    className,
+    onOpen,
+    disabled,
 }: Props) {
-	const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-	const arrowRef = useRef(null);
+    const arrowRef = useRef(null);
 
-	function handleChange(open: boolean) {
-		setOpen(open);
+    function handleChange(open: boolean) {
+        setOpen(open);
 
-		if (onOpen && open) {
-			onOpen();
-		}
-	}
+        if (onOpen && open) {
+            onOpen();
+        }
+    }
 
-	const placements = useMemo<{ initial: Placement; fallback: Placement[] }>(() => {
-		let initial: Placement;
-		let fallback: Placement[];
-		if (isVertical) {
-			initial = 'top';
-			fallback = ['bottom', 'right', 'left'];
-		} else {
-			initial = 'right';
-			fallback = ['left', 'top', 'bottom'];
-		}
-		return { initial, fallback };
-	}, [isVertical]);
+    const placements = useMemo<{ initial: Placement; fallback: Placement[] }>(() => {
+        let initial: Placement;
+        let fallback: Placement[];
+        if (isVertical) {
+            initial = 'top';
+            fallback = ['bottom', 'right', 'left'];
+        } else {
+            initial = 'right';
+            fallback = ['left', 'top', 'bottom'];
+        }
+        return {initial, fallback};
+    }, [isVertical]);
 
-	const { refs: { setReference, setFloating }, floatingStyles, context: floatingContext } = useFloating({
-		open: disabled ? false : open,
-		onOpenChange: handleChange,
-		whileElementsMounted: autoUpdate,
-		placement: 'left',
-		middleware: [
-			offset(Constants.OverlayArrow.OFFSET),
-			flip({
-				fallbackPlacements: placements.fallback,
-			}),
-			arrow({
-				element: arrowRef,
-			}),
-		],
-	});
+    const {refs: {setReference, setFloating}, floatingStyles, context: floatingContext} = useFloating({
+        open: disabled ? false : open,
+        onOpenChange: handleChange,
+        whileElementsMounted: autoUpdate,
+        placement: 'left',
+        middleware: [
+            offset(Constants.OverlayArrow.OFFSET),
+            flip({
+                fallbackPlacements: placements.fallback,
+            }),
+            arrow({
+                element: arrowRef,
+            }),
+        ],
+    });
 
-	const { isMounted, styles: transitionStyles } = useTransitionStyles(floatingContext, TRANSITION_STYLE_PROPS);
+    const {isMounted, styles: transitionStyles} = useTransitionStyles(floatingContext, TRANSITION_STYLE_PROPS);
 
-	const hover = useHover(floatingContext, {
-		restMs: Constants.OverlaysTimings.CURSOR_REST_TIME_BEFORE_OPEN,
-		delay: {
-			open: Constants.OverlaysTimings.CURSOR_MOUSEOVER_TO_OPEN,
-			close: delayClose ? Constants.OverlaysTimings.CURSOR_MOUSEOUT_TO_CLOSE_WITH_DELAY : Constants.OverlaysTimings.CURSOR_MOUSEOUT_TO_CLOSE,
-		},
-	});
-	const focus = useFocus(floatingContext);
-	const dismiss = useDismiss(floatingContext);
-	const role = useRole(floatingContext, { role: 'tooltip' });
+    const hover = useHover(floatingContext, {
+        restMs: Constants.OverlaysTimings.CURSOR_REST_TIME_BEFORE_OPEN,
+        delay: {
+            open: Constants.OverlaysTimings.CURSOR_MOUSEOVER_TO_OPEN,
+            close: delayClose ? Constants.OverlaysTimings.CURSOR_MOUSEOUT_TO_CLOSE_WITH_DELAY : Constants.OverlaysTimings.CURSOR_MOUSEOUT_TO_CLOSE,
+        },
+    });
+    const focus = useFocus(floatingContext);
+    const dismiss = useDismiss(floatingContext);
+    const role = useRole(floatingContext, {role: 'tooltip'});
 
-	const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover, focus, dismiss, role]);
 
-	if (!isValidElement(children)) {
-		// eslint-disable-next-line no-console
-		console.error('Children must be a valid React element for WithTooltip');
-	}
+    if (!isValidElement(children)) {
+        // eslint-disable-next-line no-console
+        console.error('Children must be a valid React element for WithTooltip');
+    }
 
-	const mergedRefs = useMergeRefs([setReference, (children as any)?.ref]);
+    const mergedRefs = useMergeRefs([setReference, (children as any)?.ref]);
 
-	const trigger = cloneElement(
-		children,
-		getReferenceProps({
-			ref: mergedRefs,
-			...children.props,
-		}),
-	);
+    const trigger = cloneElement(
+        children,
+        getReferenceProps({
+            ref: mergedRefs,
+            ...children.props,
+        }),
+    );
 
-	return (
-		<>
-			{trigger}
+    return (
+        <>
+            {trigger}
 
-			{isMounted && (
-				<FloatingPortal id={Constants.RootHtmlPortalId}>
-					<div
-						ref={setFloating}
-						className={classNames('tooltipContainer', className)}
-						style={{ ...floatingStyles, ...transitionStyles }}
-						{...getFloatingProps()}
-					>
-						<TooltipContent
-							title={title}
-							isEmojiLarge={isEmojiLarge}
-							hint={hint}
-						/>
-						<FloatingArrow
-							ref={arrowRef}
-							context={floatingContext}
-							width={Constants.OverlayArrow.WIDTH}
-							height={Constants.OverlayArrow.HEIGHT}
-						/>
-					</div>
-				</FloatingPortal>
-			)}
-		</>
-	);
+            {isMounted && (
+                <FloatingPortal id={Constants.RootHtmlPortalId}>
+                    <div
+                        ref={setFloating}
+                        className={classNames('tooltipContainer', className)}
+                        style={{...floatingStyles, ...transitionStyles}}
+                        {...getFloatingProps()}
+                    >
+                        <TooltipContent
+                            title={title}
+                            isEmojiLarge={isEmojiLarge}
+                            hint={hint}
+                        />
+                        <FloatingArrow
+                            ref={arrowRef}
+                            context={floatingContext}
+                            width={Constants.OverlayArrow.WIDTH}
+                            height={Constants.OverlayArrow.HEIGHT}
+                        />
+                    </div>
+                </FloatingPortal>
+            )}
+        </>
+    );
 }
 
 const TRANSITION_STYLE_PROPS = {
-	duration: {
-		open: Constants.OverlaysTimings.FADE_IN_DURATION,
-		close: Constants.OverlaysTimings.FADE_OUT_DURATION,
-	},
-	initial: Constants.OverlayTransitionStyles.START,
+    duration: {
+        open: Constants.OverlaysTimings.FADE_IN_DURATION,
+        close: Constants.OverlaysTimings.FADE_OUT_DURATION,
+    },
+    initial: Constants.OverlayTransitionStyles.START,
 };

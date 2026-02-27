@@ -5,56 +5,56 @@
 const fs = require('fs');
 
 const env = require('../../modules/environment');
-const { asyncSleep } = require('../../modules/utils');
+const {asyncSleep} = require('../../modules/utils');
 
 describe('history_menu', function desc() {
-	this.timeout(30000);
+    this.timeout(30000);
 
-	const config = env.demoMattermostConfig;
+    const config = env.demoMattermostConfig;
 
-	beforeEach(async () => {
-		env.cleanDataDir();
-		env.createTestUserDataDir();
-		env.cleanTestConfig();
-		fs.writeFileSync(env.configFilePath, JSON.stringify(config));
-		await asyncSleep(1000);
-		this.app = await env.getApp();
-		this.serverMap = await env.getServerMap(this.app);
-	});
+    beforeEach(async () => {
+        env.cleanDataDir();
+        env.createTestUserDataDir();
+        env.cleanTestConfig();
+        fs.writeFileSync(env.configFilePath, JSON.stringify(config));
+        await asyncSleep(1000);
+        this.app = await env.getApp();
+        this.serverMap = await env.getServerMap(this.app);
+    });
 
-	afterEach(async () => {
-		if (this.app) {
-			await this.app.close();
-		}
-		await env.clearElectronInstances();
-	});
+    afterEach(async () => {
+        if (this.app) {
+            await this.app.close();
+        }
+        await env.clearElectronInstances();
+    });
 
-	it('Click back and forward from history', async () => {
-		const firstServer = this.serverMap[config.servers[0].name][0].win;
-		await env.loginToMattermost(firstServer);
-		await firstServer.waitForSelector('#sidebarItem_off-topic');
+    it('Click back and forward from history', async () => {
+        const firstServer = this.serverMap[config.servers[0].name][0].win;
+        await env.loginToMattermost(firstServer);
+        await firstServer.waitForSelector('#sidebarItem_off-topic');
 
-		// Click on Off-Topic channel
-		await firstServer.click('#sidebarItem_off-topic');
+        // Click on Off-Topic channel
+        await firstServer.click('#sidebarItem_off-topic');
 
-		// Click on Town Square channel
-		await firstServer.click('#sidebarItem_town-square');
-		await firstServer.locator('[aria-label="Back"]').click();
+        // Click on Town Square channel
+        await firstServer.click('#sidebarItem_town-square');
+        await firstServer.locator('[aria-label="Back"]').click();
 
-		// Wait for navigation
-		await firstServer.waitForSelector('#channelHeaderTitle');
+        // Wait for navigation
+        await firstServer.waitForSelector('#channelHeaderTitle');
 
-		// Get channel header text
-		let channelHeaderText = await firstServer.$eval('#channelHeaderTitle', (el) => el.textContent.trim());
-		channelHeaderText.should.equal('Off-Topic');
+        // Get channel header text
+        let channelHeaderText = await firstServer.$eval('#channelHeaderTitle', (el) => el.textContent.trim());
+        channelHeaderText.should.equal('Off-Topic');
 
-		await firstServer.locator('[aria-label="Forward"]').click();
-		await asyncSleep(3000);
+        await firstServer.locator('[aria-label="Forward"]').click();
+        await asyncSleep(3000);
 
-		// Wait for navigation
-		await firstServer.waitForSelector('#channelHeaderTitle');
+        // Wait for navigation
+        await firstServer.waitForSelector('#channelHeaderTitle');
 
-		channelHeaderText = await firstServer.$eval('#channelHeaderTitle', (el) => el.textContent.trim());
-		channelHeaderText.should.equal('Town Square');
-	});
+        channelHeaderText = await firstServer.$eval('#channelHeaderTitle', (el) => el.textContent.trim());
+        channelHeaderText.should.equal('Town Square');
+    });
 });

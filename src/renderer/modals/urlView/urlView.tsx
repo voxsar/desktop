@@ -10,10 +10,10 @@ import setupDarkMode from 'renderer/modals/darkMode';
 setupDarkMode();
 
 const start = async () => {
-	ReactDOM.render(
-		<UrlView />,
-		document.getElementById('app'),
-	);
+    ReactDOM.render(
+        <UrlView/>,
+        document.getElementById('app'),
+    );
 };
 
 start();

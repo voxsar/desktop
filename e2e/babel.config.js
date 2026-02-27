@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 module.exports = (api) => {
-	api.cache.forever();
-	return {
-		presets: [
-			'@babel/typescript',
-		],
-	};
+    api.cache.forever();
+    return {
+        presets: [
+            '@babel/typescript',
+        ],
+    };
 };

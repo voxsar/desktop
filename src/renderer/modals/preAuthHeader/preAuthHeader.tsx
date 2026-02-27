@@ -13,28 +13,28 @@ import setupDarkMode from '../darkMode';
 setupDarkMode();
 
 const handleLoginCancel = () => {
-	window.desktop.modals.cancelModal();
+    window.desktop.modals.cancelModal();
 };
 
 const handleSubmit = (secret: string) => {
-	window.desktop.modals.finishModal(secret);
+    window.desktop.modals.finishModal(secret);
 };
 
 const getPreAuthInfo = () => {
-	return window.desktop.modals.getModalInfo<{ url: string; hasError: boolean }>();
+    return window.desktop.modals.getModalInfo<{ url: string; hasError: boolean }>();
 };
 
 const start = async () => {
-	ReactDOM.render(
-		<IntlProvider>
-			<PreAuthHeaderModal
-				onSubmit={handleSubmit}
-				onCancel={handleLoginCancel}
-				getPreAuthInfo={getPreAuthInfo}
-			/>
-		</IntlProvider>,
-		document.getElementById('app'),
-	);
+    ReactDOM.render(
+        <IntlProvider>
+            <PreAuthHeaderModal
+                onSubmit={handleSubmit}
+                onCancel={handleLoginCancel}
+                getPreAuthInfo={getPreAuthInfo}
+            />
+        </IntlProvider>,
+        document.getElementById('app'),
+    );
 };
 
 start();

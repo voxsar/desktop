@@ -7,11 +7,11 @@
  */
 export const SECURE_STORAGE_KEYS = {
 
-	/**
+    /**
 	 * Authentication secret shared by server administrators
 	 * Used to automatically authenticate with servers that require this secret
 	 */
-	PREAUTH: 'preauth',
+    PREAUTH: 'preauth',
 } as const;
 
 export type SecureStorageKey = typeof SECURE_STORAGE_KEYS[keyof typeof SECURE_STORAGE_KEYS];

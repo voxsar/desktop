@@ -4,41 +4,41 @@
 
 const fs = require('fs');
 
-const { expect } = require('chai');
+const {expect} = require('chai');
 
 const env = require('../../modules/environment');
-const { asyncSleep } = require('../../modules/utils');
+const {asyncSleep} = require('../../modules/utils');
 
 describe('copylink', function desc() {
-	this.timeout(30000);
+    this.timeout(30000);
 
-	const config = env.demoMattermostConfig;
+    const config = env.demoMattermostConfig;
 
-	beforeEach(async () => {
-		env.cleanDataDir();
-		env.createTestUserDataDir();
-		env.cleanTestConfig();
-		fs.writeFileSync(env.configFilePath, JSON.stringify(config));
-		await asyncSleep(1000);
-		this.app = await env.getApp();
-		this.serverMap = await env.getServerMap(this.app);
-	});
+    beforeEach(async () => {
+        env.cleanDataDir();
+        env.createTestUserDataDir();
+        env.cleanTestConfig();
+        fs.writeFileSync(env.configFilePath, JSON.stringify(config));
+        await asyncSleep(1000);
+        this.app = await env.getApp();
+        this.serverMap = await env.getServerMap(this.app);
+    });
 
-	afterEach(async () => {
-		if (this.app) {
-			await this.app.close();
-		}
-		await env.clearElectronInstances();
-	});
+    afterEach(async () => {
+        if (this.app) {
+            await this.app.close();
+        }
+        await env.clearElectronInstances();
+    });
 
-	it('MM-T1308 Check that external links dont open in the app', async () => {
-		const firstServer = this.serverMap[config.servers[0].name][0].win;
-		await env.loginToMattermost(firstServer);
-		await firstServer.waitForSelector('#post_textbox');
-		await firstServer.click('#post_textbox');
-		await firstServer.fill('#post_textbox', 'https://electronjs.org/apps/mattermost');
-		await firstServer.press('#post_textbox', 'Enter');
-		const newPageWindow = this.app.windows().find((window) => window.url().includes('apps/mattermost'));
-		expect(newPageWindow === undefined);
-	});
+    it('MM-T1308 Check that external links dont open in the app', async () => {
+        const firstServer = this.serverMap[config.servers[0].name][0].win;
+        await env.loginToMattermost(firstServer);
+        await firstServer.waitForSelector('#post_textbox');
+        await firstServer.click('#post_textbox');
+        await firstServer.fill('#post_textbox', 'https://electronjs.org/apps/mattermost');
+        await firstServer.press('#post_textbox', 'Enter');
+        const newPageWindow = this.app.windows().find((window) => window.url().includes('apps/mattermost'));
+        expect(newPageWindow === undefined);
+    });
 });

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 export enum DownloadItemTypeEnum {
-	FILE = 'file',
-	UPDATE = 'update',
+    FILE = 'file',
+    UPDATE = 'update',
 }
 
 export type DownloadItemUpdatedEventState = 'interrupted' | 'progressing';
@@ -11,17 +11,17 @@ export type DownloadItemDoneEventState = 'completed' | 'cancelled' | 'interrupte
 export type DownloadItemState = DownloadItemUpdatedEventState | DownloadItemDoneEventState | 'deleted' | 'available';
 
 export type DownloadedItem = {
-	type: DownloadItemTypeEnum;
-	filename: string;
-	state: DownloadItemState;
-	progress: number;
-	location: string;
-	mimeType: string | null;
-	addedAt: number;
-	receivedBytes: number;
-	totalBytes: number;
-	bookmark?: string;
-	thumbnailData?: string;
+    type: DownloadItemTypeEnum;
+    filename: string;
+    state: DownloadItemState;
+    progress: number;
+    location: string;
+    mimeType: string | null;
+    addedAt: number;
+    receivedBytes: number;
+    totalBytes: number;
+    bookmark?: string;
+    thumbnailData?: string;
 }
 
 export type DownloadedItems = Record<string, DownloadedItem>;
@@ -29,6 +29,6 @@ export type DownloadedItems = Record<string, DownloadedItem>;
 export type CoordinatesToJsonType = Omit<DOMRect, 'toJSON'>
 
 export type DownloadsMenuOpenEventPayload = {
-	item: DownloadedItem;
-	coordinates: CoordinatesToJsonType;
+    item: DownloadedItem;
+    coordinates: CoordinatesToJsonType;
 }

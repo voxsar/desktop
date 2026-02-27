@@ -11,67 +11,67 @@ import TopBar from 'renderer/components/TopBar';
 import './BasePage.scss';
 
 type Props = {
-	children?: React.ReactNode;
-	appName: string;
-	title?: string;
-	errorUrl?: string;
-	errorState?: ErrorState;
-	errorMessage?: string;
-	openMenu: () => void;
-	openPopoutMenu?: () => void;
+    children?: React.ReactNode;
+    appName: string;
+    title?: string;
+    errorUrl?: string;
+    errorState?: ErrorState;
+    errorMessage?: string;
+    openMenu: () => void;
+    openPopoutMenu?: () => void;
 };
 
 export enum ErrorState {
-	FAILED = 'failed',
-	INCOMPATIBLE = 'incompatible',
+    FAILED = 'failed',
+    INCOMPATIBLE = 'incompatible',
 }
 
 export default function BasePage({
-	children,
-	appName,
-	errorUrl,
-	openMenu,
-	openPopoutMenu,
-	title,
-	errorState,
-	errorMessage,
+    children,
+    appName,
+    errorUrl,
+    openMenu,
+    openPopoutMenu,
+    title,
+    errorState,
+    errorMessage,
 }: Props) {
-	let errorComponent;
-	if (errorState === ErrorState.FAILED) {
-		errorComponent = (
-			<ConnectionErrorView
-				errorInfo={errorMessage}
-				url={errorUrl}
-				appName={appName}
-				handleLink={window.desktop.openServerExternally}
-			/>
-		);
-	} else if (errorState === ErrorState.INCOMPATIBLE) {
-		errorComponent = (
-			<IncompatibleErrorView
-				url={errorUrl}
-				appName={appName}
-				handleLink={window.desktop.openServerExternally}
-				handleUpgradeLink={window.desktop.openServerUpgradeLink}
-			/>
-		);
-	}
+    let errorComponent;
+    if (errorState === ErrorState.FAILED) {
+        errorComponent = (
+            <ConnectionErrorView
+                errorInfo={errorMessage}
+                url={errorUrl}
+                appName={appName}
+                handleLink={window.desktop.openServerExternally}
+            />
+        );
+    } else if (errorState === ErrorState.INCOMPATIBLE) {
+        errorComponent = (
+            <IncompatibleErrorView
+                url={errorUrl}
+                appName={appName}
+                handleLink={window.desktop.openServerExternally}
+                handleUpgradeLink={window.desktop.openServerUpgradeLink}
+            />
+        );
+    }
 
-	return (
-		<>
-			<TopBar
-				openMenu={openMenu}
-				openPopoutMenu={openPopoutMenu}
-				title={title}
-			>
-				{children}
-			</TopBar>
-			<BackgroundImage />
-			<div className='BasePage'>
-				<div className='BasePage__body'>
-					{errorComponent}
-				</div>
-			</div>
-		</>
-	);
+    return (
+        <>
+            <TopBar
+                openMenu={openMenu}
+                openPopoutMenu={openPopoutMenu}
+                title={title}
+            >
+                {children}
+            </TopBar>
+            <BackgroundImage/>
+            <div className='BasePage'>
+                <div className='BasePage__body'>
+                    {errorComponent}
+                </div>
+            </div>
+        </>
+    );
 }

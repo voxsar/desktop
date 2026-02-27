@@ -11,21 +11,21 @@ import setupDarkMode from '../darkMode';
 setupDarkMode();
 
 const onClose = () => {
-	window.desktop.modals.finishModal();
+    window.desktop.modals.finishModal();
 };
 
 const start = async () => {
-	ReactDOM.render(
-		(
-			<IntlProvider>
-				<SettingsModal
-					onClose={onClose}
-				/>
-			</IntlProvider>
-		)
-		,
-		document.getElementById('app'),
-	);
+    ReactDOM.render(
+        (
+            <IntlProvider>
+                <SettingsModal
+                    onClose={onClose}
+                />
+            </IntlProvider>
+        )
+        ,
+        document.getElementById('app'),
+    );
 };
 
 // Deny drag&drop navigation in mainWindow.

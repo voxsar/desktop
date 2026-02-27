@@ -3,62 +3,62 @@
 // See LICENSE.txt for license information.
 import fs from 'fs';
 
-import { Logger } from 'common/log';
+import {Logger} from 'common/log';
 
 const log = new Logger('JsonFileManager');
 
 export default class JsonFileManager<T> {
-	jsonFile: string;
-	json: T;
-	private saving?: Promise<void>;
+    jsonFile: string;
+    json: T;
+    private saving?: Promise<void>;
 
-	constructor(file: string) {
-		this.jsonFile = file;
-		try {
-			this.json = JSON.parse(fs.readFileSync(file, 'utf-8'));
-		} catch (err) {
-			this.json = {} as T;
-		}
-	}
+    constructor(file: string) {
+        this.jsonFile = file;
+        try {
+            this.json = JSON.parse(fs.readFileSync(file, 'utf-8'));
+        } catch (err) {
+            this.json = {} as T;
+        }
+    }
 
-	write(json: string): Promise<void> {
-		return new Promise((resolve, reject) => {
-			fs.writeFile(this.jsonFile, json, (err) => {
-				if (err) {
-					// No real point in bringing electron-log into this otherwise electron-free file
-					// eslint-disable-next-line no-console
-					console.error(err);
-					reject(err);
-					return;
-				}
-				resolve();
-			});
-		});
-	}
+    write(json: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            fs.writeFile(this.jsonFile, json, (err) => {
+                if (err) {
+                    // No real point in bringing electron-log into this otherwise electron-free file
+                    // eslint-disable-next-line no-console
+                    console.error(err);
+                    reject(err);
+                    return;
+                }
+                resolve();
+            });
+        });
+    }
 
-	writeToFile(): Promise<void> {
-		log.debug('writeToFile', this.jsonFile);
+    writeToFile(): Promise<void> {
+        log.debug('writeToFile', this.jsonFile);
 
-		const json = JSON.stringify(this.json, undefined, 2);
-		if (this.saving) {
-			this.saving = this.saving.then(() => this.write(json));
-		} else {
-			this.saving = this.write(json);
-		}
-		return this.saving;
-	}
+        const json = JSON.stringify(this.json, undefined, 2);
+        if (this.saving) {
+            this.saving = this.saving.then(() => this.write(json));
+        } else {
+            this.saving = this.write(json);
+        }
+        return this.saving;
+    }
 
-	setJson(json: T): Promise<void> {
-		this.json = json;
-		return this.writeToFile();
-	}
+    setJson(json: T): Promise<void> {
+        this.json = json;
+        return this.writeToFile();
+    }
 
-	setValue(key: keyof T, value: T[keyof T]): Promise<void> {
-		this.json[key] = value;
-		return this.writeToFile();
-	}
+    setValue(key: keyof T, value: T[keyof T]): Promise<void> {
+        this.json[key] = value;
+        return this.writeToFile();
+    }
 
-	getValue(key: keyof T): T[keyof T] {
-		return this.json[key];
-	}
+    getValue(key: keyof T): T[keyof T] {
+        return this.json[key];
+    }
 }

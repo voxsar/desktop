@@ -2,14 +2,14 @@
 // See LICENSE.txt for license information.
 
 export type Boundaries = {
-	maxX: number;
-	maxY: number;
-	minX: number;
-	minY: number;
-	maxWidth: number;
-	maxHeight: number;
+    maxX: number;
+    maxY: number;
+    minX: number;
+    minY: number;
+    maxWidth: number;
+    maxHeight: number;
 }
 
 export type DeepPartial<T> = {
-	[P in keyof T]?: DeepPartial<T[P]>;
+    [P in keyof T]?: DeepPartial<T[P]>;
 }

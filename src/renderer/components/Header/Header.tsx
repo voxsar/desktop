@@ -8,22 +8,22 @@ import Logo from 'renderer/components/Images/Logo';
 import './Header.scss';
 
 type HeaderProps = {
-	alternateLink?: React.ReactElement;
+    alternateLink?: React.ReactElement;
 }
 
 const Header = ({
-	alternateLink,
+    alternateLink,
 }: HeaderProps) => (
-	<div
-		className='Header'
-	>
-		<div className='Header__main'>
-			<div className='Header__logo'>
-				<Logo />
-			</div>
-			{alternateLink}
-		</div>
-	</div>
+    <div
+        className='Header'
+    >
+        <div className='Header__main'>
+            <div className='Header__logo'>
+                <Logo/>
+            </div>
+            {alternateLink}
+        </div>
+    </div>
 );
 
 export default Header;

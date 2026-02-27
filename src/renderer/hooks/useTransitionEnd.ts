@@ -13,45 +13,45 @@ import React from 'react';
  *   ignores events bubbling up from descendent elements
  */
 function useTransitionend<T extends Element>(
-	ref: React.RefObject<T>,
-	callback: (event: Event) => void,
-	properties: string[],
-	listenForEventBubbling = true,
+    ref: React.RefObject<T>,
+    callback: (event: Event) => void,
+    properties: string[],
+    listenForEventBubbling = true,
 ) {
-	React.useEffect(() => {
-		if (!ref.current) {
-			return undefined;
-		}
+    React.useEffect(() => {
+        if (!ref.current) {
+            return undefined;
+        }
 
-		function handleTransitionEnd(event: Event & { propertyName?: string }) {
-			if (!listenForEventBubbling && event.target !== ref.current) {
-				return;
-			}
+        function handleTransitionEnd(event: Event & { propertyName?: string }) {
+            if (!listenForEventBubbling && event.target !== ref.current) {
+                return;
+            }
 
-			if (properties && typeof properties === 'object') {
-				const property = properties.find(
-					(propertyName) => propertyName === event.propertyName,
-				);
-				if (property) {
-					callback(event);
-				}
-				return;
-			}
-			callback(event);
-		}
+            if (properties && typeof properties === 'object') {
+                const property = properties.find(
+                    (propertyName) => propertyName === event.propertyName,
+                );
+                if (property) {
+                    callback(event);
+                }
+                return;
+            }
+            callback(event);
+        }
 
-		ref.current.addEventListener('transitionend', handleTransitionEnd);
+        ref.current.addEventListener('transitionend', handleTransitionEnd);
 
-		return () => {
-			if (!ref.current) {
-				return;
-			}
-			ref.current.removeEventListener(
-				'transitionend',
-				handleTransitionEnd,
-			);
-		};
-	}, [ref, callback, properties, listenForEventBubbling]);
+        return () => {
+            if (!ref.current) {
+                return;
+            }
+            ref.current.removeEventListener(
+                'transitionend',
+                handleTransitionEnd,
+            );
+        };
+    }, [ref, callback, properties, listenForEventBubbling]);
 }
 
 export default useTransitionend;

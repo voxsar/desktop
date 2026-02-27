@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 export type AppState = {
-	lastAppVersion?: string;
-	skippedVersion?: string;
-	updateCheckedDate?: string;
+    lastAppVersion?: string;
+    skippedVersion?: string;
+    updateCheckedDate?: string;
 };

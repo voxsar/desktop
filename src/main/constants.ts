@@ -5,9 +5,9 @@
 
 import path from 'path';
 
-import { app, ipcMain } from 'electron';
+import {app, ipcMain} from 'electron';
 
-import { UPDATE_PATHS } from 'common/communication';
+import {UPDATE_PATHS} from 'common/communication';
 
 let userDataPath;
 
@@ -24,23 +24,23 @@ export let developerModeJson = '';
 export let secureStoragePath = '';
 
 export function updatePaths(emit = false) {
-	userDataPath = app.getPath('userData');
+    userDataPath = app.getPath('userData');
 
-	configPath = `${userDataPath}/config.json`;
-	allowedProtocolFile = path.resolve(userDataPath, 'allowedProtocols.json');
-	appVersionJson = path.join(userDataPath, 'app-state.json');
-	certificateStorePath = path.resolve(userDataPath, 'certificate.json');
-	trustedOriginsStoreFile = path.resolve(userDataPath, 'trustedOrigins.json');
-	boundsInfoPath = path.join(userDataPath, 'bounds-info.json');
-	migrationInfoPath = path.resolve(userDataPath, 'migration-info.json');
-	downloadsJson = path.resolve(userDataPath, 'downloads.json');
-	permissionsJson = path.resolve(userDataPath, 'permissions.json');
-	developerModeJson = path.resolve(userDataPath, 'developerMode.json');
-	secureStoragePath = userDataPath;
+    configPath = `${userDataPath}/config.json`;
+    allowedProtocolFile = path.resolve(userDataPath, 'allowedProtocols.json');
+    appVersionJson = path.join(userDataPath, 'app-state.json');
+    certificateStorePath = path.resolve(userDataPath, 'certificate.json');
+    trustedOriginsStoreFile = path.resolve(userDataPath, 'trustedOrigins.json');
+    boundsInfoPath = path.join(userDataPath, 'bounds-info.json');
+    migrationInfoPath = path.resolve(userDataPath, 'migration-info.json');
+    downloadsJson = path.resolve(userDataPath, 'downloads.json');
+    permissionsJson = path.resolve(userDataPath, 'permissions.json');
+    developerModeJson = path.resolve(userDataPath, 'developerMode.json');
+    secureStoragePath = userDataPath;
 
-	if (emit) {
-		ipcMain.emit(UPDATE_PATHS);
-	}
+    if (emit) {
+        ipcMain.emit(UPDATE_PATHS);
+    }
 }
 
 updatePaths();

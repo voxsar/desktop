@@ -4,50 +4,50 @@
 
 import 'renderer/css/index.scss';
 
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 
 import MainPage from './components/MainPage';
-import { useConfig } from './hooks/useConfig';
+import {useConfig} from './hooks/useConfig';
 import IntlProvider from './intl_provider';
 import setupDarkMode from './modals/darkMode';
-import { printVersion } from './utils';
+import {printVersion} from './utils';
 
 const openMenu = () => {
-	if (window.process.platform !== 'darwin') {
-		window.desktop.openAppMenu();
-	}
+    if (window.process.platform !== 'darwin') {
+        window.desktop.openAppMenu();
+    }
 };
 
 setupDarkMode();
 
 function Root() {
-	const { config } = useConfig();
+    const {config} = useConfig();
 
-	useEffect(() => {
-		printVersion();
+    useEffect(() => {
+        printVersion();
 
-		// Deny drag&drop navigation in mainWindow.
-		// Drag&drop is allowed in webview of index.html.
-		document.addEventListener('dragover', (event) => event.preventDefault());
-		document.addEventListener('drop', (event) => event.preventDefault());
-	}, []);
+        // Deny drag&drop navigation in mainWindow.
+        // Drag&drop is allowed in webview of index.html.
+        document.addEventListener('dragover', (event) => event.preventDefault());
+        document.addEventListener('drop', (event) => event.preventDefault());
+    }, []);
 
-	if (!config) {
-		return null;
-	}
+    if (!config) {
+        return null;
+    }
 
-	return (
-		<IntlProvider>
-			<MainPage
-				openMenu={openMenu}
-				appName={config.appName}
-			/>
-		</IntlProvider>
-	);
+    return (
+        <IntlProvider>
+            <MainPage
+                openMenu={openMenu}
+                appName={config.appName}
+            />
+        </IntlProvider>
+    );
 }
 
 ReactDOM.render(
-	<Root />,
-	document.getElementById('app'),
+    <Root/>,
+    document.getElementById('app'),
 );

@@ -2,454 +2,455 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import { EventEmitter } from 'events';
 import fs from 'fs';
 import path from 'path';
 
+import {EventEmitter} from 'events';
+
 import JsonFileManager from 'common/JsonFileManager';
-import { Logger } from 'common/log';
-import { copy } from 'common/utils/util';
+import {Logger} from 'common/log';
+import {copy} from 'common/utils/util';
 import * as Validator from 'common/Validator';
 
 import type {
-	AnyConfig,
-	BuildConfig,
-	CombinedConfig,
-	ConfigServer,
-	CurrentConfig,
-	RegistryConfig as RegistryCurrentConfig,
+    AnyConfig,
+    BuildConfig,
+    CombinedConfig,
+    ConfigServer,
+    CurrentConfig,
+    RegistryConfig as RegistryCurrentConfig,
 } from 'types/config';
 
 import buildConfig from './buildConfig';
-import defaultPreferences, { getDefaultDownloadLocation } from './defaultPreferences';
+import defaultPreferences, {getDefaultDownloadLocation} from './defaultPreferences';
 import migrateConfigItems from './migrationPreferences';
-import RegistryConfig, { REGISTRY_READ_EVENT } from './RegistryConfig';
+import RegistryConfig, {REGISTRY_READ_EVENT} from './RegistryConfig';
 import upgradeConfigData from './upgradePreferences';
 
 const log = new Logger('Config');
 
 export class Config extends EventEmitter {
-	private configFilePath?: string;
-	private appName?: string;
-	private appPath?: string;
+    private configFilePath?: string;
+    private appName?: string;
+    private appPath?: string;
 
-	private registryConfig: RegistryConfig;
-	private _predefinedServers: ConfigServer[];
-	private json?: JsonFileManager<CurrentConfig>;
+    private registryConfig: RegistryConfig;
+    private _predefinedServers: ConfigServer[];
+    private json?: JsonFileManager<CurrentConfig>;
 
-	private combinedData?: CombinedConfig;
-	private localConfigData?: CurrentConfig;
-	private registryConfigData?: Partial<RegistryCurrentConfig>;
-	private defaultConfigData?: CurrentConfig;
-	private buildConfigData?: BuildConfig;
-	private canUpgradeValue?: boolean;
+    private combinedData?: CombinedConfig;
+    private localConfigData?: CurrentConfig;
+    private registryConfigData?: Partial<RegistryCurrentConfig>;
+    private defaultConfigData?: CurrentConfig;
+    private buildConfigData?: BuildConfig;
+    private canUpgradeValue?: boolean;
 
-	constructor() {
-		super();
-		this.registryConfig = new RegistryConfig();
-		this._predefinedServers = [];
-		if (buildConfig.defaultServers) {
-			this._predefinedServers.push(...buildConfig.defaultServers.map((server, index) => ({ ...server, order: index })));
-		}
-	}
+    constructor() {
+        super();
+        this.registryConfig = new RegistryConfig();
+        this._predefinedServers = [];
+        if (buildConfig.defaultServers) {
+            this._predefinedServers.push(...buildConfig.defaultServers.map((server, index) => ({...server, order: index})));
+        }
+    }
 
-	init = (configFilePath: string, appName: string, appPath: string) => {
-		this.configFilePath = configFilePath;
-		this.appName = appName;
-		this.appPath = appPath;
-		this.canUpgradeValue = this.checkWriteableApp();
+    init = (configFilePath: string, appName: string, appPath: string) => {
+        this.configFilePath = configFilePath;
+        this.appName = appName;
+        this.appPath = appPath;
+        this.canUpgradeValue = this.checkWriteableApp();
 
-		this.reload();
-	};
+        this.reload();
+    };
 
-	initRegistry = () => {
-		if (process.platform !== 'win32') {
-			return Promise.resolve();
-		}
+    initRegistry = () => {
+        if (process.platform !== 'win32') {
+            return Promise.resolve();
+        }
 
-		return new Promise<void>((resolve) => {
-			this.registryConfig = new RegistryConfig();
-			this.registryConfig.once(REGISTRY_READ_EVENT, (data) => {
-				this.onLoadRegistry(data);
-				resolve();
-			});
-			this.registryConfig.init();
-		});
-	};
+        return new Promise<void>((resolve) => {
+            this.registryConfig = new RegistryConfig();
+            this.registryConfig.once(REGISTRY_READ_EVENT, (data) => {
+                this.onLoadRegistry(data);
+                resolve();
+            });
+            this.registryConfig.init();
+        });
+    };
 
-	/**
+    /**
 	 * Reload all sources of config data
 	 *
 	 * @emits {update} emitted once all data has been loaded and merged
 	 */
-	reload = (): void => {
-		this.defaultConfigData = copy(defaultPreferences);
-		this.buildConfigData = copy(buildConfig);
+    reload = (): void => {
+        this.defaultConfigData = copy(defaultPreferences);
+        this.buildConfigData = copy(buildConfig);
 
-		const loadedConfig = this.loadLocalConfigFile();
-		this.localConfigData = this.checkForConfigUpdates(loadedConfig);
+        const loadedConfig = this.loadLocalConfigFile();
+        this.localConfigData = this.checkForConfigUpdates(loadedConfig);
 
-		this.regenerateCombinedConfigData();
+        this.regenerateCombinedConfigData();
 
-		this.emit('update', this.combinedData);
-	};
+        this.emit('update', this.combinedData);
+    };
 
-	/*********************
+    /*********************
 	 * Setters and Getters
 	 *********************/
 
-	/**
+    /**
 	 * Used to save a single config property
 	 *
 	 * @param {string} key name of config property to be saved
 	 * @param {*} data value to save for provided key
 	 */
-	set = (key: keyof CurrentConfig, data: CurrentConfig[keyof CurrentConfig]): void => {
-		log.debug('set');
-		this.setMultiple({ [key]: data });
-	};
+    set = (key: keyof CurrentConfig, data: CurrentConfig[keyof CurrentConfig]): void => {
+        log.debug('set');
+        this.setMultiple({[key]: data});
+    };
 
-	setConfigPath = (configPath: string) => {
-		this.configFilePath = configPath;
-		this.json = undefined;
-	};
+    setConfigPath = (configPath: string) => {
+        this.configFilePath = configPath;
+        this.json = undefined;
+    };
 
-	/**
+    /**
 	 * Used to save an array of config properties in one go
 	 *
 	 * @param {array} properties an array of config properties to save
 	 */
-	setMultiple = (newData: Partial<CurrentConfig>) => {
-		log.debug('setMultiple');
+    setMultiple = (newData: Partial<CurrentConfig>) => {
+        log.debug('setMultiple');
 
-		if (newData.darkMode && newData.darkMode !== this.darkMode) {
-			this.emit('darkModeChange', newData.darkMode);
-		}
-		this.localConfigData = Object.assign({}, this.localConfigData, { ...newData, servers: this.localConfigData?.servers });
-		this.regenerateCombinedConfigData();
-		this.saveLocalConfigData();
-	};
+        if (newData.darkMode && newData.darkMode !== this.darkMode) {
+            this.emit('darkModeChange', newData.darkMode);
+        }
+        this.localConfigData = Object.assign({}, this.localConfigData, {...newData, servers: this.localConfigData?.servers});
+        this.regenerateCombinedConfigData();
+        this.saveLocalConfigData();
+    };
 
-	setServers = (servers: ConfigServer[], lastActiveServer?: number) => {
-		log.debug('setServers');
+    setServers = (servers: ConfigServer[], lastActiveServer?: number) => {
+        log.debug('setServers');
 
-		this.localConfigData = Object.assign({}, this.localConfigData, {
-			servers,
-			lastActiveServer: lastActiveServer ?? this.localConfigData?.lastActiveServer,
-			viewLimit: this.localConfigData?.viewLimit ? Math.max(this.localConfigData.viewLimit, servers.length + this.predefinedServers.length) : undefined,
-		});
-		this.regenerateCombinedConfigData();
-		this.saveLocalConfigData();
-	};
+        this.localConfigData = Object.assign({}, this.localConfigData, {
+            servers,
+            lastActiveServer: lastActiveServer ?? this.localConfigData?.lastActiveServer,
+            viewLimit: this.localConfigData?.viewLimit ? Math.max(this.localConfigData.viewLimit, servers.length + this.predefinedServers.length) : undefined,
+        });
+        this.regenerateCombinedConfigData();
+        this.saveLocalConfigData();
+    };
 
-	// getters for accessing the various config data inputs
+    // getters for accessing the various config data inputs
 
-	get data() {
-		return this.combinedData;
-	}
-	get localData() {
-		return this.localConfigData ?? defaultPreferences;
-	}
-	get defaultData() {
-		return this.defaultConfigData ?? defaultPreferences;
-	}
-	get buildData() {
-		return this.buildConfigData ?? buildConfig;
-	}
-	get registryData() {
-		return this.registryConfigData;
-	}
+    get data() {
+        return this.combinedData;
+    }
+    get localData() {
+        return this.localConfigData ?? defaultPreferences;
+    }
+    get defaultData() {
+        return this.defaultConfigData ?? defaultPreferences;
+    }
+    get buildData() {
+        return this.buildConfigData ?? buildConfig;
+    }
+    get registryData() {
+        return this.registryConfigData;
+    }
 
-	// convenience getters
+    // convenience getters
 
-	get version() {
-		return this.combinedData?.version ?? defaultPreferences.version;
-	}
-	get darkMode() {
-		return this.combinedData?.darkMode ?? defaultPreferences.darkMode;
-	}
-	get localServers() {
-		return this.localConfigData?.servers ?? defaultPreferences.servers;
-	}
-	get predefinedServers() {
-		return this._predefinedServers;
-	}
-	get enableHardwareAcceleration() {
-		return this.combinedData?.enableHardwareAcceleration ?? defaultPreferences.enableHardwareAcceleration;
-	}
+    get version() {
+        return this.combinedData?.version ?? defaultPreferences.version;
+    }
+    get darkMode() {
+        return this.combinedData?.darkMode ?? defaultPreferences.darkMode;
+    }
+    get localServers() {
+        return this.localConfigData?.servers ?? defaultPreferences.servers;
+    }
+    get predefinedServers() {
+        return this._predefinedServers;
+    }
+    get enableHardwareAcceleration() {
+        return this.combinedData?.enableHardwareAcceleration ?? defaultPreferences.enableHardwareAcceleration;
+    }
 
-	get startInFullscreen() {
-		return this.combinedData?.startInFullscreen ?? defaultPreferences.startInFullscreen;
-	}
-	get enableServerManagement() {
-		return this.combinedData?.enableServerManagement ?? buildConfig.enableServerManagement;
-	}
-	get enableAutoUpdater() {
-		return this.combinedData?.enableAutoUpdater ?? buildConfig.enableAutoUpdater;
-	}
-	get autostart() {
-		return this.combinedData?.autostart ?? defaultPreferences.autostart;
-	}
-	get hideOnStart() {
-		return this.combinedData?.hideOnStart ?? defaultPreferences.hideOnStart;
-	}
-	get notifications() {
-		return this.combinedData?.notifications ?? defaultPreferences.notifications;
-	}
-	get showUnreadBadge() {
-		return this.combinedData?.showUnreadBadge ?? defaultPreferences.showUnreadBadge;
-	}
-	get useSpellChecker() {
-		return this.combinedData?.useSpellChecker ?? defaultPreferences.useSpellChecker;
-	}
+    get startInFullscreen() {
+        return this.combinedData?.startInFullscreen ?? defaultPreferences.startInFullscreen;
+    }
+    get enableServerManagement() {
+        return this.combinedData?.enableServerManagement ?? buildConfig.enableServerManagement;
+    }
+    get enableAutoUpdater() {
+        return this.combinedData?.enableAutoUpdater ?? buildConfig.enableAutoUpdater;
+    }
+    get autostart() {
+        return this.combinedData?.autostart ?? defaultPreferences.autostart;
+    }
+    get hideOnStart() {
+        return this.combinedData?.hideOnStart ?? defaultPreferences.hideOnStart;
+    }
+    get notifications() {
+        return this.combinedData?.notifications ?? defaultPreferences.notifications;
+    }
+    get showUnreadBadge() {
+        return this.combinedData?.showUnreadBadge ?? defaultPreferences.showUnreadBadge;
+    }
+    get useSpellChecker() {
+        return this.combinedData?.useSpellChecker ?? defaultPreferences.useSpellChecker;
+    }
 
-	get spellCheckerURL(): (string | undefined) {
-		return this.combinedData?.spellCheckerURL;
-	}
+    get spellCheckerURL(): (string | undefined) {
+        return this.combinedData?.spellCheckerURL;
+    }
 
-	get spellCheckerLocales() {
-		return this.combinedData?.spellCheckerLocales ?? defaultPreferences.spellCheckerLocales;
-	}
-	get showTrayIcon() {
-		return this.combinedData?.showTrayIcon ?? defaultPreferences.showTrayIcon;
-	}
-	get trayIconTheme() {
-		return this.combinedData?.trayIconTheme ?? defaultPreferences.trayIconTheme;
-	}
-	get downloadLocation() {
-		return this.combinedData?.downloadLocation ?? getDefaultDownloadLocation();
-	}
-	get helpLink() {
-		return this.combinedData?.helpLink;
-	}
-	get academyLink() {
-		return this.combinedData?.academyLink;
-	}
-	get upgradeLink() {
-		return this.combinedData?.upgradeLink;
-	}
-	get minimizeToTray() {
-		return this.combinedData?.minimizeToTray;
-	}
-	get lastActiveServer() {
-		return this.combinedData?.lastActiveServer;
-	}
-	get alwaysClose() {
-		return this.combinedData?.alwaysClose;
-	}
-	get alwaysMinimize() {
-		return this.combinedData?.alwaysMinimize;
-	}
+    get spellCheckerLocales() {
+        return this.combinedData?.spellCheckerLocales ?? defaultPreferences.spellCheckerLocales;
+    }
+    get showTrayIcon() {
+        return this.combinedData?.showTrayIcon ?? defaultPreferences.showTrayIcon;
+    }
+    get trayIconTheme() {
+        return this.combinedData?.trayIconTheme ?? defaultPreferences.trayIconTheme;
+    }
+    get downloadLocation() {
+        return this.combinedData?.downloadLocation ?? getDefaultDownloadLocation();
+    }
+    get helpLink() {
+        return this.combinedData?.helpLink;
+    }
+    get academyLink() {
+        return this.combinedData?.academyLink;
+    }
+    get upgradeLink() {
+        return this.combinedData?.upgradeLink;
+    }
+    get minimizeToTray() {
+        return this.combinedData?.minimizeToTray;
+    }
+    get lastActiveServer() {
+        return this.combinedData?.lastActiveServer;
+    }
+    get alwaysClose() {
+        return this.combinedData?.alwaysClose;
+    }
+    get alwaysMinimize() {
+        return this.combinedData?.alwaysMinimize;
+    }
 
-	get canUpgrade() {
-		return process.env.NODE_ENV === 'test' || (this.canUpgradeValue && this.buildConfigData?.enableAutoUpdater && !(process.platform === 'linux' && !process.env.APPIMAGE) && !(process.platform === 'win32' && this.registryConfigData?.enableAutoUpdater === false));
-	}
+    get canUpgrade() {
+        return process.env.NODE_ENV === 'test' || (this.canUpgradeValue && this.buildConfigData?.enableAutoUpdater && !(process.platform === 'linux' && !process.env.APPIMAGE) && !(process.platform === 'win32' && this.registryConfigData?.enableAutoUpdater === false));
+    }
 
-	get autoCheckForUpdates() {
-		return this.combinedData?.autoCheckForUpdates;
-	}
+    get autoCheckForUpdates() {
+        return this.combinedData?.autoCheckForUpdates;
+    }
 
-	get appLanguage() {
-		return this.combinedData?.appLanguage;
-	}
+    get appLanguage() {
+        return this.combinedData?.appLanguage;
+    }
 
-	get enableMetrics() {
-		return this.combinedData?.enableMetrics ?? true;
-	}
+    get enableMetrics() {
+        return this.combinedData?.enableMetrics ?? true;
+    }
 
-	get enableSentry() {
-		return this.combinedData?.enableSentry ?? true;
-	}
+    get enableSentry() {
+        return this.combinedData?.enableSentry ?? true;
+    }
 
-	get viewLimit() {
-		return this.combinedData?.viewLimit ?? 15;
-	}
+    get viewLimit() {
+        return this.combinedData?.viewLimit ?? 15;
+    }
 
-	get themeSyncing() {
-		return this.combinedData?.themeSyncing ?? true;
-	}
+    get themeSyncing() {
+        return this.combinedData?.themeSyncing ?? true;
+    }
 
-	getWindowsSystemDarkMode = () => {
-		return !this.registryConfig.getAppsUseLightTheme();
-	};
+    getWindowsSystemDarkMode = () => {
+        return !this.registryConfig.getAppsUseLightTheme();
+    };
 
-	/**
+    /**
 	 * Gets the servers from registry into the config object and reload
 	 *
 	 * @param {object} registryData Server configuration from the registry and if servers can be managed by user
 	 */
 
-	private onLoadRegistry = (registryData: Partial<RegistryCurrentConfig>): void => {
-		log.debug('loadRegistry');
+    private onLoadRegistry = (registryData: Partial<RegistryCurrentConfig>): void => {
+        log.debug('loadRegistry');
 
-		this.registryConfigData = registryData;
-		if (this.registryConfigData.servers) {
-			this._predefinedServers.push(...this.registryConfigData.servers.map((server, index) => ({ ...server, order: index })));
-		}
+        this.registryConfigData = registryData;
+        if (this.registryConfigData.servers) {
+            this._predefinedServers.push(...this.registryConfigData.servers.map((server, index) => ({...server, order: index})));
+        }
 
-		this.regenerateCombinedConfigData();
-		this.emit('update', this.combinedData);
-	};
+        this.regenerateCombinedConfigData();
+        this.emit('update', this.combinedData);
+    };
 
-	/**
+    /**
 	 * Config file loading methods
 	 */
 
-	/**
+    /**
 	 * Used to save the current set of local config data to disk
 	 *
 	 * @emits {update} emitted once all data has been saved
 	 * @emits {synchronize} emitted once all data has been saved; used to notify other config instances of changes
 	 * @emits {error} emitted if saving local config data to file fails
 	 */
-	private saveLocalConfigData = (isRetry = false): void => {
-		if (!(this.json && this.localConfigData)) {
-			return;
-		}
+    private saveLocalConfigData = (isRetry = false): void => {
+        if (!(this.json && this.localConfigData)) {
+            return;
+        }
 
-		if (!this.defaultConfigData) {
-			return;
-		}
+        if (!this.defaultConfigData) {
+            return;
+        }
 
-		if (this.localConfigData.version !== this.defaultConfigData.version) {
-			this.emit('error', new Error('version ' + this.localConfigData.version + ' is not equal to ' + this.defaultConfigData.version));
-			return;
-		}
+        if (this.localConfigData.version !== this.defaultConfigData.version) {
+            this.emit('error', new Error('version ' + this.localConfigData.version + ' is not equal to ' + this.defaultConfigData.version));
+            return;
+        }
 
-		log.verbose('Saving config data to file...');
+        log.verbose('Saving config data to file...');
 
-		this.json.setJson(this.localConfigData).then(() => {
-			this.emit('update', this.combinedData);
-		}).catch((error: NodeJS.ErrnoException) => {
-			if (error.code === 'EBUSY' && !isRetry) {
-				this.saveLocalConfigData(true);
-			} else {
-				this.emit('error', error);
-			}
-		});
-	};
+        this.json.setJson(this.localConfigData).then(() => {
+            this.emit('update', this.combinedData);
+        }).catch((error: NodeJS.ErrnoException) => {
+            if (error.code === 'EBUSY' && !isRetry) {
+                this.saveLocalConfigData(true);
+            } else {
+                this.emit('error', error);
+            }
+        });
+    };
 
-	/**
+    /**
 	 * Loads and returns locally stored config data from the filesystem or returns app defaults if no file is found
 	 */
-	private loadLocalConfigFile = (): AnyConfig => {
-		if (!this.configFilePath) {
-			throw new Error('Unable to read from config, no path specified');
-		}
+    private loadLocalConfigFile = (): AnyConfig => {
+        if (!this.configFilePath) {
+            throw new Error('Unable to read from config, no path specified');
+        }
 
-		let configData: AnyConfig;
-		try {
-			this.json = new JsonFileManager<CurrentConfig>(this.configFilePath);
+        let configData: AnyConfig;
+        try {
+            this.json = new JsonFileManager<CurrentConfig>(this.configFilePath);
 
-			// validate based on config file version
-			configData = Validator.validateConfigData(this.json.json);
+            // validate based on config file version
+            configData = Validator.validateConfigData(this.json.json);
 
-			if (!configData) {
-				throw new Error('Provided configuration file does not validate, using defaults instead.');
-			}
-		} catch (e) {
-			log.warn('Failed to load configuration file from the filesystem. Using defaults.');
-			configData = copy(this.defaultConfigData);
+            if (!configData) {
+                throw new Error('Provided configuration file does not validate, using defaults instead.');
+            }
+        } catch (e) {
+            log.warn('Failed to load configuration file from the filesystem. Using defaults.');
+            configData = copy(this.defaultConfigData);
 
-			this.json?.setJson(configData as CurrentConfig).catch((error) => {
-				this.emit('error', error);
-			});
-		}
-		return configData;
-	};
+            this.json?.setJson(configData as CurrentConfig).catch((error) => {
+                this.emit('error', error);
+            });
+        }
+        return configData;
+    };
 
-	/**
+    /**
 	 * Determines if locally stored data needs to be updated and upgrades as needed
 	 *
 	 * @param {*} data locally stored data
 	 */
-	private checkForConfigUpdates = (data: AnyConfig): CurrentConfig => {
-		if (!this.json) {
-			throw new Error('Config not initialized');
-		}
+    private checkForConfigUpdates = (data: AnyConfig): CurrentConfig => {
+        if (!this.json) {
+            throw new Error('Config not initialized');
+        }
 
-		let configData = data;
-		if (this.defaultConfigData) {
-			try {
-				if (configData.version !== this.defaultConfigData.version) {
-					configData = upgradeConfigData(configData);
-					this.json.setJson(configData as CurrentConfig).catch((error) => {
-						this.emit('error', error);
-					});
-					log.info(`Configuration updated to version ${this.defaultConfigData.version} successfully.`);
-				}
-				const didMigrate = migrateConfigItems(configData);
-				if (didMigrate) {
-					this.json.setJson(configData as CurrentConfig).catch((error) => {
-						this.emit('error', error);
-					});
-					log.info('Migrating config items successfully.');
-				}
-			} catch (error) {
-				log.error(`Failed to update configuration to version ${this.defaultConfigData.version}.`);
-			}
-		}
+        let configData = data;
+        if (this.defaultConfigData) {
+            try {
+                if (configData.version !== this.defaultConfigData.version) {
+                    configData = upgradeConfigData(configData);
+                    this.json.setJson(configData as CurrentConfig).catch((error) => {
+                        this.emit('error', error);
+                    });
+                    log.info(`Configuration updated to version ${this.defaultConfigData.version} successfully.`);
+                }
+                const didMigrate = migrateConfigItems(configData);
+                if (didMigrate) {
+                    this.json.setJson(configData as CurrentConfig).catch((error) => {
+                        this.emit('error', error);
+                    });
+                    log.info('Migrating config items successfully.');
+                }
+            } catch (error) {
+                log.error(`Failed to update configuration to version ${this.defaultConfigData.version}.`);
+            }
+        }
 
-		return configData as CurrentConfig;
-	};
+        return configData as CurrentConfig;
+    };
 
-	/**
+    /**
 	 * Properly combines all sources of data into a single, manageable set of all config data
 	 */
-	private regenerateCombinedConfigData = () => {
-		if (!this.appName) {
-			throw new Error('Config not initialized, cannot regenerate');
-		}
+    private regenerateCombinedConfigData = () => {
+        if (!this.appName) {
+            throw new Error('Config not initialized, cannot regenerate');
+        }
 
-		// combine all config data in the correct order
-		this.combinedData = Object.assign({},
-			this.defaultConfigData,
-			this.localConfigData,
-			this.buildConfigData,
-			this.registryConfigData,
-		);
+        // combine all config data in the correct order
+        this.combinedData = Object.assign({},
+            this.defaultConfigData,
+            this.localConfigData,
+            this.buildConfigData,
+            this.registryConfigData,
+        );
 
-		// We don't want to include the servers in the combined config, they should only be accesible via the ServerManager
-		delete (this.combinedData as any).servers;
-		delete (this.combinedData as any).defaultServers;
+        // We don't want to include the servers in the combined config, they should only be accesible via the ServerManager
+        delete (this.combinedData as any).servers;
+        delete (this.combinedData as any).defaultServers;
 
-		if (this.combinedData) {
-			this.combinedData.appName = this.appName;
-		}
-	};
+        if (this.combinedData) {
+            this.combinedData.appName = this.appName;
+        }
+    };
 
-	private checkWriteableApp = () => {
-		if (!this.appPath) {
-			throw new Error('Config not initialized, cannot regenerate');
-		}
+    private checkWriteableApp = () => {
+        if (!this.appPath) {
+            throw new Error('Config not initialized, cannot regenerate');
+        }
 
-		if (process.platform === 'win32') {
-			try {
-				fs.accessSync(path.join(path.dirname(this.appPath), '../../'), fs.constants.W_OK);
+        if (process.platform === 'win32') {
+            try {
+                fs.accessSync(path.join(path.dirname(this.appPath), '../../'), fs.constants.W_OK);
 
-				// check to make sure that app-update.yml exists
-				if (!fs.existsSync(path.join(process.resourcesPath, 'app-update.yml'))) {
-					log.warn('app-update.yml does not exist, disabling auto-updates');
-					return false;
-				}
-			} catch (error) {
-				log.info(`${this.appPath}: ${error}`);
-				log.warn('autoupgrade disabled');
-				return false;
-			}
+                // check to make sure that app-update.yml exists
+                if (!fs.existsSync(path.join(process.resourcesPath, 'app-update.yml'))) {
+                    log.warn('app-update.yml does not exist, disabling auto-updates');
+                    return false;
+                }
+            } catch (error) {
+                log.info(`${this.appPath}: ${error}`);
+                log.warn('autoupgrade disabled');
+                return false;
+            }
 
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			return __CAN_UPGRADE__; // prevent showing the option if the path is not writeable, like in a managed environment.
-		}
+            // eslint-disable-next-line no-undef
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return __CAN_UPGRADE__; // prevent showing the option if the path is not writeable, like in a managed environment.
+        }
 
-		// temporarily disabling auto updater for macOS due to security issues
-		// eslint-disable-next-line no-undef
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		return process.platform !== 'darwin' && __CAN_UPGRADE__;
-	};
+        // temporarily disabling auto updater for macOS due to security issues
+        // eslint-disable-next-line no-undef
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return process.platform !== 'darwin' && __CAN_UPGRADE__;
+    };
 }
 
 const config = new Config();

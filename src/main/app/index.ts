@@ -3,7 +3,7 @@
 
 /* istanbul ignore file */
 
-import { initialize } from './initialize';
+import {initialize} from './initialize';
 
 // TODO: Singletons, we need DI :D
 import('app/mainWindow/serverDropdownView');
@@ -12,7 +12,7 @@ import('app/mainWindow/downloadsDropdownView');
 
 // attempt to initialize the application
 try {
-	initialize();
+    initialize();
 } catch (error: any) {
-	throw new Error(`App initialization failed: ${error.toString()}`);
+    throw new Error(`App initialization failed: ${error.toString()}`);
 }

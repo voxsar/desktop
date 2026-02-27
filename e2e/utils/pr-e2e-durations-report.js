@@ -2,17 +2,17 @@
 // See LICENSE.txt for license information.
 
 function generateCommentBodyPerformanceTest(fileContents) {
-	const data = JSON.parse(fileContents);
+    const data = JSON.parse(fileContents);
 
-	return `
+    return `
 E2E Performance Test results:
 
 | Test | Duration |
 | --- | --- |
 ${data?.passes?.reduce((acc, pass) => {
-		return `${acc}| ${pass.fullTitle || 'title'} | ${pass.duration}ms |\n`;
-	}, '')
-		}
+        return `${acc}| ${pass.fullTitle || 'title'} | ${pass.duration}ms |\n`;
+    }, '')
+}
 
 ${data?.failures?.length > 0 ? `
     Some tests failed:
@@ -32,5 +32,5 @@ ${fileContents}
 }
 
 module.exports = {
-	generateCommentBodyPerformanceTest,
+    generateCommentBodyPerformanceTest,
 };
