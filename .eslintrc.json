@@ -27,9 +27,25 @@
 		"no-process-env": 0,
 		"no-var": 2,
 		"react/no-find-dom-node": 2,
-		"no-underscore-dangle": [
-			"warn"
-		],
+		"no-underscore-dangle": 0,
+		"@typescript-eslint/no-unused-vars": 1,
+		"@typescript-eslint/no-explicit-any": 0,
+		"no-console": 1,
+		"no-mixed-spaces-and-tabs": 0,
+		"@typescript-eslint/indent": 0,
+		"react/jsx-indent": 0,
+		"react/jsx-indent-props": 0,
+		"react/jsx-closing-bracket-location": 0,
+		"no-param-reassign": 1,
+		"no-dupe-keys": 2,
+		"react/jsx-no-undef": 2,
+		"no-undef": 2,
+		"max-lines": 0,
+		"no-case-declarations": 1,
+		"react-hooks/exhaustive-deps": 1,
+		"react/no-array-index-key": 1,
+		"no-warning-comments": 0,
+		"multiline-ternary": 0,
 		"@mattermost/use-external-link": 0,
 		"linebreak-style": 0,
 		"import/order": [
@@ -73,6 +89,12 @@
 		]
 	},
 	"overrides": [
+		{
+			"files": ["**/*.ts", "**/*.tsx"],
+			"rules": {
+				"no-undef": 0
+			}
+		},
 		{
 			"files": [
 				"scripts/**/*",

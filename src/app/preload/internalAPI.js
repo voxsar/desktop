@@ -175,7 +175,6 @@ contextBridge.exposeInMainWorld('desktop', {
     switchApp: () => ipcRenderer.send(SWITCH_APP),
     switchToServer: (serverId) => ipcRenderer.send(SWITCH_SERVER, serverId),
     getAllServers: () => ipcRenderer.invoke(GET_ORDERED_SERVERS),
-    getCurrentServer: () => ipcRenderer.invoke(GET_CURRENT_SERVER),
     getActiveAppName: () => ipcRenderer.invoke(GET_ACTIVE_APP_NAME),
     onAppSwitched: (listener) => ipcRenderer.on(APP_SWITCHED, (_, appName) => listener(appName)),
 

@@ -3,6 +3,7 @@
 
 'use strict';
 
+import os from 'os';
 import path from 'path';
 
 import {BrowserWindow, app, ipcMain, dialog} from 'electron';

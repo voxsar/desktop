@@ -6,6 +6,7 @@ import React from 'react';
 import type {DownloadedItem} from 'types/downloads';
 
 import UpdateAvailable from './UpdateAvailable';
+import UpdateDownloaded from './UpdateDownloaded';
 
 import 'renderer/css/components/Button.scss';
 

@@ -5,6 +5,7 @@ import {shell, clipboard} from 'electron';
 
 import Config from 'common/config';
 import ServerManager from 'common/servers/serverManager';
+import UpdateManager from 'main/autoUpdater';
 import Diagnostics from 'main/diagnostics';
 import {localizeMessage} from 'main/i18nManager';
 
