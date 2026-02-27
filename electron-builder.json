@@ -176,9 +176,7 @@
 				"from": "resources/windows/gpo",
 				"to": "gpo"
 			}
-		],
-		"signDlls": true,
-		"publisherName": "CN=\"Aura.\", O=\"Artslab Creatives, PVT.\", L=Palo Alto, S=California, C=US"
+		]
 	},
 	"nsis": {
 		"artifactName": "${version}/${name}-setup-${version}-win.${ext}",
