@@ -92,7 +92,7 @@ describe('common/config/policyConfigLoader', () => {
                 expect(data.servers).toContainEqual({name: 'server-lm-1', url: 'http://server-lm-1.com'});
                 expect(data.servers).toContainEqual({name: 'server-cu-1', url: 'http://server-cu-1.com'});
                 expect(data.enableServerManagement).toBe(false);
-                expect(data.enableUpdateNotifications).toBe(true);
+                expect(data.enableAutoUpdater).toBe(true);
             });
 
             it('handles undefined from one hive', () => {
@@ -160,7 +160,7 @@ describe('common/config/policyConfigLoader', () => {
                     {name: 'server-b', url: 'https://b.com'},
                 ]);
                 expect(data.enableServerManagement).toBe(true);
-                expect(data.enableUpdateNotifications).toBe(false);
+                expect(data.enableAutoUpdater).toBe(false);
             });
 
             it('returns empty servers and undefined booleans when no managed prefs', () => {
@@ -168,7 +168,7 @@ describe('common/config/policyConfigLoader', () => {
                 const data = policyConfigLoader.getPolicyConfig();
                 expect(data.servers).toEqual([]);
                 expect(data.enableServerManagement).toBeUndefined();
-                expect(data.enableUpdateNotifications).toBeUndefined();
+                expect(data.enableAutoUpdater).toBeUndefined();
             });
 
             it('handles cf-prefs throw gracefully', () => {

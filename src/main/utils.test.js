@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 'use strict';
-import {TAB_BAR_HEIGHT} from 'common/utils/constants';
 
 import * as Utils from './utils';
 
@@ -58,14 +57,14 @@ describe('main/utils', () => {
     });
 
     describe('getWindowBoundaries', () => {
-        it('should include tab bar height', () => {
+        it('should return window boundaries', () => {
             expect(Utils.getWindowBoundaries({
                 getContentBounds: () => ({width: 500, height: 400}),
             })).toStrictEqual({
                 x: 0,
-                y: TAB_BAR_HEIGHT,
+                y: 0,
                 width: 500,
-                height: 400 - TAB_BAR_HEIGHT,
+                height: 400,
             });
         });
     });

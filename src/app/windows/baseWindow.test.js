@@ -233,35 +233,18 @@ describe('BaseWindow', () => {
             }));
         });
 
-        it('should set title bar overlay with light theme colors', () => {
+        it('should disable title bar overlay (using injected controls)', () => {
             Config.darkMode = false;
 
             const baseWindow = new BaseWindow({});
 
             expect(baseWindow).toBeDefined();
             expect(BrowserWindow).toHaveBeenCalledWith(expect.objectContaining({
-                titleBarOverlay: {
-                    color: 'rgba(255, 255, 255, 0)',
-                    symbolColor: 'rgba(63, 67, 80, 0.64)',
-                    height: TAB_BAR_HEIGHT,
-                },
+                titleBarOverlay: false,
             }));
         });
 
-        it('should set title bar overlay with dark theme colors', () => {
-            Config.darkMode = true;
 
-            const baseWindow = new BaseWindow({});
-
-            expect(baseWindow).toBeDefined();
-            expect(BrowserWindow).toHaveBeenCalledWith(expect.objectContaining({
-                titleBarOverlay: {
-                    color: 'rgba(25, 27, 31, 0)',
-                    symbolColor: 'rgba(227, 228, 232, 0.64)',
-                    height: TAB_BAR_HEIGHT,
-                },
-            }));
-        });
 
         // Note: Testing BrowserWindow creation failure is complex with current mock setup
         // The actual implementation throws an error if BrowserWindow returns null

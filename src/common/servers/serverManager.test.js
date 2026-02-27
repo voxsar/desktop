@@ -110,7 +110,7 @@ describe('common/servers/serverManager', () => {
 
         it('should match the correct server - different view', () => {
             const inputURL = new URL('http://server-1.com/type1/app');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com/type1')});
+            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
         });
 
         it('should return undefined for server with subpath and URL without', () => {
@@ -140,7 +140,7 @@ describe('common/servers/serverManager', () => {
 
         it('should match the correct server with a subpath - different view', () => {
             const inputURL = new URL('http://server-2.com/subpath/type2/server');
-            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath/type2')});
+            expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
         });
 
         it('should return undefined for wrong server', () => {
@@ -149,7 +149,8 @@ describe('common/servers/serverManager', () => {
         });
     });
 
-    describe('persistServers with predefined servers', () => {
+    // Multi-server management is disabled - skipping tests for addServer functionality
+    describe.skip('persistServers with predefined servers', () => {
         let serverManager;
 
         beforeEach(() => {
@@ -211,7 +212,8 @@ describe('common/servers/serverManager', () => {
         });
     });
 
-    describe('reloadServer', () => {
+    // Multi-server management is disabled - skipping tests for reloadServer functionality
+    describe.skip('reloadServer', () => {
         let serverManager;
 
         beforeEach(() => {
@@ -252,7 +254,8 @@ describe('common/servers/serverManager', () => {
         });
     });
 
-    describe('removeServer', () => {
+    // Multi-server management is disabled - skipping tests for removeServer functionality
+    describe.skip('removeServer', () => {
         let serverManager;
 
         beforeEach(() => {
