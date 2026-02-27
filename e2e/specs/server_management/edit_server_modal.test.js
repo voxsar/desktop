@@ -53,22 +53,11 @@ describe('EditServerModal', function desc() {
 		});
 	});
 
-<<<<<<< HEAD
 	it('MM-T4391_1 should not edit server when Save is pressed but nothing edited', async () => {
 		await editServerView.click('#newServerModal_confirm');
 		await asyncSleep(1000);
 		const existing = Boolean(await this.app.windows().find((window) => window.url().includes('editServer')));
 		existing.should.be.false;
-=======
-    it('MM-T4391_1 should not edit server when Save is pressed but nothing edited', async () => {
-        await editServerView.click('#newServerModal_confirm');
-
-        // Linux needs more time for window close events to propagate
-        await asyncSleep(process.platform === 'linux' ? 3000 : 1000);
-
-        const existing = Boolean(await this.app.windows().find((window) => window.url().includes('editServer')));
-        existing.should.be.false;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		const savedConfig = JSON.parse(fs.readFileSync(env.configFilePath, 'utf8'));
 		savedConfig.servers.should.deep.contain({

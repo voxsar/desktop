@@ -139,7 +139,6 @@ describe('main/preAuthManager', () => {
 			expect(ModalManager.addModal).toBeCalled();
 		});
 
-<<<<<<< HEAD
 		it('should handle other port numbers with https', () => {
 			ServerManager.lookupServerByURL.mockReturnValue({ id: 'test-view', url: new URL('https://trustedurl.com:8080') });
 			const callback = jest.fn();
@@ -155,35 +154,16 @@ describe('main/preAuthManager', () => {
 			expect(callback).not.toBeCalled();
 		});
 	});
-=======
-        it('should handle other port numbers with https', () => {
-            ServerManager.lookupServerByURL.mockReturnValue({id: 'test-view', url: new URL('https://trustedurl.com:8080')});
-            const callback = jest.fn();
-            preAuthManager.handleClientCert({preventDefault: jest.fn()}, null, 'trustedurl.com:8080', [{}, {}], callback);
-            expect(ModalManager.addModal).toBeCalled();
-        });
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	describe('handlePreAuthSecret', () => {
 		const preAuthManager = new PreAuthManager();
 
-<<<<<<< HEAD
 		it('should not pop modal on untrusted URL', () => {
 			const callback = jest.fn();
 			preAuthManager.handlePreAuthSecret('http://untrustedurl.com/', callback);
 			expect(ModalManager.addModal).not.toBeCalled();
 			expect(callback).not.toBeCalled();
 		});
-=======
-        it('should not pop modal on untrusted URL', () => {
-            ServerManager.lookupServerByURL.mockReturnValue(undefined);
-            const callback = jest.fn();
-            preAuthManager.handlePreAuthSecret('http://untrustedurl.com/', callback);
-            expect(ModalManager.addModal).not.toBeCalled();
-            expect(callback).not.toBeCalled();
-        });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('should pop modal on trusted URL', () => {
 			ServerManager.lookupServerByURL.mockReturnValue({ id: 'test-view', url: new URL('http://trustedurl.com/') });

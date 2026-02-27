@@ -240,14 +240,9 @@ export class WebContentsManager {
 			return;
 		}
 
-<<<<<<< HEAD
 		AppState.updateUnreadsPerServer(view.serverId, isUnread);
 		AppState.updateMentionsPerServer(view.serverId, mentionCount);
 	};
-=======
-        AppState.updateUnreadsAndMentionsPerServer(view.serverId, mentionCount, isUnread);
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private handleSessionExpired = (event: IpcMainEvent, isExpired: boolean) => {
 		const view = this.getViewByWebContentsId(event.sender.id);

@@ -10,7 +10,6 @@ const { asyncSleep } = require('../../modules/utils');
 describe('startup/app', function desc() {
 	this.timeout(30000);
 
-<<<<<<< HEAD
 	beforeEach(async () => {
 		env.createTestUserDataDir();
 		env.cleanTestConfig();
@@ -23,23 +22,6 @@ describe('startup/app', function desc() {
 		}
 		await env.clearElectronInstances();
 	});
-=======
-    beforeEach(async () => {
-        env.createTestUserDataDir();
-        await asyncSleep(1000);
-        env.cleanTestConfig();
-        await asyncSleep(1000);
-        this.app = await env.getApp();
-    });
-
-    afterEach(async () => {
-        if (this.app) {
-            await this.app.close();
-        }
-        await env.clearElectronInstances();
-        await asyncSleep(1000);
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	it('MM-T4400 should be stopped when the app instance already exists', (done) => {
 		const secondApp = env.getApp();
@@ -66,31 +48,12 @@ describe('startup/app', function desc() {
 		env.cleanTestConfig();
 		this.app = await env.getApp();
 
-<<<<<<< HEAD
 		await asyncSleep(500);
 
 		const welcomeScreenModal = this.app.windows().find((window) => window.url().includes('welcomeScreen'));
 		const modalButton = await welcomeScreenModal.innerText('.WelcomeScreen .WelcomeScreen__button');
 		modalButton.should.equal('Get Started');
 	});
-=======
-        // Wait for welcome screen modal to appear if not immediately available
-        let welcomeScreenModal = this.app.windows().find((window) => window.url().includes('welcomeScreen'));
-        if (!welcomeScreenModal) {
-            welcomeScreenModal = await this.app.waitForEvent('window', {
-                predicate: (window) => window.url().includes('welcomeScreen'),
-                timeout: 10000,
-            });
-        }
-
-        // Wait for the welcome screen modal to be fully loaded
-        await welcomeScreenModal.waitForLoadState('domcontentloaded');
-        await asyncSleep(500);
-
-        const modalButton = await welcomeScreenModal.innerText('.WelcomeScreen .WelcomeScreen__button');
-        modalButton.should.equal('Get Started');
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	if (process.platform !== 'linux') {
 		it('MM-T4985 should show app name in title bar when no servers exist', async () => {

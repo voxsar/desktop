@@ -1,7 +1,7 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-const {spawnSync} = require('child_process');
+const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -38,26 +38,6 @@ Categories=contrib/net;
 		}
 		fs.appendFileSync(mimeCachePath, 'x-scheme-handler/mattermost-dev=mattermost-desktop-dev.desktop\n');
 
-<<<<<<< HEAD:scripts/create_linux_dev_shortcut.js
 		console.log('NOTE: You may need to log in and out of your session to ensure that deep linking works correctly.');
 	}
-=======
-        console.log('NOTE: You may need to log in and out of your session to ensure that deep linking works correctly.');
-    }
-
-    console.log('Setting proper ownership for linux arch');
-    let result = spawnSync('sudo', ['chown', 'root:root', './node_modules/electron/dist/chrome-sandbox']);
-    if (result.error) {
-        throw new Error(
-            `Failed to set proper ownership for linux arch: ${result.error} ${result.stderr} ${result.stdout}`,
-        );
-    }
-
-    result = spawnSync('sudo', ['chmod', SETUID_PERMISSIONS, './node_modules/electron/dist/chrome-sandbox']);
-    if (result.error) {
-        throw new Error(
-            `Failed to set proper permissions for linux arch: ${result.error} ${result.stderr} ${result.stdout}`,
-        );
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14:scripts/linux_dev_setup.js
 }

@@ -51,7 +51,6 @@ function ConfigureServer({
 		id,
 	} = server || {};
 
-<<<<<<< HEAD
 	const mounted = useRef(false);
 	const [transition, setTransition] = useState<'inFromRight' | 'outToLeft'>();
 	const [name, setName] = useState(prevName ?? '');
@@ -60,17 +59,6 @@ function ConfigureServer({
 	const [urlError, setURLError] = useState<{ type: STATUS; value: string }>();
 	const [showContent, setShowContent] = useState(false);
 	const [waiting, setWaiting] = useState(false);
-=======
-    const mounted = useRef(false);
-    const [transition, setTransition] = useState<'inFromRight' | 'outToLeft'>();
-    const [name, setName] = useState(prevName ?? '');
-    const [url, setUrl] = useState(prevURL ?? prefillURL ?? '');
-    const [nameError, setNameError] = useState('');
-    const [urlError, setURLError] = useState<{type: STATUS; value: string}>();
-    const [showContent, setShowContent] = useState(false);
-    const [waiting, setWaiting] = useState(false);
-    const [isMagicLink, setIsMagicLink] = useState(false);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const [validating, setValidating] = useState(false);
 	const validationTimestamp = useRef<number>();
@@ -93,7 +81,6 @@ function ConfigureServer({
 		};
 	}, []);
 
-<<<<<<< HEAD
 	const fetchValidationResult = (urlToValidate: string) => {
 		setValidating(true);
 		setURLError({
@@ -126,51 +113,6 @@ function ConfigureServer({
 			setValidating(false);
 		});
 	};
-=======
-    useEffect(() => {
-        if (url && isMagicLink) {
-            connect();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMagicLink, url]);
-
-    const fetchValidationResult = (urlToValidate: string) => {
-        setValidating(true);
-        setURLError({
-            type: STATUS.INFO,
-            value: formatMessage({id: 'renderer.components.configureServer.url.validating', defaultMessage: 'Validating...'}),
-        });
-        const requestTime = Date.now();
-        validationTimestamp.current = requestTime;
-        validateURL(urlToValidate).then(({validatedURL, serverName, message, status}) => {
-            if (editing.current) {
-                setValidating(false);
-                setURLError(undefined);
-                return;
-            }
-            if (!validationTimestamp.current || requestTime < validationTimestamp.current) {
-                return;
-            }
-            if (validatedURL) {
-                setUrl(validatedURL);
-            }
-            if (serverName) {
-                setName((prev) => {
-                    return prev.length ? prev : serverName;
-                });
-            }
-            if (message) {
-                setTransition(undefined);
-                setURLError(message);
-            }
-            setValidating(false);
-
-            if (status === URLValidationStatus.MagicLink) {
-                setIsMagicLink(true);
-            }
-        });
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const validateName = () => {
 		const newName = name.trim();
@@ -258,7 +200,6 @@ function ConfigureServer({
 			};
 		}
 
-<<<<<<< HEAD
 		if (validationResult?.status === URLValidationStatus.OK) {
 			message = {
 				type: STATUS.SUCCESS,
@@ -272,22 +213,6 @@ function ConfigureServer({
 			message,
 		};
 	};
-=======
-        if (validationResult?.status === URLValidationStatus.OK || validationResult?.status === URLValidationStatus.MagicLink) {
-            message = {
-                type: STATUS.SUCCESS,
-                value: formatMessage({id: 'renderer.components.configureServer.url.ok', defaultMessage: 'Server URL is valid. Server version: {serverVersion}'}, {serverVersion: validationResult.serverVersion}),
-            };
-        }
-
-        return {
-            validatedURL: validationResult.validatedURL,
-            serverName: validationResult.serverName,
-            message,
-            status: validationResult.status,
-        };
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const handleNameOnChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
 		setName(value);
@@ -325,19 +250,12 @@ function ConfigureServer({
 		}
 	};
 
-<<<<<<< HEAD
 	const submit = async (e: React.MouseEvent | React.KeyboardEvent) => {
 		e.preventDefault();
 
 		if (!canSave || waiting) {
 			return;
 		}
-=======
-    const connect = () => {
-        if (!canSave || waiting) {
-            return;
-        }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		setWaiting(true);
 
@@ -350,7 +268,6 @@ function ConfigureServer({
 			return;
 		}
 
-<<<<<<< HEAD
 		setTransition('outToLeft');
 
 		setTimeout(() => {
@@ -366,28 +283,6 @@ function ConfigureServer({
 		if (!alternateLinkURL || !alternateLinkMessage || !alternateLinkText) {
 			return undefined;
 		}
-=======
-        setTransition('outToLeft');
-        setTimeout(() => {
-            onConnect({
-                url,
-                name,
-                id,
-            });
-        }, MODAL_TRANSITION_TIMEOUT);
-    };
-
-    const submit = async (e: React.MouseEvent | React.KeyboardEvent) => {
-        e.preventDefault();
-
-        connect();
-    };
-
-    const getAlternateLink = useCallback(() => {
-        if (!alternateLinkURL || !alternateLinkMessage || !alternateLinkText) {
-            return undefined;
-        }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		return (
 			<div className={classNames('alternate-link', transition)}>

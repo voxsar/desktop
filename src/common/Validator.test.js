@@ -187,7 +187,6 @@ describe('common/Validator', () => {
 		});
 	});
 
-<<<<<<< HEAD
 	describe('validateV4ConfigData', () => {
 		const config = {
 			autoCheckForUpdates: true,
@@ -216,40 +215,6 @@ describe('common/Validator', () => {
 			viewLimit: 15,
 			themeSyncing: true,
 		};
-=======
-    describe('validateV4ConfigData', () => {
-        const config = {
-            autoCheckForUpdates: true,
-            autostart: true,
-            hideOnStart: false,
-            darkMode: false,
-            enableHardwareAcceleration: true,
-            startInFullscreen: false,
-            lastActiveServer: 0,
-            logLevel: 'info',
-            minimizeToTray: false,
-            showTrayIcon: false,
-            showUnreadBadge: true,
-            skippedVersions: [],
-            spellCheckerLocales: ['en-US'],
-            spellCheckerURL: 'http://spellcheckerservice.com',
-            servers: [
-                {
-                    name: 'server-1',
-                    url: 'http://server-1.com',
-                    order: 1,
-                },
-            ],
-            trayIconTheme: 'use_system',
-            useSpellChecker: true,
-            version: 4,
-            viewLimit: 15,
-            themeSyncing: true,
-            enableMetrics: true,
-            enableSentry: true,
-            useNativeTitleBar: false,
-        };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('should validate v4 config data', () => {
 			expect(Validator.validateV4ConfigData(config)).toStrictEqual(config);

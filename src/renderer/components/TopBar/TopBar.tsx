@@ -16,22 +16,12 @@ type Props = {
 	openPopoutMenu?: () => void;
 }
 
-<<<<<<< HEAD
 const TopBar = ({ children, title, openMenu, openPopoutMenu }: Props) => {
 	const intl = useIntl();
 	const [fullScreen, setFullScreen] = useState(false);
 	const [threeDotsIsFocused, setThreeDotsIsFocused] = useState(false);
 	const topBar = useRef<HTMLDivElement>(null);
 	const threeDotMenu = useRef<HTMLButtonElement>(null);
-=======
-const TopBar = ({children, title, openMenu, openPopoutMenu}: Props) => {
-    const intl = useIntl();
-    const {config} = useConfig();
-    const [fullScreen, setFullScreen] = useState(false);
-    const [threeDotsIsFocused, setThreeDotsIsFocused] = useState(false);
-    const topBar = useRef<HTMLDivElement>(null);
-    const threeDotMenu = useRef<HTMLButtonElement>(null);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const focusThreeDotsButton = () => {
 		threeDotMenu.current?.focus();
@@ -66,7 +56,6 @@ const TopBar = ({children, title, openMenu, openPopoutMenu}: Props) => {
 		fullScreen,
 	});
 
-<<<<<<< HEAD
 	return (
 		<div
 			className={topBarClassName}
@@ -109,53 +98,6 @@ const TopBar = ({children, title, openMenu, openPopoutMenu}: Props) => {
 			</div>
 		</div>
 	);
-=======
-    return (
-        <div
-            className={topBarClassName}
-            onContextMenu={openPopoutMenu}
-            onDoubleClick={window.desktop.doubleClickOnWindow}
-        >
-            <div
-                ref={topBar}
-                className={'topBar-bg'}
-            >
-                <button
-                    ref={threeDotMenu}
-                    className='three-dot-menu'
-                    onClick={openMenu}
-                    onMouseOver={focusThreeDotsButton}
-                    onMouseOut={unFocusThreeDotsButton}
-                    tabIndex={0}
-                    aria-label={intl.formatMessage({id: 'renderer.components.mainPage.contextMenu.ariaLabel', defaultMessage: 'Context menu'})}
-                >
-                    <i
-                        className={classNames('icon-dots-vertical', {
-                            isFocused: threeDotsIsFocused,
-                        })}
-                    />
-                </button>
-                {children}
-                {title && (
-                    <div className='app-title'>
-                        {title}
-                    </div>
-                )}
-                {window.process.platform !== 'darwin' && fullScreen && (
-                    <div
-                        className='button full-screen-button'
-                        onClick={handleExitFullScreen}
-                    >
-                        <i className='icon icon-arrow-collapse'/>
-                    </div>
-                )}
-                {window.process.platform !== 'darwin' && !fullScreen && (window.process.platform !== 'linux' || !config?.useNativeTitleBar) && (
-                    <span style={{width: `${window.innerWidth - (window.navigator.windowControlsOverlay?.getTitlebarAreaRect().width ?? 0)}px`}}/>
-                )}
-            </div>
-        </div>
-    );
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };
 
 export default TopBar;

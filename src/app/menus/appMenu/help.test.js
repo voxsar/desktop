@@ -6,12 +6,7 @@ import { shell, clipboard } from 'electron';
 import Config from 'common/config';
 import ServerManager from 'common/servers/serverManager';
 import Diagnostics from 'main/diagnostics';
-<<<<<<< HEAD
 import { localizeMessage } from 'main/i18nManager';
-=======
-import {localizeMessage} from 'main/i18nManager';
-import UpdateManager from 'main/updateNotifier';
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 import createHelpMenu from './help';
 
@@ -53,19 +48,12 @@ jest.mock('common/servers/serverManager', () => ({
 	getRemoteInfo: jest.fn(),
 }));
 
-<<<<<<< HEAD
 jest.mock('main/autoUpdater', () => ({
 	versionDownloaded: false,
 	versionAvailable: false,
 	handleUpdate: jest.fn(),
 	handleDownload: jest.fn(),
 	checkForUpdates: jest.fn(),
-=======
-jest.mock('main/updateNotifier', () => ({
-    versionDownloaded: false,
-    versionAvailable: false,
-    checkForUpdates: jest.fn(),
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }));
 
 jest.mock('main/diagnostics', () => ({
@@ -86,7 +74,6 @@ describe('app/menus/appMenu/help', () => {
 		},
 	];
 
-<<<<<<< HEAD
 	beforeEach(() => {
 		ServerManager.getCurrentServerId.mockReturnValue(servers[0].id);
 		ServerManager.getServer.mockReturnValue(servers[0]);
@@ -101,20 +88,6 @@ describe('app/menus/appMenu/help', () => {
 		UpdateManager.versionDownloaded = false;
 		UpdateManager.versionAvailable = false;
 	});
-=======
-    beforeEach(() => {
-        ServerManager.getCurrentServerId.mockReturnValue(servers[0].id);
-        ServerManager.getServer.mockReturnValue(servers[0]);
-        ServerManager.getOrderedServers.mockReturnValue(servers);
-        ServerManager.getRemoteInfo.mockReturnValue({
-            helpLink: 'http://server-help.com',
-            reportProblemLink: 'http://server-report.com',
-            licenseSku: 'professional',
-            serverVersion: '7.0.0',
-        });
-        Config.canUpgrade = false;
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	describe('createHelpMenu', () => {
 		it('should show the "Run diagnostics" item under help', () => {
@@ -440,7 +413,6 @@ describe('app/menus/appMenu/help', () => {
 			expect(clipboard.writeText).toHaveBeenCalledWith('Server Version 7.0.0');
 		});
 
-<<<<<<< HEAD
 		it('should show restart and update option when update is downloaded', () => {
 			Config.canUpgrade = true;
 			UpdateManager.versionDownloaded = true;
@@ -511,20 +483,6 @@ describe('app/menus/appMenu/help', () => {
 			const checkUpdatesItem = menu.submenu.find((item) => item.label === 'Check for Updates');
 			expect(checkUpdatesItem).not.toBe(undefined);
 		});
-=======
-        it('should show check for updates option when no update is available', () => {
-            Config.canUpgrade = true;
-            localizeMessage.mockImplementation((id) => {
-                if (id === 'main.menus.app.help.checkForUpdates') {
-                    return 'Check for Updates';
-                }
-                return id;
-            });
-            const menu = createHelpMenu();
-            const checkUpdatesItem = menu.submenu.find((item) => item.label === 'Check for Updates');
-            expect(checkUpdatesItem).not.toBe(undefined);
-        });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('should call UpdateManager.checkForUpdates when check for updates is clicked', () => {
 			Config.canUpgrade = true;

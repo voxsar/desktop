@@ -39,43 +39,20 @@ describe('dark_mode', function desc() {
 			// Toggle Dark Mode
 			await toggleDarkMode();
 
-<<<<<<< HEAD
 			const topBarElementWithDarkMode = await mainWindow.waitForSelector('.topBar');
 			const topBarElementClassWithDarkMode = await topBarElementWithDarkMode.getAttribute('class');
 
 			topBarElementClassWithDarkMode.should.contain('topBar darkMode');
-=======
-            // Wait for dark mode class to be applied
-            // Linux needs more time for dark mode to propagate through the window manager
-            await mainWindow.waitForSelector('.topBar.darkMode', {timeout: 10000});
-
-            const topBarElementWithDarkMode = await mainWindow.waitForSelector('.topBar');
-            const topBarElementClassWithDarkMode = await topBarElementWithDarkMode.getAttribute('class');
-
-            topBarElementClassWithDarkMode.should.contain('darkMode');
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			// Toggle Light Mode
 			await toggleDarkMode();
 
-<<<<<<< HEAD
 			const topBarElementWithLightMode = await mainWindow.waitForSelector('.topBar');
 			const topBarElementClassWithLightMode = await topBarElementWithLightMode.getAttribute('class');
 
 			topBarElementClassWithLightMode.should.contain('topBar');
 		});
 	}
-=======
-            // Wait for dark mode class to be removed
-            await asyncSleep(2000);
-
-            const topBarElementWithLightMode = await mainWindow.waitForSelector('.topBar');
-            const topBarElementClassWithLightMode = await topBarElementWithLightMode.getAttribute('class');
-
-            topBarElementClassWithLightMode.should.not.contain('darkMode');
-        });
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 });
 
 async function toggleDarkMode() {

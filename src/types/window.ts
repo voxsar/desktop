@@ -14,7 +14,6 @@ import type { SaveQueueItem } from './settings';
 import type { Language } from '../../i18n/i18n';
 
 declare global {
-<<<<<<< HEAD
 	interface Window {
 		ipcRenderer: {
 			send: typeof ipcRenderer.send;
@@ -58,53 +57,6 @@ declare global {
 			isDeveloperModeEnabled: () => Promise<boolean>;
 			getSecret: (serverUrl: string, keySuffix?: string) => Promise<string | null>;
 			clearCacheAndReload: () => void;
-=======
-    interface Window {
-        ipcRenderer: {
-            send: typeof ipcRenderer.send;
-            on: (channel: string, listener: (...args: any[]) => void) => void;
-            invoke: typeof ipcRenderer.invoke;
-        };
-        process: {
-            platform: NodeJS.Platform;
-            env: {
-                user?: string;
-                username?: string;
-            };
-        };
-        timers: {
-            setImmediate: typeof setImmediate;
-        };
-        desktop: {
-            quit: (reason: string, stack: string) => void;
-            openAppMenu: () => void;
-            closeServersDropdown: () => void;
-            openServersDropdown: () => void;
-            switchTab: (viewId: string) => void;
-            closeTab: (viewId: string) => void;
-            exitFullScreen: () => void;
-            doubleClickOnWindow: () => void;
-            openServerExternally: () => void;
-            openServerUpgradeLink: () => void;
-            openChangelogLink: () => void;
-            openWindowsStore: () => void;
-            downloadUpdateManually: () => void;
-            openUpdateGuide: () => void;
-            openLinuxGitHubRelease: () => void;
-            getIsMacAppStore: () => Promise<boolean>;
-            openMacAppStore: () => void;
-            skipVersion: () => void;
-            closeDownloadsDropdown: () => void;
-            closeDownloadsDropdownMenu: () => void;
-            openDownloadsDropdown: () => void;
-            goBack: () => void;
-            checkForUpdates: () => void;
-            updateConfiguration: (saveQueueItems: SaveQueueItem[]) => void;
-            getNonce: () => Promise<string | undefined>;
-            isDeveloperModeEnabled: () => Promise<boolean>;
-            getSecret: (serverUrl: string, keySuffix?: string) => Promise<string | null>;
-            clearCacheAndReload: () => void;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			switchApp: () => void;
 			getActiveAppName: () => Promise<string>;
@@ -192,21 +144,10 @@ declare global {
 				pingDomain: (url: string) => Promise<string>;
 			};
 
-<<<<<<< HEAD
 			loadingScreen: {
 				loadingScreenAnimationFinished: () => void;
 				onToggleLoadingScreenVisibility: (listener: (toggle: boolean) => void) => void;
 			};
-=======
-            downloadsDropdown: {
-                requestInfo: () => void;
-                sendSize: (width: number, height: number) => void;
-                openFile: (item: DownloadedItem) => void;
-                requestClearDownloadsDropdown: () => void;
-                toggleDownloadsDropdownMenu: (payload: DownloadsMenuOpenEventPayload) => void;
-                focus: () => void;
-            };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			downloadsDropdown: {
 				requestInfo: () => void;
@@ -229,7 +170,6 @@ declare global {
 				onUpdateDownloadsDropdownMenu: (listener: (item: DownloadedItem) => void) => void;
 			};
 
-<<<<<<< HEAD
 			serverDropdown: {
 				requestInfo: () => void;
 				sendSize: (width: number, height: number) => void;
@@ -237,18 +177,6 @@ declare global {
 				showNewServerModal: () => void;
 				showEditServerModal: (serverId: string) => void;
 				showRemoveServerModal: (serverId: string) => void;
-=======
-                onUpdateServerDropdown: (listener: (
-                    servers: UniqueServer[],
-                    windowBounds: Rectangle,
-                    activeServer?: string,
-                    enableServerManagement?: boolean,
-                    expired?: Map<string, boolean>,
-                    mentions?: Map<string, number>,
-                    unreads?: Map<string, boolean>,
-                ) => void) => void;
-            };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 				onUpdateServerDropdown: (listener: (
 					servers: UniqueServer[],

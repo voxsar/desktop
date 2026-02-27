@@ -11,11 +11,7 @@ const env = require('../modules/environment');
 const { asyncSleep } = require('../modules/utils');
 
 describe('focus', function desc() {
-<<<<<<< HEAD
 	this.timeout(40000);
-=======
-    this.timeout(process.platform === 'win32' ? 60000 : 40000);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const config = {
 		...env.demoMattermostConfig,
@@ -31,7 +27,6 @@ describe('focus', function desc() {
 
 	let firstServer;
 
-<<<<<<< HEAD
 	beforeEach(async () => {
 		env.cleanDataDir();
 		env.createTestUserDataDir();
@@ -52,29 +47,6 @@ describe('focus', function desc() {
 		}
 		await env.clearElectronInstances();
 	});
-=======
-    beforeEach(async () => {
-        env.cleanDataDir();
-        await asyncSleep(1000);
-        env.createTestUserDataDir();
-        await asyncSleep(1000);
-        env.cleanTestConfig();
-        await asyncSleep(1000);
-        fs.writeFileSync(env.configFilePath, JSON.stringify(config));
-        await asyncSleep(1000);
-        this.app = await env.getApp();
-        this.serverMap = await env.getServerMap(this.app);
-        firstServer = this.serverMap[config.servers[0].name][0].win;
-        await env.loginToMattermost(firstServer);
-        const textbox = await firstServer.waitForSelector('#post_textbox');
-        textbox.focus();
-    });
-
-    afterEach(async () => {
-        await env.clearElectronInstances();
-        await asyncSleep(1000);
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	describe('Focus textbox tests', () => {
 		it('MM-T1315 should return focus to the message box when closing the settings modal', async () => {
@@ -87,20 +59,8 @@ describe('focus', function desc() {
 			await settingsWindow.waitForSelector('.SettingsModal');
 			await settingsWindow.close();
 
-<<<<<<< HEAD
 			const isTextboxFocused = await firstServer.$eval('#post_textbox', (el) => el === document.activeElement);
 			isTextboxFocused.should.be.true;
-=======
-            // Wait for focus to return to textbox after modal close
-            await asyncSleep(300);
-            await firstServer.waitForFunction(
-                () => document.activeElement?.id === 'post_textbox',
-                {timeout: 3000},
-            );
-
-            const isTextboxFocused = await firstServer.$eval('#post_textbox', (el) => el === document.activeElement);
-            isTextboxFocused.should.be.true;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			await firstServer.fill('#post_textbox', '');
 

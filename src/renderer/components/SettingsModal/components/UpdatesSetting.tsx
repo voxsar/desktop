@@ -17,7 +17,6 @@ export default function UpdatesSetting({
 	onSave: (key: string, value: boolean) => void;
 	value: boolean;
 }) {
-<<<<<<< HEAD
 	return (
 		<>
 			<CheckSetting
@@ -51,44 +50,4 @@ export default function UpdatesSetting({
 			/>
 		</>
 	);
-=======
-    const handleCheckForUpdatesNow = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        window.desktop.checkForUpdates();
-    };
-
-    return (
-        <>
-            <CheckSetting
-                id={id}
-                onSave={onSave}
-                value={value}
-                label={
-                    <FormattedMessage
-                        id='renderer.components.settingsPage.updates.automatic'
-                        defaultMessage='Automatically check for updates'
-                    />
-                }
-                subLabel={
-                    <div className='UpdatesSetting__subLabel'>
-                        <FormattedMessage
-                            id='renderer.components.settingsPage.updates.automatic.newDescription'
-                            defaultMessage='If enabled, you will be automatically notified when a new update is available.'
-                        />
-                        <button
-                            className='UpdatesSetting__button btn btn-primary'
-                            id='checkForUpdatesNow'
-                            onClick={handleCheckForUpdatesNow}
-                        >
-                            <FormattedMessage
-                                id='renderer.components.settingsPage.updates.checkNow'
-                                defaultMessage='Check for Updates Now'
-                            />
-                        </button>
-                    </div>
-                }
-            />
-        </>
-    );
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }

@@ -25,7 +25,6 @@ jest.mock('common/Validator', () => ({
 }));
 
 const buildServer = {
-<<<<<<< HEAD
 	name: 'build-server-1',
 	order: 0,
 	url: 'http://build-server-1.com',
@@ -35,19 +34,6 @@ const registryServer = {
 	name: 'registry-server-1',
 	order: 0,
 	url: 'http://registry-server-1.com',
-=======
-    name: 'build-server-1',
-    order: 0,
-    url: 'http://build-server-1.com',
-    isPredefined: true,
-};
-
-const registryServer = {
-    name: 'registry-server-1',
-    order: 0,
-    url: 'http://registry-server-1.com',
-    isPredefined: true,
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };
 
 const server = {
@@ -70,16 +56,9 @@ jest.mock('common/config/buildConfig', () => {
 	};
 });
 
-<<<<<<< HEAD
 jest.mock('common/config/RegistryConfig', () => {
 	return jest.fn();
 });
-=======
-jest.mock('common/config/policyConfigLoader', () => ({
-    getPolicyConfig: jest.fn().mockReturnValue({}),
-    getAppsUseLightTheme: jest.fn().mockReturnValue(true),
-}));
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 jest.mock('electron', () => ({
 	app: {
@@ -323,7 +302,6 @@ describe('common/config', () => {
 		});
 	});
 
-<<<<<<< HEAD
 	describe('regenerateCombinedConfigData', () => {
 		it('should combine config from all sources', () => {
 			const config = new Config();
@@ -333,17 +311,6 @@ describe('common/config', () => {
 			config.localConfigData = { otherDefaultSetting: 'local', localSetting: 'local', otherLocalSetting: 'local' };
 			config.buildConfigData = { otherLocalSetting: 'build', buildSetting: 'build', otherBuildSetting: 'build' };
 			config.registryConfigData = { otherBuildSetting: 'registry', registrySetting: 'registry' };
-=======
-    describe('regenerateCombinedConfigData', () => {
-        it('should combine config from all sources', () => {
-            const config = new Config();
-            config.reload = jest.fn();
-            config.init(configPath, appName, appPath);
-            config.defaultConfigData = {defaultSetting: 'default', otherDefaultSetting: 'default'};
-            config.localConfigData = {otherDefaultSetting: 'local', localSetting: 'local', otherLocalSetting: 'local'};
-            config.buildConfigData = {otherLocalSetting: 'build', buildSetting: 'build', otherBuildSetting: 'build'};
-            config.policyConfigData = {otherBuildSetting: 'registry', registrySetting: 'registry'};
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			config.regenerateCombinedConfigData();
 			config.combinedData.darkMode = false;
@@ -360,7 +327,6 @@ describe('common/config', () => {
 			});
 		});
 
-<<<<<<< HEAD
 		it('should not include any servers in the combined config', () => {
 			const config = new Config();
 			config.reload = jest.fn();
@@ -386,31 +352,6 @@ describe('common/config', () => {
 					},
 				]
 			};
-=======
-        it('should not include any servers in the combined config', () => {
-            const config = new Config();
-            config.reload = jest.fn();
-            config.init(configPath, appName, appPath);
-            config.defaultConfigData = {};
-            config.localConfigData = {};
-            config.buildConfigData = {enableServerManagement: true};
-            config.policyConfigData = {};
-            config.predefinedServers.push(server, server);
-            config.localConfigData = {servers: [
-                server,
-                {
-                    ...server,
-                    name: 'local-server-2',
-                    url: 'http://local-server-2.com',
-                },
-                {
-                    ...server,
-                    name: 'local-server-1',
-                    order: 1,
-                    url: 'http://local-server-1.com',
-                },
-            ]};
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			config.regenerateCombinedConfigData();
 			config.combinedData.darkMode = false;

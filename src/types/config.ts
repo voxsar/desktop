@@ -7,12 +7,7 @@ export type Server = {
 }
 
 export type ConfigServer = Server & {
-<<<<<<< HEAD
 	order: number;
-=======
-    order: number;
-    isPredefined?: boolean;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 export type UniqueServer = Server & {
@@ -33,7 +28,6 @@ export type UniqueView = {
 export type CurrentConfig = ConfigV4;
 
 export type ConfigV4 = {
-<<<<<<< HEAD
 	version: 4;
 	servers: ConfigServer[];
 	showTrayIcon: boolean;
@@ -64,40 +58,6 @@ export type ConfigV4 = {
 	enableSentry?: boolean;
 	viewLimit?: number;
 	themeSyncing?: boolean;
-=======
-    version: 4;
-    servers: ConfigServer[];
-    showTrayIcon: boolean;
-    trayIconTheme: string;
-    minimizeToTray: boolean;
-    notifications: {
-        flashWindow: number;
-        bounceIcon: boolean;
-        bounceIconType: '' | 'critical' | 'informational';
-    };
-    showUnreadBadge: boolean;
-    useSpellChecker: boolean;
-    enableHardwareAcceleration: boolean;
-    autostart: boolean;
-    hideOnStart: boolean;
-    spellCheckerLocales: string[];
-    darkMode: boolean;
-    downloadLocation?: string;
-    spellCheckerURL?: string;
-    lastActiveServer?: number;
-    startInFullscreen?: boolean;
-    autoCheckForUpdates?: boolean;
-    alwaysMinimize?: boolean;
-    alwaysClose?: boolean;
-    logLevel?: string;
-    appLanguage?: string;
-    enableMetrics?: boolean;
-    enableSentry?: boolean;
-    viewLimit?: number;
-    themeSyncing?: boolean;
-    skippedVersions?: string[];
-    useNativeTitleBar?: boolean;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 export type ConfigV3 = Omit<ConfigV4,
@@ -160,7 +120,6 @@ export type ConfigV0 = { version: 0; url: string };
 export type AnyConfig = ConfigV4 | ConfigV3 | ConfigV2 | ConfigV1 | ConfigV0;
 
 export type BuildConfig = {
-<<<<<<< HEAD
 	defaultServers?: Server[];
 	helpLink: string;
 	academyLink: string;
@@ -175,27 +134,6 @@ export type RegistryConfig = {
 	servers: Server[];
 	enableServerManagement: boolean;
 	enableAutoUpdater: boolean;
-=======
-    defaultServers?: Server[];
-    helpLink: string;
-    academyLink: string;
-    upgradeLink: string;
-    enableServerManagement: boolean;
-    enableUpdateNotifications: boolean;
-    updateNotificationURL: string;
-    macAppStoreUpdateURL: string;
-    windowsStoreUpdateURL?: string;
-    linuxUpdateURL: string;
-    linuxGitHubReleaseURL: string;
-    managedResources: string[];
-    allowedProtocols: string[];
-}
-
-export type RegistryConfig = {
-    servers: Server[];
-    enableServerManagement: boolean;
-    enableUpdateNotifications: boolean;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 export type CombinedConfig = Omit<CurrentConfig, 'servers'> & Omit<BuildConfig, 'defaultServers'> & {

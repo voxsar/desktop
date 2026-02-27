@@ -21,17 +21,12 @@ import type {
 import buildConfig from './buildConfig';
 import defaultPreferences, { getDefaultDownloadLocation } from './defaultPreferences';
 import migrateConfigItems from './migrationPreferences';
-<<<<<<< HEAD
 import RegistryConfig, { REGISTRY_READ_EVENT } from './RegistryConfig';
-=======
-import policyConfigLoader from './policyConfigLoader';
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 import upgradeConfigData from './upgradePreferences';
 
 const log = new Logger('Config');
 
 export class Config extends EventEmitter {
-<<<<<<< HEAD
 	private configFilePath?: string;
 	private appName?: string;
 	private appPath?: string;
@@ -79,37 +74,6 @@ export class Config extends EventEmitter {
 			this.registryConfig.init();
 		});
 	};
-=======
-    private configFilePath?: string;
-    private appName?: string;
-
-    private _predefinedServers: ConfigServer[];
-    private json?: JsonFileManager<CurrentConfig>;
-
-    private combinedData?: CombinedConfig;
-    private localConfigData?: CurrentConfig;
-    private policyConfigData?: Partial<RegistryCurrentConfig>;
-    private defaultConfigData?: CurrentConfig;
-    private buildConfigData?: BuildConfig;
-
-    constructor() {
-        super();
-        this._predefinedServers = [];
-        if (buildConfig.defaultServers) {
-            this._predefinedServers.push(...buildConfig.defaultServers.map((server, index) => ({...server, order: index, isPredefined: true})));
-        }
-    }
-
-    init = (configFilePath: string, appName: string) => {
-        this.configFilePath = configFilePath;
-        this.appName = appName;
-
-        this.reload();
-        if (process.platform === 'win32' || process.platform === 'darwin') {
-            this.onLoadRegistry(policyConfigLoader.getPolicyConfig());
-        }
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	/**
 	 * Reload all sources of config data
@@ -167,7 +131,6 @@ export class Config extends EventEmitter {
 	setServers = (servers: ConfigServer[], lastActiveServer?: number) => {
 		log.debug('setServers');
 
-<<<<<<< HEAD
 		this.localConfigData = Object.assign({}, this.localConfigData, {
 			servers,
 			lastActiveServer: lastActiveServer ?? this.localConfigData?.lastActiveServer,
@@ -176,20 +139,9 @@ export class Config extends EventEmitter {
 		this.regenerateCombinedConfigData();
 		this.saveLocalConfigData();
 	};
-=======
-        this.localConfigData = Object.assign({}, this.localConfigData, {
-            servers,
-            lastActiveServer: lastActiveServer ?? this.localConfigData?.lastActiveServer,
-            viewLimit: this.localConfigData?.viewLimit ? Math.max(this.localConfigData.viewLimit, servers.length) : undefined,
-        });
-        this.regenerateCombinedConfigData();
-        this.saveLocalConfigData();
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	// getters for accessing the various config data inputs
 
-<<<<<<< HEAD
 	get data() {
 		return this.combinedData;
 	}
@@ -205,23 +157,6 @@ export class Config extends EventEmitter {
 	get registryData() {
 		return this.registryConfigData;
 	}
-=======
-    get data() {
-        return this.combinedData;
-    }
-    get localData() {
-        return this.localConfigData ?? defaultPreferences;
-    }
-    get defaultData() {
-        return this.defaultConfigData ?? defaultPreferences;
-    }
-    get buildData() {
-        return this.buildConfigData ?? buildConfig;
-    }
-    get registryData() {
-        return this.policyConfigData;
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	// convenience getters
 
@@ -241,7 +176,6 @@ export class Config extends EventEmitter {
 		return this.combinedData?.enableHardwareAcceleration ?? defaultPreferences.enableHardwareAcceleration;
 	}
 
-<<<<<<< HEAD
 	get startInFullscreen() {
 		return this.combinedData?.startInFullscreen ?? defaultPreferences.startInFullscreen;
 	}
@@ -266,32 +200,6 @@ export class Config extends EventEmitter {
 	get useSpellChecker() {
 		return this.combinedData?.useSpellChecker ?? defaultPreferences.useSpellChecker;
 	}
-=======
-    get startInFullscreen() {
-        return this.combinedData?.startInFullscreen ?? defaultPreferences.startInFullscreen;
-    }
-    get enableServerManagement() {
-        return this.combinedData?.enableServerManagement ?? buildConfig.enableServerManagement;
-    }
-    get enableUpdateNotifications() {
-        return this.combinedData?.enableUpdateNotifications ?? buildConfig.enableUpdateNotifications;
-    }
-    get autostart() {
-        return this.combinedData?.autostart ?? defaultPreferences.autostart;
-    }
-    get hideOnStart() {
-        return this.combinedData?.hideOnStart ?? defaultPreferences.hideOnStart;
-    }
-    get notifications() {
-        return this.combinedData?.notifications ?? defaultPreferences.notifications;
-    }
-    get showUnreadBadge() {
-        return this.combinedData?.showUnreadBadge ?? defaultPreferences.showUnreadBadge;
-    }
-    get useSpellChecker() {
-        return this.combinedData?.useSpellChecker ?? defaultPreferences.useSpellChecker;
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	get spellCheckerURL(): (string | undefined) {
 		return this.combinedData?.spellCheckerURL;
@@ -331,15 +239,9 @@ export class Config extends EventEmitter {
 		return this.combinedData?.alwaysMinimize;
 	}
 
-<<<<<<< HEAD
 	get canUpgrade() {
 		return process.env.NODE_ENV === 'test' || (this.canUpgradeValue && this.buildConfigData?.enableAutoUpdater && !(process.platform === 'linux' && !process.env.APPIMAGE) && !(process.platform === 'win32' && this.registryConfigData?.enableAutoUpdater === false));
 	}
-=======
-    get canUpgrade() {
-        return process.env.NODE_ENV === 'test' || (this.buildConfigData?.enableUpdateNotifications && !(this.policyConfigData && this.policyConfigData?.enableUpdateNotifications === false));
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	get autoCheckForUpdates() {
 		return this.combinedData?.autoCheckForUpdates;
@@ -365,19 +267,9 @@ export class Config extends EventEmitter {
 		return this.combinedData?.themeSyncing ?? true;
 	}
 
-<<<<<<< HEAD
 	getWindowsSystemDarkMode = () => {
 		return !this.registryConfig.getAppsUseLightTheme();
 	};
-=======
-    get useNativeTitleBar() {
-        return this.combinedData?.useNativeTitleBar ?? false;
-    }
-
-    getWindowsSystemDarkMode = () => {
-        return !policyConfigLoader.getAppsUseLightTheme();
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	/**
 	 * Gets the servers from registry into the config object and reload
@@ -388,17 +280,10 @@ export class Config extends EventEmitter {
 	private onLoadRegistry = (registryData: Partial<RegistryCurrentConfig>): void => {
 		log.debug('loadRegistry');
 
-<<<<<<< HEAD
 		this.registryConfigData = registryData;
 		if (this.registryConfigData.servers) {
 			this._predefinedServers.push(...this.registryConfigData.servers.map((server, index) => ({ ...server, order: index })));
 		}
-=======
-        this.policyConfigData = registryData;
-        if (this.policyConfigData.servers) {
-            this._predefinedServers.push(...this.policyConfigData.servers.map((server, index) => ({...server, order: index, isPredefined: true})));
-        }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		this.regenerateCombinedConfigData();
 		this.emit('update', this.combinedData);
@@ -506,7 +391,6 @@ export class Config extends EventEmitter {
 		return configData as CurrentConfig;
 	};
 
-<<<<<<< HEAD
 	/**
 	 * Properly combines all sources of data into a single, manageable set of all config data
 	 */
@@ -522,30 +406,11 @@ export class Config extends EventEmitter {
 			this.buildConfigData,
 			this.registryConfigData,
 		);
-=======
-    /**
-     * Combines all config sources into one. Order (later overrides earlier):
-     * default < local < build < registry (GPO) < mdm (CFPrefs).
-     * Policy keys are loaded by policyConfigLoader.
-     */
-    private regenerateCombinedConfigData = () => {
-        if (!this.appName) {
-            throw new Error('Config not initialized, cannot regenerate');
-        }
-
-        this.combinedData = Object.assign({},
-            this.defaultConfigData,
-            this.localConfigData,
-            this.buildConfigData,
-            this.policyConfigData,
-        );
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		// We don't want to include the servers in the combined config, they should only be accesible via the ServerManager
 		delete (this.combinedData as any).servers;
 		delete (this.combinedData as any).defaultServers;
 
-<<<<<<< HEAD
 		if (this.combinedData) {
 			this.combinedData.appName = this.appName;
 		}
@@ -583,12 +448,6 @@ export class Config extends EventEmitter {
 		// @ts-ignore
 		return process.platform !== 'darwin' && __CAN_UPGRADE__;
 	};
-=======
-        if (this.combinedData) {
-            this.combinedData.appName = this.appName;
-        }
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 const config = new Config();

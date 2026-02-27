@@ -64,7 +64,6 @@ function Popout() {
 		return null;
 	}
 
-<<<<<<< HEAD
 	return (
 		<IntlProvider>
 			<BasePage
@@ -78,25 +77,6 @@ function Popout() {
 			/>
 		</IntlProvider>
 	);
-=======
-    if (config.useNativeTitleBar) {
-        return null;
-    }
-
-    return (
-        <IntlProvider>
-            <BasePage
-                openMenu={openMenu}
-                openPopoutMenu={openPopoutMenu}
-                title={title ?? config.appName}
-                appName={config.appName}
-                errorState={errorState}
-                errorMessage={errorMessage}
-                errorUrl={errorUrl}
-            />
-        </IntlProvider>
-    );
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 ReactDOM.render(

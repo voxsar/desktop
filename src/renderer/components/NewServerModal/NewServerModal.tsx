@@ -127,7 +127,6 @@ class NewServerModal extends React.PureComponent<Props, State> {
 		};
 	};
 
-<<<<<<< HEAD
 	validateServerURL = (serverUrl: string) => {
 		clearTimeout(this.validationTimeout as unknown as number);
 		this.validationTimeout = setTimeout(() => {
@@ -147,30 +146,6 @@ class NewServerModal extends React.PureComponent<Props, State> {
 			});
 		}, 1000);
 	};
-=======
-    validateServerURL = (serverUrl: string) => {
-        clearTimeout(this.validationTimeout as unknown as number);
-        this.validationTimeout = setTimeout(() => {
-            if (!this.mounted) {
-                return;
-            }
-            const currentTimeout = this.validationTimeout;
-            this.setState({validationStarted: true});
-            window.desktop.validateServerURL(serverUrl, this.props.server?.id).then((validationResult) => {
-                if (!this.mounted) {
-                    return;
-                }
-                if (currentTimeout !== this.validationTimeout) {
-                    return;
-                }
-                this.setState({validationResult, validationStarted: false, serverUrl: validationResult.validatedURL ?? serverUrl, serverName: this.state.serverName ? this.state.serverName : validationResult.serverName ?? ''});
-                if (validationResult.status === URLValidationStatus.MagicLink && !this.props.editMode) {
-                    this.save();
-                }
-            });
-        }, 1000);
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	isServerURLErrored = () => {
 		return this.state.validationResult?.status === URLValidationStatus.Invalid ||

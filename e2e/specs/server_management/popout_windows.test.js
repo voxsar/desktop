@@ -65,7 +65,6 @@ describe('server_management/popout_windows', function desc() {
 			const browserWindow = await this.app.browserWindow(popoutWindow);
 			const initialBounds = await browserWindow.evaluate((window) => window.getBounds());
 
-<<<<<<< HEAD
 			// Simulate resizing by setting new bounds
 			const newBounds = {
 				x: initialBounds.x,
@@ -73,21 +72,11 @@ describe('server_management/popout_windows', function desc() {
 				width: initialBounds.width + 100,
 				height: initialBounds.height + 100,
 			};
-=======
-            // Simulate resizing by setting new bounds
-            const newBounds = {
-                x: initialBounds.x,
-                y: initialBounds.y,
-                width: initialBounds.width + 200,
-                height: initialBounds.height + 200,
-            };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			await browserWindow.evaluate((window, bounds) => {
 				window.setBounds(bounds);
 			}, newBounds);
 
-<<<<<<< HEAD
 			await asyncSleep(1000);
 
 			// Verify the window was resized
@@ -95,21 +84,6 @@ describe('server_management/popout_windows', function desc() {
 			currentBounds.width.should.equal(newBounds.width);
 			currentBounds.height.should.equal(newBounds.height);
 		});
-=======
-            // Wait for the bounds change to be applied
-            await asyncSleep(2000);
-
-            // Verify the window was resized
-            const currentBounds = await browserWindow.evaluate((window) => window.getBounds());
-
-            // Use a larger tolerance check since macOS window managers might enforce
-            // minimum/maximum sizes or apply constraints
-            // macOS 15 has even stricter window size constraints than previous versions
-            const tolerance = process.platform === 'darwin' ? 250 : 10;
-            Math.abs(currentBounds.width - newBounds.width).should.be.lessThan(tolerance);
-            Math.abs(currentBounds.height - newBounds.height).should.be.lessThan(tolerance);
-        });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('MM-TXXXX_3 should move the popout window by dragging title bar', async () => {
 			const browserWindow = await this.app.browserWindow(popoutWindow);
@@ -127,7 +101,6 @@ describe('server_management/popout_windows', function desc() {
 				window.setBounds(bounds);
 			}, newBounds);
 
-<<<<<<< HEAD
 			await asyncSleep(1000);
 
 			// Verify the window was moved
@@ -135,18 +108,6 @@ describe('server_management/popout_windows', function desc() {
 			currentBounds.x.should.equal(newBounds.x);
 			currentBounds.y.should.equal(newBounds.y);
 		});
-=======
-            // Wait for the bounds change to be applied
-            await asyncSleep(2000);
-
-            // Verify the window was moved
-            const currentBounds = await browserWindow.evaluate((window) => window.getBounds());
-
-            // Use a tolerance check for position as well
-            Math.abs(currentBounds.x - newBounds.x).should.be.lessThan(10);
-            Math.abs(currentBounds.y - newBounds.y).should.be.lessThan(10);
-        });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('MM-TXXXX_4 should close the popout window using close button', async () => {
 			const browserWindow = await this.app.browserWindow(popoutWindow);
@@ -161,19 +122,11 @@ describe('server_management/popout_windows', function desc() {
 			popoutWindows.length.should.equal(0);
 		});
 
-<<<<<<< HEAD
 		if (process.platform !== 'darwin') {
 			it('MM-TXXXX_5 should close popout windows when main window is closed', async () => {
 				// Create a popout window first
 				robot.keyTap('n', [env.cmdOrCtrl]);
 				await asyncSleep(2000);
-=======
-        if (process.platform === 'win32') {
-            it('MM-TXXXX_5 should close popout windows when main window is closed', async () => {
-                // Create a popout window first
-                robot.keyTap('n', [env.cmdOrCtrl]);
-                await asyncSleep(2000);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 				// Verify we have both main window and popout window
 				const windows = this.app.windows();
@@ -187,13 +140,8 @@ describe('server_management/popout_windows', function desc() {
 				const mainBrowserWindow = await this.app.browserWindow(mainWindow);
 				await mainBrowserWindow.evaluate((window) => window.close());
 
-<<<<<<< HEAD
 				// Wait briefly to allow windows to close
 				await asyncSleep(1000);
-=======
-                // Wait longer to allow popout windows to close cascade
-                await asyncSleep(3000);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 				// Check the current state of windows
 				const remainingWindows = this.app.windows();

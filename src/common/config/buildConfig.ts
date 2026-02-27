@@ -23,7 +23,6 @@ import { DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK } from '.
  * @prop {[]} allowedProtocols - Defines which protocols should be automatically allowed
  */
 const buildConfig: BuildConfig = {
-<<<<<<< HEAD
 	defaultServers: [
 		{
 			name: 'Aura Chat',
@@ -46,31 +45,6 @@ const buildConfig: BuildConfig = {
 		'mailto',
 		'tel',
 	],
-=======
-    defaultServers: [/*
-    {
-      name: 'example',
-      url: 'https://example.com'
-    }
-  */],
-    helpLink: DEFAULT_HELP_LINK,
-    academyLink: DEFAULT_ACADEMY_LINK,
-    upgradeLink: DEFAULT_UPGRADE_LINK,
-    enableServerManagement: true,
-    enableUpdateNotifications: true,
-    updateNotificationURL: 'https://releases.mattermost.com/desktop',
-    macAppStoreUpdateURL: 'macappstore://apps.apple.com/us/app/mattermost-desktop/id1614666244',
-    windowsStoreUpdateURL: 'ms-windows-store://pdp/?productid=XP8BR8MH3LPKLT',
-    linuxUpdateURL: 'https://docs.mattermost.com/deployment-guide/desktop/linux-desktop-install.html',
-    linuxGitHubReleaseURL: 'https://github.com/mattermost/desktop/releases/tag/v',
-    managedResources: ['trusted'],
-    allowedProtocols: [
-        'mattermost',
-        'ftp',
-        'mailto',
-        'tel',
-    ],
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };
 
 export default buildConfig;

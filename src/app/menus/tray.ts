@@ -13,7 +13,6 @@ import { localizeMessage } from 'main/i18nManager';
 import { getLocalPreload } from 'main/utils';
 
 export default function createTrayMenu() {
-<<<<<<< HEAD
 	const servers = ServerManager.getOrderedServers();
 	const template: MenuItemConstructorOptions[] = [
 		...servers.slice(0, 9).map((server) => {
@@ -39,29 +38,6 @@ export default function createTrayMenu() {
 				if (!mainWindow.isVisible()) {
 					mainWindow.show();
 				}
-=======
-    const servers = ServerManager.getOrderedServers();
-    const template: MenuItemConstructorOptions[] = [
-        ...servers.slice(0, 9).map((server) => {
-            return {
-                label: server.name.length > 50 ? `${server.name.slice(0, 50)}...` : server.name,
-                click: () => {
-                    MainWindow.show();
-                    ServerManager.updateCurrentServer(server.id);
-                },
-            };
-        }), {
-            type: 'separator',
-        }, {
-            label: process.platform === 'darwin' ? localizeMessage('main.menus.tray.preferences', 'Preferences...') : localizeMessage('main.menus.tray.settings', 'Settings'),
-            click: () => {
-                const mainWindow = MainWindow.get();
-                if (!mainWindow) {
-                    return;
-                }
-
-                mainWindow.show();
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 				ModalManager.addModal(
 					ModalConstants.SETTINGS_MODAL,

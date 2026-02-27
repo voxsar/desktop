@@ -11,11 +11,7 @@ const env = require('../../modules/environment');
 const { asyncSleep } = require('../../modules/utils');
 
 describe('copylink', function desc() {
-<<<<<<< HEAD
 	this.timeout(40000);
-=======
-    this.timeout(90000);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	const config = env.demoMattermostConfig;
 
@@ -36,7 +32,6 @@ describe('copylink', function desc() {
 		await env.clearElectronInstances();
 	});
 
-<<<<<<< HEAD
 	if (process.platform !== 'linux') {
 		it('MM-T125 Copy Link can be used from channel LHS', async () => {
 			const firstServer = this.serverMap[config.servers[0].name][0].win;
@@ -61,39 +56,4 @@ describe('copylink', function desc() {
 			clipboardText.should.contain('/channels/town-square');
 		});
 	}
-=======
-    if (process.platform !== 'linux') {
-        it('MM-T125 Copy Link can be used from channel LHS', async () => {
-            const firstServer = this.serverMap[config.servers[0].name][0].win;
-            await env.loginToMattermost(firstServer);
-            await asyncSleep(2000);
-
-            // Clear clipboard to prevent pollution from other tests
-            clipboard.writeText('');
-            await asyncSleep(500);
-
-            await firstServer.waitForSelector('#sidebarItem_town-square', {timeout: 5000});
-            await firstServer.click('#sidebarItem_town-square', {button: 'right'});
-            await asyncSleep(2000);
-            switch (process.platform) {
-            case 'win32':
-                robot.keyTap('down');
-                robot.keyTap('down');
-                break;
-            case 'darwin':
-                robot.keyTap('c');
-                break;
-            }
-            robot.keyTap('enter');
-
-            // Wait for clipboard operation to complete
-            await asyncSleep(1000);
-
-            await firstServer.click('#sidebarItem_town-square');
-            await firstServer.click('#post_textbox');
-            const clipboardText = clipboard.readText();
-            clipboardText.should.contain('/channels/town-square');
-        });
-    }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 });

@@ -78,7 +78,6 @@ export class AppState extends EventEmitter {
 		this.emitStatusForView(viewId);
 	};
 
-<<<<<<< HEAD
 	updateMentionsPerServer = (serverId: string, mentions: number) => {
 		ViewManager.getViewLog(serverId, 'AppState').silly('updateMentionsPerServer', mentions);
 		this.mentionsPerServer.set(serverId, mentions);
@@ -90,14 +89,6 @@ export class AppState extends EventEmitter {
 		this.unreadsPerServer.set(serverId, unreads);
 		this.emitStatusForServer(serverId);
 	};
-=======
-    updateUnreadsAndMentionsPerServer = (serverId: string, mentions: number, unreads: boolean) => {
-        ViewManager.getViewLog(serverId, 'AppState').silly('updateUnreadsAndMentionsPerServer', mentions, unreads);
-        this.mentionsPerServer.set(serverId, mentions);
-        this.unreadsPerServer.set(serverId, unreads);
-        this.emitStatusForServer(serverId);
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	clear = (viewId: string) => {
 		ViewManager.getViewLog(viewId, 'AppState').silly('clear');

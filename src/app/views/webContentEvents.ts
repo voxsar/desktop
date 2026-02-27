@@ -13,7 +13,6 @@ import Config from 'common/config';
 import { Logger } from 'common/log';
 import ServerManager from 'common/servers/serverManager';
 import {
-<<<<<<< HEAD
 	isAdminUrl,
 	isCallsPopOutURL,
 	isChannelExportUrl,
@@ -27,22 +26,6 @@ import {
 	isTeamUrl,
 	isValidURI,
 	parseURL,
-=======
-    isAdminUrl,
-    isCallsPopOutURL,
-    isChannelExportUrl,
-    isHelpUrl,
-    isImageProxyUrl,
-    isInternalURL,
-    isLoginUrl,
-    isManagedResource,
-    isPluginUrl,
-    isPublicFilesUrl,
-    isTeamUrl,
-    isValidURI,
-    normalizeUrlForValidation,
-    parseURL,
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 } from 'common/utils/url';
 import ViewManager from 'common/views/viewManager';
 import ContextMenu from 'main/contextMenu';
@@ -103,30 +86,18 @@ export class WebContentsEventManager {
 		return server.url;
 	};
 
-<<<<<<< HEAD
 	private generateWillNavigate = (webContentsId: number) => {
 		return (event: Event, url: string) => {
 			this.log(webContentsId).debug('will-navigate', url);
-=======
-    private generateWillNavigate = (webContentsId: number) => {
-        return (event: Event, url: string) => {
-            this.log(webContentsId).debug('will-navigate');
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			const parsedURL = parseURL(url)!;
 			const serverURL = this.getServerURLFromWebContentsId(webContentsId);
 
-<<<<<<< HEAD
 			this.log(webContentsId).info(serverURL?.toString());
 
 			if (serverURL && (isTeamUrl(serverURL, parsedURL) || isAdminUrl(serverURL, parsedURL) || isLoginUrl(serverURL, parsedURL) || this.isTrustedPopupWindow(webContentsId))) {
 				return;
 			}
-=======
-            if (serverURL && (isTeamUrl(serverURL, parsedURL) || isAdminUrl(serverURL, parsedURL) || isLoginUrl(serverURL, parsedURL) || this.isTrustedPopupWindow(webContentsId))) {
-                return;
-            }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			if (serverURL && isChannelExportUrl(serverURL, parsedURL)) {
 				return;
@@ -141,7 +112,6 @@ export class WebContentsEventManager {
 				return;
 			}
 
-<<<<<<< HEAD
 			this.log(webContentsId).info(`Prevented desktop from navigating to: ${url}`);
 			event.preventDefault();
 		};
@@ -173,42 +143,6 @@ export class WebContentsEventManager {
 				);
 				return { action: 'deny' };
 			}
-=======
-            this.log(webContentsId).info('Prevented desktop from navigating to external URL');
-            event.preventDefault();
-        };
-    };
-
-    private denyNewWindow = (): {action: 'deny' | 'allow'} => {
-        this.log().warn('Prevented popup window from opening a new window');
-        return {action: 'deny'};
-    };
-
-    private generateNewWindowListener = (webContentsId: number, spellcheck?: boolean) => {
-        return (details: Electron.HandlerDetails): {action: 'deny' | 'allow'} => {
-            this.log(webContentsId).debug('new-window');
-
-            const parsedURL = parseURL(details.url);
-            if (!parsedURL) {
-                this.log(webContentsId).warn(`Ignoring non-url: ${details.url}`);
-                return {action: 'deny'};
-            }
-
-            // Normalize URL before validation to handle characters like backslashes and curly braces
-            // that are technically invalid per RFC 3986 but commonly used by apps like MS Teams,
-            // SharePoint, and OneNote
-            if (!isValidURI(normalizeUrlForValidation(details.url))) {
-                this.log(webContentsId).warn(`Ignoring invalid URL: ${details.url}`);
-                dialog.showErrorBox(
-                    localizeMessage('main.webContentEvents.invalidLinkTitle', 'Invalid Link'),
-                    localizeMessage(
-                        'main.webContentEvents.invalidLinkDescription',
-                        'The link you clicked appears to be malformed and cannot be opened. Please check the URL for errors before trying again.',
-                    ),
-                );
-                return {action: 'deny'};
-            }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			// Dev tools case
 			if (parsedURL.protocol === 'devtools:') {
@@ -258,7 +192,6 @@ export class WebContentsEventManager {
 				return { action: 'deny' };
 			}
 
-<<<<<<< HEAD
 			if (isTeamUrl(serverURL, parsedURL, true)) {
 				NavigationManager.openLinkInNewTab(parsedURL);
 				return { action: 'deny' };
@@ -271,20 +204,6 @@ export class WebContentsEventManager {
 				this.log(webContentsId).info(`Popup window already open at provided url: ${details.url}`);
 				return { action: 'deny' };
 			}
-=======
-            if (isTeamUrl(serverURL, parsedURL, true)) {
-                NavigationManager.openLinkInNewTab(parsedURL);
-                return {action: 'deny'};
-            }
-            if (isAdminUrl(serverURL, parsedURL)) {
-                this.log(webContentsId).info('Admin console page detected, preventing new window');
-                return {action: 'deny'};
-            }
-            if (this.popupWindow && this.popupWindow.win.webContents.getURL() === details.url) {
-                this.log(webContentsId).info('Popup window already open at provided URL');
-                return {action: 'deny'};
-            }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			// TODO: move popups to its own and have more than one.
 			if (isPluginUrl(serverURL, parsedURL) || isManagedResource(serverURL, parsedURL)) {

@@ -48,7 +48,6 @@ function mkDirAsync(path) {
 }
 
 function rmDirAsync(path) {
-<<<<<<< HEAD
 	return new Promise((resolve, reject) => {
 		dirExistsAsync(path).then((exists) => {
 			if (exists) {
@@ -81,39 +80,6 @@ function unlinkAsync(path) {
 			resolve();
 		});
 	});
-=======
-    return new Promise((resolve, reject) => {
-        dirExistsAsync(path).then((exists) => {
-            if (!exists) {
-                resolve();
-                return;
-            }
-            fs.rm(path, {recursive: true, force: true}, (error) => {
-                if (error && error.code !== 'ENOENT') {
-                    reject(error);
-                    return;
-                }
-                resolve();
-            });
-        }).catch(reject);
-    });
-}
-
-function unlinkAsync(path) {
-    return new Promise((resolve, reject) => {
-        fs.unlink(path, (error) => {
-            if (error) {
-                if (error.code === 'ENOENT') {
-                    resolve();
-                    return;
-                }
-                reject(error);
-                return;
-            }
-            resolve();
-        });
-    });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 }
 
 function writeFileAsync(path, data) {
@@ -154,20 +120,10 @@ async function rmDirAsyncWithRetry(path, maxRetries = 3, delay = 1000) {
 }
 
 module.exports = {
-<<<<<<< HEAD
 	asyncSleep,
 	dirExistsAsync,
 	mkDirAsync,
 	rmDirAsync,
 	unlinkAsync,
 	writeFileAsync,
-=======
-    asyncSleep,
-    dirExistsAsync,
-    mkDirAsync,
-    rmDirAsync,
-    rmDirAsyncWithRetry,
-    unlinkAsync,
-    writeFileAsync,
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 };

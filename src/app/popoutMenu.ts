@@ -1,13 +1,8 @@
 // Copyright (c) 2016-present Aura, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-<<<<<<< HEAD
 import type { MenuItem, MenuItemConstructorOptions } from 'electron';
 import { clipboard, Menu } from 'electron';
-=======
-import type {BrowserWindow, Input, MenuItem, MenuItemConstructorOptions} from 'electron';
-import {clipboard, Menu} from 'electron';
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 import WebContentsManager from 'app/views/webContentsManager';
 import PopoutManager from 'app/windows/popoutManager';

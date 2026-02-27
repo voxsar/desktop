@@ -44,11 +44,7 @@ describe('Menu/window_menu', function desc() {
 		await env.clearElectronInstances();
 	};
 
-<<<<<<< HEAD
 	this.timeout(30000);
-=======
-    this.timeout(60000);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	describe('MM-T826 should switch to servers when keyboard shortcuts are pressed', async () => {
 		let mainWindow;
@@ -84,7 +80,6 @@ describe('Menu/window_menu', function desc() {
 	describe('MM-T4385 select tab from menu', async () => {
 		let mainView;
 
-<<<<<<< HEAD
 		before(async () => {
 			await beforeFunc();
 			mainView = this.app.windows().find((window) => window.url().includes('index'));
@@ -106,35 +101,6 @@ describe('Menu/window_menu', function desc() {
 			await thirdView.click('#sidebarItem_town-square');
 		});
 		after(afterFunc);
-=======
-        before(async () => {
-            await beforeFunc();
-            mainView = this.app.windows().find((window) => window.url().includes('index'));
-            await mainView.click('#newTabButton');
-            await mainView.click('#newTabButton');
-
-            // macOS 15 and Linux need more time for tabs to initialize
-            await asyncSleep(process.platform === 'darwin' ? 5000 : 4000);
-            this.serverMap = await env.getServerMap(this.app);
-
-            const secondTab = await mainView.waitForSelector('.TabBar li.serverTabItem:nth-child(2)', {timeout: 15000});
-            await secondTab.click();
-            await asyncSleep(1500);
-            const secondView = this.serverMap[config.servers[0].name][1].win;
-            await secondView.waitForSelector('#sidebarItem_off-topic', {timeout: 15000});
-            await secondView.click('#sidebarItem_off-topic');
-            await asyncSleep(1000);
-
-            const thirdTab = await mainView.waitForSelector('.TabBar li.serverTabItem:nth-child(3)', {timeout: 15000});
-            await thirdTab.click();
-            await asyncSleep(1500);
-            const thirdView = this.serverMap[config.servers[0].name][2].win;
-            await thirdView.waitForSelector('#sidebarItem_town-square', {timeout: 15000});
-            await thirdView.click('#sidebarItem_town-square');
-            await asyncSleep(1000);
-        });
-        after(afterFunc);
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		it('MM-T4385_1 should show the second tab', async () => {
 			let tabViewButton = await mainView.innerText('.active');
@@ -170,20 +136,11 @@ describe('Menu/window_menu', function desc() {
 		await asyncSleep(3000);
 		this.serverMap = await env.getServerMap(this.app);
 
-<<<<<<< HEAD
 		const secondTab = await mainView.waitForSelector('.TabBar li.serverTabItem:nth-child(2)');
 		await secondTab.click();
 		const secondView = this.serverMap[config.servers[0].name][1].win;
 		await secondView.waitForSelector('#sidebarItem_off-topic');
 		await secondView.click('#sidebarItem_off-topic');
-=======
-        const secondTab = await mainView.waitForSelector('.TabBar li.serverTabItem:nth-child(2)');
-        await secondTab.click();
-        await asyncSleep(1000);
-        const secondView = this.serverMap[config.servers[0].name][1].win;
-        await secondView.waitForSelector('#sidebarItem_off-topic', {timeout: 10000});
-        await secondView.click('#sidebarItem_off-topic', {force: true});
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		let tabViewButton = await mainView.innerText('.active');
 		tabViewButton.should.contain('Off-Topic');
@@ -227,7 +184,6 @@ describe('Menu/window_menu', function desc() {
 		it('MM-T825 should be hidden when keyboard shortcuts are pressed', async () => {
 			await beforeFunc();
 
-<<<<<<< HEAD
 			const mainWindow = this.app.windows().find((window) => window.url().includes('index'));
 			const browserWindow = await this.app.browserWindow(mainWindow);
 			robot.keyTap('w', [env.cmdOrCtrl]);
@@ -236,22 +192,6 @@ describe('Menu/window_menu', function desc() {
 			isVisible.should.be.false;
 			const isDestroyed = await browserWindow.evaluate((window) => window.isDestroyed());
 			isDestroyed.should.be.false;
-=======
-            const mainWindow = this.app.windows().find((window) => window.url().includes('index'));
-            const browserWindow = await this.app.browserWindow(mainWindow);
-
-            // send Shift + Command + W on mac
-            const modifiers = process.platform === 'darwin' ?
-                ['shift', 'command'] :
-                [env.cmdOrCtrl];
-
-            robot.keyTap('w', modifiers);
-            await asyncSleep(2000);
-            const isVisible = await browserWindow.evaluate((window) => window.isVisible());
-            isVisible.should.be.false;
-            const isDestroyed = await browserWindow.evaluate((window) => window.isDestroyed());
-            isDestroyed.should.be.false;
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			await afterFunc();
 		});

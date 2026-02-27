@@ -9,12 +9,7 @@ import type { PopoutViewProps } from '@mattermost/desktop-api';
 import CallsWidgetWindow from 'app/callsWidgetWindow';
 import MainWindow from 'app/mainWindow/mainWindow';
 import MenuManager from 'app/menus';
-<<<<<<< HEAD
 import type { MattermostWebContentsView } from 'app/views/MattermostWebContentsView';
-=======
-import {createSetNativeTitleBar} from 'app/popoutMenu';
-import type {MattermostWebContentsView} from 'app/views/MattermostWebContentsView';
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 import WebContentsManager from 'app/views/webContentsManager';
 import BaseWindow from 'app/windows/baseWindow';
 import {
@@ -40,14 +35,8 @@ import {
 	POPOUT_CLOSED,
 	UPDATE_TARGET_URL,
 } from 'common/communication';
-<<<<<<< HEAD
 import { POPOUT_RATE_LIMIT } from 'common/constants';
 import { Logger } from 'common/log';
-=======
-import Config from 'common/config';
-import {POPOUT_RATE_LIMIT} from 'common/constants';
-import {Logger} from 'common/log';
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 import ServerManager from 'common/servers/serverManager';
 import { DEFAULT_RHS_WINDOW_WIDTH, TAB_BAR_HEIGHT } from 'common/utils/constants';
 import type { MattermostView } from 'common/views/MattermostView';
@@ -135,17 +124,8 @@ export class PopoutManager {
 		window.registerThemeManager((webContents) => ThemeManager.registerPopoutView(webContents, view.id));
 		this.popoutWindows.set(view.id, window);
 
-<<<<<<< HEAD
 		return window;
 	};
-=======
-        if (Config.useNativeTitleBar) {
-            window.browserWindow.setAutoHideMenuBar(true);
-        }
-
-        return window;
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private startPopoutWindow = (viewId: string, window: BaseWindow) => {
 		window.browserWindow.webContents.once('did-finish-load', () => {
@@ -186,23 +166,10 @@ export class PopoutManager {
 		window.browserWindow.once('show', setBounds);
 		window.browserWindow.once('close', close);
 
-<<<<<<< HEAD
 		if (process.platform !== 'darwin') {
 			// @ts-expect-error: The type is wrong on Electrons side
 			webContentsView.webContents.on('before-input-event', window.handleAltKeyPressed);
 		}
-=======
-        const setNativeTitleBar = createSetNativeTitleBar(window.browserWindow, viewId);
-        if (process.platform !== 'darwin') {
-            if (Config.useNativeTitleBar) {
-                // @ts-expect-error: The type is wrong on Electrons side
-                webContentsView.webContents.on('before-input-event', setNativeTitleBar);
-            } else {
-                // @ts-expect-error: The type is wrong on Electrons side
-                webContentsView.webContents.on('before-input-event', window.handleAltKeyPressed);
-            }
-        }
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		this.popoutListeners.set(viewId, () => {
 			mattermostWebContentsView.off(LOADSCREEN_END, loadScreenEnd);
@@ -214,20 +181,9 @@ export class PopoutManager {
 			window.browserWindow.off('show', setBounds);
 			window.browserWindow.off('close', close);
 
-<<<<<<< HEAD
 			// @ts-expect-error: The type is wrong on Electrons side
 			webContentsView.webContents.off('before-input-event', window.handleAltKeyPressed);
 		});
-=======
-            if (Config.useNativeTitleBar) {
-                // @ts-expect-error: The type is wrong on Electrons side
-                webContentsView.webContents.off('before-input-event', setNativeTitleBar);
-            } else {
-                // @ts-expect-error: The type is wrong on Electrons side
-                webContentsView.webContents.off('before-input-event', window.handleAltKeyPressed);
-            }
-        });
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 		window.browserWindow.contentView.addChildView(mattermostWebContentsView.getWebContentsView());
 	};
@@ -252,7 +208,6 @@ export class PopoutManager {
 		};
 	};
 
-<<<<<<< HEAD
 	private setBounds = (window: BaseWindow, webContentsView: WebContentsView) => {
 		return () => {
 			if (window.browserWindow) {
@@ -260,18 +215,6 @@ export class PopoutManager {
 			}
 		};
 	};
-=======
-    private setBounds = (window: BaseWindow, webContentsView: WebContentsView) => {
-        return () => {
-            if (window.browserWindow) {
-                const windowBounds = Config.useNativeTitleBar ?
-                    {...window.browserWindow.getContentBounds(), y: 0, x: 0} :
-                    getWindowBoundaries(window.browserWindow);
-                webContentsView.setBounds(windowBounds);
-            }
-        };
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private handleViewUpdated = (viewId: string) => {
 		log.debug('handleViewUpdated', { viewId });

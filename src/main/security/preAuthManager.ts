@@ -134,7 +134,6 @@ export class PreAuthManager {
 
 		event.preventDefault(); // prevent the app from getting the first certificate available
 
-<<<<<<< HEAD
 		// The URL provided is in the format <domain>:<port>, so we need to convert it to a proper URL for trust checking
 		let urlToCheck = url;
 		if (url.includes(':') && !url.includes('://')) {
@@ -170,25 +169,6 @@ export class PreAuthManager {
 			});
 		}
 	};
-=======
-        const mainWindow = MainWindow.get();
-        if (!mainWindow) {
-            log.info('No main window found. Skipping certificate selection');
-            return;
-        }
-        const modalPromise = ModalManager.addModal<CertificateModalData, {cert: Certificate}>(
-            `${ModalConstants.CERTIFICATE_MODAL}-${url}`, html, preload, {url, list}, mainWindow,
-        );
-        if (modalPromise) {
-            modalPromise.then((data) => {
-                callback(data.cert);
-            }).catch((err) => {
-                log.error('Error processing certificate selection', {err});
-                callback();
-            });
-        }
-    };
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 	private handleBasicAuth = (
 		event: Event,

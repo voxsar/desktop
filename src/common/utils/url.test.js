@@ -3,7 +3,6 @@
 'use strict';
 
 import {
-<<<<<<< HEAD
 	getFormattedPathName,
 	isUrlType,
 	isValidURL,
@@ -12,17 +11,6 @@ import {
 	isInternalURL,
 	isCallsPopOutURL,
 	isTrustedURL,
-=======
-    getFormattedPathName,
-    isUrlType,
-    isValidURL,
-    isValidURI,
-    normalizeUrlForValidation,
-    parseURL,
-    isInternalURL,
-    isCallsPopOutURL,
-    isTrustedURL,
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 } from 'common/utils/url';
 
 describe('common/utils/url', () => {
@@ -51,7 +39,6 @@ describe('common/utils/url', () => {
 		});
 	});
 
-<<<<<<< HEAD
 	describe('isValidURL', () => {
 		it('should be true for a valid web url', () => {
 			const testURL = 'https://developers.mattermost.com/';
@@ -104,86 +91,6 @@ describe('common/utils/url', () => {
 		it('should return false on different hosts', () => {
 			const baseURL = new URL('http://mattermost.com');
 			const externalURL = new URL('http://google.com');
-=======
-    describe('isValidURL', () => {
-        it('should be true for a valid web url', () => {
-            const testURL = 'https://developers.mattermost.com/';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a valid, non-https web url', () => {
-            const testURL = 'http://developers.mattermost.com/';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for an invalid, self-defined, top-level domain', () => {
-            const testURL = 'https://www.example.x';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a file download url', () => {
-            const testURL = 'https://community.mattermost.com/api/v4/files/ka3xbfmb3ffnmgdmww8otkidfw?download=1';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a permalink url', () => {
-            const testURL = 'https://community.mattermost.com/test-channel/pl/pdqowkij47rmbyk78m5hwc7r6r';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a valid, internal domain', () => {
-            const testURL = 'https://mattermost.company-internal';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a second, valid internal domain', () => {
-            const testURL = 'https://serverXY/mattermost';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a valid, non-https internal domain', () => {
-            const testURL = 'http://mattermost.local';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-        it('should be true for a valid, non-https, ip address with port number', () => {
-            const testURL = 'http://localhost:8065';
-            expect(isValidURL(testURL)).toBe(true);
-        });
-    });
-    describe('isValidURI', () => {
-        it('should be true for a deeplink url', () => {
-            const testURL = 'mattermost://community-release.mattermost.com/core/channels/developers';
-            expect(isValidURI(testURL)).toBe(true);
-        });
-        it('should be false for a malicious url', () => {
-            const testURL = String.raw`mattermost:///" --data-dir "\\deans-mbp\mattermost`;
-            expect(isValidURI(testURL)).toBe(false);
-        });
-    });
-
-    describe('normalizeUrlForValidation', () => {
-        it('should convert backslashes to forward slashes', () => {
-            const input = String.raw`onenote:///D:\OneNote\Apps\Test.one`;
-            expect(normalizeUrlForValidation(input)).toBe('onenote:///D:/OneNote/Apps/Test.one');
-        });
-        it('should encode curly braces', () => {
-            const input = 'https://teams.microsoft.com/l/message?context={%22contextType%22:%22chat%22}';
-            expect(normalizeUrlForValidation(input)).toBe('https://teams.microsoft.com/l/message?context=%7B%22contextType%22:%22chat%22%7D');
-        });
-        it('should make MS Teams URLs pass isValidURI after normalization', () => {
-            const teamsUrl = 'https://teams.microsoft.com/l/message/19:meeting@thread.v2/123?context={%22contextType%22:%22chat%22}';
-            expect(isValidURI(teamsUrl)).toBe(false); // Fails without normalization
-            expect(isValidURI(normalizeUrlForValidation(teamsUrl))).toBe(true); // Passes with normalization
-        });
-        it('should make OneNote URLs pass isValidURI after normalization', () => {
-            const onenoteUrl = 'onenote:///D:/path#section&page-id={GUID}';
-            expect(isValidURI(onenoteUrl)).toBe(false); // Fails without normalization
-            expect(isValidURI(normalizeUrlForValidation(onenoteUrl))).toBe(true); // Passes with normalization
-        });
-        it('should still reject malicious URLs after normalization', () => {
-            const maliciousUrl = String.raw`mattermost:///" --data-dir "\\deans-mbp\mattermost`;
-            expect(isValidURI(normalizeUrlForValidation(maliciousUrl))).toBe(false);
-        });
-    });
-
-    describe('isInternalURL', () => {
-        it('should return false on different hosts', () => {
-            const baseURL = new URL('http://mattermost.com');
-            const externalURL = new URL('http://google.com');
->>>>>>> b473ba39bfc4a853bf658f05ad5d2155dad9fd14
 
 			expect(isInternalURL(externalURL, baseURL)).toBe(false);
 		});
