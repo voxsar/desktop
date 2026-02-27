@@ -17,7 +17,7 @@
 	},
 	"scripts": {
 		"postinstall": "patch-package && electron-builder install-app-deps",
-		"clean": "rm -rf release/ node_modules/ src/node_modules/ dist/ && cd e2e && npm run clean && cd -",
+		"clean": "npx rimraf release node_modules src/node_modules dist && cd e2e && npm run clean && cd ..",
 		"clean-install": "npm run clean && npm install",
 		"clean-dist": "rm -rf dist/",
 		"check": "run-p lint:js-quiet check-build-config check-types test:unit",
@@ -146,6 +146,7 @@
 		"node-loader": "2.0.0",
 		"npm-run-all": "4.1.5",
 		"patch-package": "8.0.1",
+		"rimraf": "^5.0.10",
 		"sass": "1.49.11",
 		"sass-loader": "16.0.2",
 		"semver": "7.6.0",
