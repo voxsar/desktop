@@ -287,12 +287,12 @@ function initializeInterCommunicationEventListeners() {
     // Window controls for frameless window
     // Note: BrowserWindow.fromWebContents may return null for WebContentsView
     // child views, so we fall back to MainWindow.get()
-    ipcMain.on(WINDOW_MINIMIZE, (event: IpcMainEvent) => {
+    ipcMain.on(WINDOW_MINIMIZE, (event) => {
         const win = BrowserWindow.fromWebContents(event.sender) ?? MainWindow.get();
         win?.minimize();
     });
 
-    ipcMain.on(WINDOW_MAXIMIZE, (event: IpcMainEvent) => {
+    ipcMain.on(WINDOW_MAXIMIZE, (event) => {
         const win = BrowserWindow.fromWebContents(event.sender) ?? MainWindow.get();
         if (win?.isMaximized()) {
             win?.unmaximize();
@@ -301,17 +301,17 @@ function initializeInterCommunicationEventListeners() {
         }
     });
 
-    ipcMain.on(WINDOW_UNMAXIMIZE, (event: IpcMainEvent) => {
+    ipcMain.on(WINDOW_UNMAXIMIZE, (event) => {
         const win = BrowserWindow.fromWebContents(event.sender) ?? MainWindow.get();
         win?.unmaximize();
     });
 
-    ipcMain.on(WINDOW_CLOSE, (event: IpcMainEvent) => {
+    ipcMain.on(WINDOW_CLOSE, (event) => {
         const win = BrowserWindow.fromWebContents(event.sender) ?? MainWindow.get();
         win?.close();
     });
 
-    ipcMain.on(WINDOW_DRAG, (event: IpcMainEvent, deltaX: number, deltaY: number) => {
+    ipcMain.on(WINDOW_DRAG, (event, deltaX: number, deltaY: number) => {
         const win = BrowserWindow.fromWebContents(event.sender) ?? MainWindow.get();
         if (win) {
             const [x, y] = win.getPosition();

@@ -212,7 +212,7 @@ export class UpdateNotifier {
     };
 
     private openUpdateGuide = (): void => {
-        if (process.platform === 'linux') {
+        if (process.platform === 'linux' && buildConfig.linuxUpdateURL) {
             shell.openExternal(buildConfig.linuxUpdateURL);
         }
     };

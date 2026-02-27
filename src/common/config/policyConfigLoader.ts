@@ -19,7 +19,7 @@ export class PolicyConfigLoader {
         return {
             servers: this.getServerList(),
             enableServerManagement: this.getSingleBooleanValue('EnableServerManagement'),
-            enableUpdateNotifications: this.getSingleBooleanValue('EnableAutoUpdater'),
+            enableAutoUpdater: this.getSingleBooleanValue('EnableAutoUpdater'),
         };
     };
 

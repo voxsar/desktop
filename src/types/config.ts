@@ -58,6 +58,7 @@ export type ConfigV4 = {
     enableSentry?: boolean;
     viewLimit?: number;
     themeSyncing?: boolean;
+    skippedVersions?: string[];
 }
 
 export type ConfigV3 = Omit<ConfigV4,
@@ -128,6 +129,11 @@ export type BuildConfig = {
     enableAutoUpdater: boolean;
     managedResources: string[];
     allowedProtocols: string[];
+    updateNotificationURL?: string;
+    windowsStoreUpdateURL?: string;
+    macAppStoreUpdateURL?: string;
+    linuxUpdateURL?: string;
+    linuxGitHubReleaseURL?: string;
 }
 
 export type RegistryConfig = {

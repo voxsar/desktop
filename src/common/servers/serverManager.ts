@@ -261,11 +261,11 @@ export class ServerManager extends EventEmitter {
 
         this.removeServer(serverId);
         const newServer = server.isPredefined ? this.addServerToMap(server, wasCurrent, false) : this.addServer(server.toUniqueServer());
-        if (wasCurrent && !server.isPredefined) {
+        if (wasCurrent && !server.isPredefined && newServer) {
             this.updateCurrentServer(newServer.id);
         }
 
-        if (server.isPredefined) {
+        if (server.isPredefined || !newServer) {
             return;
         }
 
