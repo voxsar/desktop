@@ -165,62 +165,12 @@ jobs:
           compression-level: 0
           retention-days: 14
 
-  upload-to-s3:
+  github-release:
     runs-on: ubuntu-22.04
     needs:
       - build-mac-installer
       - build-msi-installer
       - build-linux
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: release/setup-aws-credentials
-        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
-        with:
-          aws-region: us-east-1
-          aws-access-key-id: ${{ secrets.MM_DESKTOP_RELEASE_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.MM_DESKTOP_RELEASE_AWS_SECRET_ACCESS_KEY }}
-
-      - name: release/checkout-repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: release/download-builds
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          path: build
-          pattern: build-*
-          merge-multiple: true
-
-      - name: release/setup-files-for-aws
-        run: |
-          mkdir -p ./aws-s3-dist
-          cp -r --backup=numbered ./build/{macos-release,win-release,linux}/* ./aws-s3-dist
-      - name: release/generate-latest-version
-        id: generate-latest
-        run: |
-          bash -x ./scripts/generate_latest_version.sh
-      - name: release/upload-to-s3
-        run: aws s3 cp ./aws-s3-dist/ s3://releases.mattermost.com/desktop/ --acl public-read --cache-control "no-cache" --recursive
-      - name: release/upload-latest-version
-        run: aws s3 cp ./${{ steps.generate-latest.outputs.FILENAME }} s3://releases.mattermost.com/desktop/${{ steps.generate-latest.outputs.FILENAME }} --acl public-read --cache-control "no-cache"
-
-      # Upload artifacts new bucket
-      - name: release/setup-aws-credentials-new-bucket
-        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
-        with:
-          aws-region: us-east-1
-          role-to-assume: ${{ secrets.MM_DESKTOP_RELEASE_AWS_ROLE_TO_ASSUME }}
-
-      - name: release/upload-to-s3-new-bucket
-        run: aws s3 cp ./aws-s3-dist/ s3://${{ secrets.MM_DESKTOP_RELEASE_BUCKET }} --cache-control "no-cache" --recursive
-      - name: release/upload-latest-version-new-bucket
-        run: aws s3 cp ./${{ steps.generate-latest.outputs.FILENAME }} s3://${{ secrets.MM_DESKTOP_RELEASE_BUCKET }}${{ steps.generate-latest.outputs.FILENAME }} --cache-control "no-cache"
-
-  github-release:
-    runs-on: ubuntu-22.04
-    needs:
-      - upload-to-s3
     steps:
       - name: release/checkout-repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

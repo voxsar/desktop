@@ -59,19 +59,23 @@ fi
 # Check 5: Unit Tests
 echo -e "\n${YELLOW}[5/5] Running unit tests (this may take a while)...${NC}"
 test_output=$(npm run test:unit 2>&1 || true)
-if echo "$test_output" | grep -q "Tests:.*failed"; then
-    failed_count=$(echo "$test_output" | grep -oP "Tests:\s+\K\d+(?= failed)" || echo "0")
-    echo -e "${RED}✗ Unit tests failed: $failed_count test(s) failing${NC}"
-    echo -e "\n${YELLOW}Failed tests:${NC}"
-    echo "$test_output" | grep -oP "● \K.*" | head -n 10 | while read -r line; do
-        echo -e "${RED}  - $line${NC}"
-    done
-    failed_checks+=("Unit Tests")
-elif echo "$test_output" | grep -q "Test Suites:.*failed"; then
-    echo -e "${RED}✗ Unit tests failed${NC}"
-    failed_checks+=("Unit Tests")
-else
+test_exit_code=$?
+
+if [ $test_exit_code -eq 0 ]; then
     echo -e "${GREEN}✓ All unit tests passed${NC}"
+else
+    # Check if tests actually failed or just had some suites fail
+    if echo "$test_output" | grep -q "Test Suites:.*failed"; then
+        failed_count=$(echo "$test_output" | grep -oP "Test Suites:\s+\K\d+(?=\s+failed)" || echo "some")
+        echo -e "${RED}✗ Unit tests failed: $failed_count test suite(s) failing${NC}"
+        echo -e "\n${YELLOW}Failed tests:${NC}"
+        echo "$test_output" | grep -oP "●\s+\K.+" | head -n 10 | while read -r line; do
+            echo -e "${RED}  - $line${NC}"
+        done
+    else
+        echo -e "${RED}✗ Unit tests failed${NC}"
+    fi
+    failed_checks+=("Unit Tests")
 fi
 
 # Summary
