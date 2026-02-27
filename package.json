@@ -84,13 +84,20 @@
 			"/e2e/",
 			"/webpack.config.test.js"
 		],
+		"transformIgnorePatterns": [
+			"node_modules/(?!(electron-context-menu)/)"
+		],
+		"moduleNameMapper": {
+			"^electron-context-menu$": "<rootDir>/src/jest/__mocks__/electron-context-menu.js"
+		},
 		"globals": {
 			"__HASH_VERSION__": "5.0.0",
 			"__IS_NIGHTLY_BUILD__": false,
 			"__IS_MAC_APP_STORE__": false,
 			"__DISABLE_GPU__": false,
 			"__SKIP_ONBOARDING_SCREENS__": false,
-			"__SENTRY_DSN__": "https://test@sentry.io/123"
+			"__SENTRY_DSN__": "https://test@sentry.io/123",
+			"__CAN_UPGRADE__": true
 		},
 		"setupFiles": [
 			"./src/jest/jestSetup.js"
