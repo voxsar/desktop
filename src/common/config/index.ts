@@ -3,6 +3,8 @@
 // See LICENSE.txt for license information.
 
 import { EventEmitter } from 'events';
+import fs from 'fs';
+import path from 'path';
 
 import JsonFileManager from 'common/JsonFileManager';
 import { Logger } from 'common/log';
