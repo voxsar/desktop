@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import Config from 'common/config';
-import { parseURL, isInternalURL } from 'common/utils/url';
+import {parseURL, isInternalURL} from 'common/utils/url';
 import Utils from 'common/utils/util';
 
-import { ServerManager } from './serverManager';
+import {ServerManager} from './serverManager';
 
 jest.mock('common/config', () => {
 	const mock = {
@@ -38,7 +38,7 @@ describe('common/servers/serverManager', () => {
 		const serverManager = new ServerManager();
 
 		beforeEach(() => {
-			const server = { id: 'server-1', url: new URL('http://server-1.com'), name: 'server-1' };
+			const server = {id: 'server-1', url: new URL('http://server-1.com'), name: 'server-1'};
 			server.updateURL = (url) => {
 				server.url = new URL(url);
 			};
@@ -85,8 +85,8 @@ describe('common/servers/serverManager', () => {
 	describe('lookupServerByURL', () => {
 		const serverManager = new ServerManager();
 		serverManager.getAllServers = () => [
-			{ id: 'server-1', url: new URL('http://server-1.com') },
-			{ id: 'server-2', url: new URL('http://server-2.com/subpath') },
+			{id: 'server-1', url: new URL('http://server-1.com')},
+			{id: 'server-2', url: new URL('http://server-2.com/subpath')},
 		];
 
 		beforeEach(() => {
@@ -100,17 +100,17 @@ describe('common/servers/serverManager', () => {
 
 		it('should match the correct server - base URL', () => {
 			const inputURL = new URL('http://server-1.com');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
 		});
 
 		it('should match the correct server - base view', () => {
 			const inputURL = new URL('http://server-1.com/server');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
 		});
 
 		it('should match the correct server - different view', () => {
 			const inputURL = new URL('http://server-1.com/type1/app');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-1', url: new URL('http://server-1.com') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-1', url: new URL('http://server-1.com')});
 		});
 
 		it('should return undefined for server with subpath and URL without', () => {
@@ -125,7 +125,7 @@ describe('common/servers/serverManager', () => {
 
 		it('should match the correct server with a subpath - base URL', () => {
 			const inputURL = new URL('http://server-2.com/subpath');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
 		});
 
 		it('should not match a server where the subpaths are substrings of each other ', () => {
@@ -135,12 +135,12 @@ describe('common/servers/serverManager', () => {
 
 		it('should match the correct server with a subpath - base view', () => {
 			const inputURL = new URL('http://server-2.com/subpath/server');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
 		});
 
 		it('should match the correct server with a subpath - different view', () => {
 			const inputURL = new URL('http://server-2.com/subpath/type2/server');
-			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({ id: 'server-2', url: new URL('http://server-2.com/subpath') });
+			expect(serverManager.lookupServerByURL(inputURL)).toStrictEqual({id: 'server-2', url: new URL('http://server-2.com/subpath')});
 		});
 
 		it('should return undefined for wrong server', () => {
@@ -155,8 +155,8 @@ describe('common/servers/serverManager', () => {
 
 		beforeEach(() => {
 			Config.predefinedServers = [
-				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
-				{ name: 'Predefined Server 2', url: 'http://predefined-2.com' },
+				{name: 'Predefined Server 1', url: 'http://predefined-1.com'},
+				{name: 'Predefined Server 2', url: 'http://predefined-2.com'},
 			];
 			Config.localServers = [];
 			Config.enableServerManagement = true;
@@ -174,7 +174,7 @@ describe('common/servers/serverManager', () => {
 		});
 
 		it('should always set lastActiveServer to at least 0 when there are predefined servers', () => {
-			const localServer = { name: 'Local Server', url: 'http://local.com' };
+			const localServer = {name: 'Local Server', url: 'http://local.com'};
 			serverManager.addServer(localServer);
 			serverManager.updateCurrentServer(serverManager.getOrderedServers()[0].id);
 			expect(Config.setServers).toHaveBeenCalledWith(expect.any(Array), 0);
@@ -194,10 +194,10 @@ describe('common/servers/serverManager', () => {
 
 		it('should set a current server even when lastActiveServer index is out of bounds', () => {
 			Config.predefinedServers = [
-				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+				{name: 'Predefined Server 1', url: 'http://predefined-1.com'},
 			];
 			Config.localServers = [
-				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+				{name: 'Local Server 1', url: 'http://local-1.com', order: 0},
 			];
 			Config.enableServerManagement = true;
 			Config.lastActiveServer = 10;
@@ -219,9 +219,9 @@ describe('common/servers/serverManager', () => {
 		beforeEach(() => {
 			Config.predefinedServers = [];
 			Config.localServers = [
-				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
-				{ name: 'Local Server 2', url: 'http://local-2.com', order: 1 },
-				{ name: 'Local Server 3', url: 'http://local-3.com', order: 2 },
+				{name: 'Local Server 1', url: 'http://local-1.com', order: 0},
+				{name: 'Local Server 2', url: 'http://local-2.com', order: 1},
+				{name: 'Local Server 3', url: 'http://local-3.com', order: 2},
 			];
 			Config.enableServerManagement = true;
 			Config.lastActiveServer = 0;
@@ -268,11 +268,11 @@ describe('common/servers/serverManager', () => {
 
 		it('should switch to previous server when removing a server, even with predefined servers', () => {
 			Config.predefinedServers = [
-				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+				{name: 'Predefined Server 1', url: 'http://predefined-1.com'},
 			];
 			Config.localServers = [
-				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
-				{ name: 'Local Server 2', url: 'http://local-2.com', order: 1 },
+				{name: 'Local Server 1', url: 'http://local-1.com', order: 0},
+				{name: 'Local Server 2', url: 'http://local-2.com', order: 1},
 			];
 			Config.enableServerManagement = true;
 			Config.lastActiveServer = 0;
@@ -294,10 +294,10 @@ describe('common/servers/serverManager', () => {
 
 		it('should switch to next server when removing first server and no previous exists', () => {
 			Config.predefinedServers = [
-				{ name: 'Predefined Server 1', url: 'http://predefined-1.com' },
+				{name: 'Predefined Server 1', url: 'http://predefined-1.com'},
 			];
 			Config.localServers = [
-				{ name: 'Local Server 1', url: 'http://local-1.com', order: 0 },
+				{name: 'Local Server 1', url: 'http://local-1.com', order: 0},
 			];
 			Config.enableServerManagement = true;
 			Config.lastActiveServer = 0;

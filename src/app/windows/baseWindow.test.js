@@ -6,10 +6,10 @@
 import os from 'os';
 import path from 'path';
 
-import { BrowserWindow, app, ipcMain, dialog } from 'electron';
+import {BrowserWindow, app, ipcMain, dialog} from 'electron';
 
-import { LoadingScreen } from 'app/views/loadingScreen';
-import { URLView } from 'app/views/urlView';
+import {LoadingScreen} from 'app/views/loadingScreen';
+import {URLView} from 'app/views/urlView';
 import {
 	EMIT_CONFIGURATION,
 	FOCUS_THREE_DOT_MENU,
@@ -17,14 +17,14 @@ import {
 	TOGGLE_SECURE_INPUT,
 } from 'common/communication';
 import Config from 'common/config';
-import { MINIMUM_WINDOW_HEIGHT, MINIMUM_WINDOW_WIDTH, SECOND, TAB_BAR_HEIGHT } from 'common/utils/constants';
+import {MINIMUM_WINDOW_HEIGHT, MINIMUM_WINDOW_WIDTH, SECOND, TAB_BAR_HEIGHT} from 'common/utils/constants';
 import Utils from 'common/utils/util';
 
 import BaseWindow from './baseWindow';
 
 import ContextMenu from '../../main/contextMenu';
-import { localizeMessage } from '../../main/i18nManager';
-import { getLocalPreload } from '../../main/utils';
+import {localizeMessage} from '../../main/i18nManager';
+import {getLocalPreload} from '../../main/utils';
 
 jest.mock('os', () => ({
 	platform: jest.fn(),
@@ -37,7 +37,7 @@ jest.mock('path', () => ({
 }));
 
 jest.mock('electron', () => {
-	const { EventEmitter } = jest.requireActual('events');
+	const {EventEmitter} = jest.requireActual('events');
 	const mockIpcMain = new EventEmitter();
 	mockIpcMain.on = jest.fn(mockIpcMain.on);
 	mockIpcMain.emit = jest.fn(mockIpcMain.emit);
@@ -64,7 +64,7 @@ jest.mock('electron', () => {
 			mockWebContents.once = jest.fn(mockWebContents.once);
 			mockWebContents.emit = jest.fn(mockWebContents.emit);
 			mockBrowserWindow.webContents = mockWebContents;
-			mockBrowserWindow.getContentBounds = jest.fn(() => ({ x: 0, y: 0, width: 800, height: 600 }));
+			mockBrowserWindow.getContentBounds = jest.fn(() => ({x: 0, y: 0, width: 800, height: 600}));
 			mockBrowserWindow.getSize = jest.fn(() => [800, 600]);
 			mockBrowserWindow.restore = jest.fn();
 			return mockBrowserWindow;
@@ -138,7 +138,7 @@ describe('BaseWindow', () => {
 				minWidth: MINIMUM_WINDOW_WIDTH,
 				minHeight: MINIMUM_WINDOW_HEIGHT,
 				titleBarStyle: 'hidden',
-				trafficLightPosition: { x: 12, y: 12 },
+				trafficLightPosition: {x: 12, y: 12},
 				backgroundColor: '#000',
 				webPreferences: {
 					disableBlinkFeatures: 'Auxclick',
@@ -169,7 +169,7 @@ describe('BaseWindow', () => {
 
 		it('should set Linux icon when platform is linux', () => {
 			const originalPlatform = process.platform;
-			Object.defineProperty(process, 'platform', { value: 'linux' });
+			Object.defineProperty(process, 'platform', {value: 'linux'});
 
 			const baseWindow = new BaseWindow({});
 
@@ -179,12 +179,12 @@ describe('BaseWindow', () => {
 				icon: 'icon.png',
 			}));
 
-			Object.defineProperty(process, 'platform', { value: originalPlatform });
+			Object.defineProperty(process, 'platform', {value: originalPlatform});
 		});
 
 		it('should not set icon for non-Linux platforms', () => {
 			const originalPlatform = process.platform;
-			Object.defineProperty(process, 'platform', { value: 'darwin' });
+			Object.defineProperty(process, 'platform', {value: 'darwin'});
 
 			const baseWindow = new BaseWindow({});
 
@@ -193,7 +193,7 @@ describe('BaseWindow', () => {
 				icon: expect.anything(),
 			}));
 
-			Object.defineProperty(process, 'platform', { value: originalPlatform });
+			Object.defineProperty(process, 'platform', {value: originalPlatform});
 		});
 
 		it('should set frameless window for macOS', () => {
@@ -280,7 +280,7 @@ describe('BaseWindow', () => {
 			const baseWindow = new BaseWindow({});
 
 			expect(baseWindow).toBeDefined();
-			expect(baseWindow.browserWindow.webContents.openDevTools).toHaveBeenCalledWith({ mode: 'detach' });
+			expect(baseWindow.browserWindow.webContents.openDevTools).toHaveBeenCalledWith({mode: 'detach'});
 
 			process.env.MM_DEBUG_SETTINGS = originalEnv;
 		});
@@ -323,29 +323,29 @@ describe('BaseWindow', () => {
 	describe('getBounds', () => {
 		it('should return content bounds for non-Linux platforms', () => {
 			const originalPlatform = process.platform;
-			Object.defineProperty(process, 'platform', { value: 'darwin' });
+			Object.defineProperty(process, 'platform', {value: 'darwin'});
 
 			const baseWindow = new BaseWindow({});
 			const bounds = baseWindow.getBounds();
 
 			expect(baseWindow.browserWindow.getContentBounds).toHaveBeenCalled();
-			expect(bounds).toEqual({ x: 0, y: 0, width: 800, height: 600 });
+			expect(bounds).toEqual({x: 0, y: 0, width: 800, height: 600});
 
-			Object.defineProperty(process, 'platform', { value: originalPlatform });
+			Object.defineProperty(process, 'platform', {value: originalPlatform});
 		});
 
 		it('should return modified bounds for Linux platform', () => {
 			const originalPlatform = process.platform;
-			Object.defineProperty(process, 'platform', { value: 'linux' });
+			Object.defineProperty(process, 'platform', {value: 'linux'});
 
 			const baseWindow = new BaseWindow({});
 			const bounds = baseWindow.getBounds();
 
 			expect(baseWindow.browserWindow.getContentBounds).toHaveBeenCalled();
 			expect(baseWindow.browserWindow.getSize).toHaveBeenCalled();
-			expect(bounds).toEqual({ x: 0, y: 0, width: 800, height: 600 });
+			expect(bounds).toEqual({x: 0, y: 0, width: 800, height: 600});
 
-			Object.defineProperty(process, 'platform', { value: originalPlatform });
+			Object.defineProperty(process, 'platform', {value: originalPlatform});
 		});
 	});
 
@@ -454,7 +454,7 @@ describe('BaseWindow', () => {
 		it('should handle unresponsive event', async () => {
 			const baseWindow = new BaseWindow({});
 
-			dialog.showMessageBox.mockResolvedValue({ response: 0 });
+			dialog.showMessageBox.mockResolvedValue({response: 0});
 
 			baseWindow.browserWindow.emit('unresponsive');
 
