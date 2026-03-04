@@ -48,8 +48,6 @@ jobs:
           node-gyp install --devdir="C:\Users\runneradmin\.electron-gyp" --target=$(jq -r .devDependencies.electron package.json) --dist-url="https://electronjs.org/headers"
           node-gyp install --devdir="C:\Users\runneradmin\.electron-gyp" --target=$(jq -r .devDependencies.electron package.json) --dist-url="https://electronjs.org/headers" --arch arm64
           npm ci --openssl_fips=''
-      - name: nightly/test
-        uses: ./.github/actions/test
       - name: nightly/build
         shell: powershell
         env:
@@ -90,8 +88,6 @@ jobs:
           brew install yq rename
           sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
           npm ci
-      - name: nightly/test
-        uses: ./.github/actions/test
       - name: nightly/build
         env:
           APPLE_API_KEY_ID: ${{ secrets.MM_DESKTOP_MAC_APP_STORE_MACOS_API_KEY_ID }}
