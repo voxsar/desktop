@@ -200,5 +200,9 @@
 			"_build_id_links none",
 			"--rpm-digest=sha256"
 		]
+	},
+	"flatpak": {
+		"runtimeVersion": "25.08",
+		"baseVersion": "25.08"
 	}
 }
