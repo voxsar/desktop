@@ -196,7 +196,10 @@ export const NOTIFICATION_CLICKED = 'notification-clicked';
 export const OPEN_NOTIFICATION_PREFERENCES = 'open-notification-preferences';
 export const OPEN_WINDOWS_CAMERA_PREFERENCES = 'open-windows-camera-preferences';
 export const OPEN_WINDOWS_MICROPHONE_PREFERENCES = 'open-windows-microphone-preferences';
+export const OPEN_WINDOWS_FILESYSTEM_PREFERENCES = 'open-windows-filesystem-preferences';
+export const OPEN_MACOS_SCREEN_RECORDING_PREFERENCES = 'open-macos-screen-recording-preferences';
 export const GET_MEDIA_ACCESS_STATUS = 'get-media-access-status';
+export const RESET_PERMISSION = 'reset-permission';
 
 export const GET_NONCE = 'get-nonce';
 
