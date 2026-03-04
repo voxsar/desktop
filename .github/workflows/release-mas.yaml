@@ -44,6 +44,9 @@ jobs:
       - name: release/patch-version-number-for-MAS
         run: ./scripts/patch_mas_version.sh
       - name: release/package
-        run: npm run package:mas
+        run: |
+          [ -z "$CSC_LINK" ] && unset CSC_LINK || true
+          [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD || true
+          npm run package:mas
       - name: release/publish
         run: fastlane publish_test path:"$(find . -name \*.pkg -print -quit)"

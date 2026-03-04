@@ -134,7 +134,10 @@ jobs:
       - name: nightly/patch-version-number-for-MAS
         run: ./scripts/patch_mas_version.sh
       - name: nightly/package
-        run: npm run package:mas
+        run: |
+          [ -z "$CSC_LINK" ] && unset CSC_LINK || true
+          [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD || true
+          npm run package:mas
       - name: nightly/publish
         run: fastlane publish_test path:"$(find . -name \*.pkg -print -quit)"
 
@@ -173,6 +176,8 @@ jobs:
         run: |
           echo $MAC_PROFILE | base64 -D > ./mac.provisionprofile
           zsh -c 'echo -n $APPLE_API_KEY_RAW > ./key.p8'
+          [ -z "$CSC_LINK" ] && unset CSC_LINK || true
+          [ -z "$CSC_KEY_PASSWORD" ] && unset CSC_KEY_PASSWORD || true
           mkdir -p ./build/macos-release
           npm run package:mac-with-universal
           bash -x ./scripts/cp_artifacts.sh release ./build/macos-release
