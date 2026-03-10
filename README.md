@@ -1,5 +1,7 @@
 # Aura Desktop
 
+[![release](https://github.com/artslabcreatives/mattermost-desktop/actions/workflows/release.yaml/badge.svg?branch=master)](https://github.com/artslabcreatives/mattermost-desktop/actions/workflows/release.yaml)
+
 [Aura](https://mattermost.com) is an open source platform for secure collaboration across the entire software development lifecycle. This repo is for the native desktop application that's built on [Electron](http://electron.atom.io/); it runs on Windows, Mac, and Linux.
 
 Originally created as "electron-mattermost" by Yuya Ochiai.
